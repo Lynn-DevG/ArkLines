@@ -20,6 +20,7 @@ const AppContent = () => {
     const timelineRef = useRef(null);
 
     const PX_PER_SEC = 60 * zoom;
+    const TRACK_HEADER_WIDTH = 100;
 
     const handleActionDragStart = (e, action) => {
         setDragState({
@@ -91,7 +92,7 @@ const AppContent = () => {
         if (!selectedTool || !timelineRef.current) return;
 
         const rect = timelineRef.current.getBoundingClientRect();
-        const clickX = e.clientX - rect.left + timelineRef.current.scrollLeft;
+        const clickX = e.clientX - rect.left + timelineRef.current.scrollLeft - TRACK_HEADER_WIDTH;
         let time = Math.max(0, clickX / PX_PER_SEC);
 
         // 1. Magnetism Snap
@@ -137,7 +138,7 @@ const AppContent = () => {
     const handleTimelineHover = (e) => {
         if (!timelineRef.current) return;
         const rect = timelineRef.current.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left + timelineRef.current.scrollLeft;
+        const mouseX = e.clientX - rect.left + timelineRef.current.scrollLeft - TRACK_HEADER_WIDTH;
         const time = Math.max(0, mouseX / PX_PER_SEC);
         setCursorTime(time);
 
@@ -210,12 +211,12 @@ const AppContent = () => {
                             onMouseUp={handleTimelineMouseUp}
                             onMouseLeave={handleTimelineMouseUp}
                         >
-                            <div style={{ width: `${30 * PX_PER_SEC + 100}px`, minHeight: '100%' }} className="relative flex flex-col">
+                            <div style={{ width: `${30 * PX_PER_SEC + TRACK_HEADER_WIDTH}px`, minHeight: '100%' }} className="relative flex flex-col">
                                 {/* Time Grid */}
                                 <div className="absolute inset-0 pointer-events-none z-0">
                                     {Array.from({ length: 31 }).map((_, i) => (
                                         <div key={i} className="absolute top-0 bottom-0 border-l border-slate-800/50 text-[10px] text-slate-600 pl-1 pt-1"
-                                            style={{ left: i * PX_PER_SEC }}>
+                                            style={{ left: `${TRACK_HEADER_WIDTH + i * PX_PER_SEC}px` }}>
                                             {i}s
                                         </div>
                                     ))}
@@ -236,7 +237,7 @@ const AppContent = () => {
                                             invalidResourceActionIds={invalidActionIds}
                                         />
                                     ) : (
-                                        <div key={idx} className="min-h-[140px] border-b border-slate-800/30 bg-slate-900/20 flex items-center justify-center">
+                                        <div key={idx} className="min-h-[140px] border-b border-slate-800/30 bg-slate-900/20 flex items-center justify-start" style={{ paddingLeft: `${TRACK_HEADER_WIDTH}px` }}>
                                             <span className="text-slate-800 text-xs">Empty Slot</span>
                                         </div>
                                     ))}

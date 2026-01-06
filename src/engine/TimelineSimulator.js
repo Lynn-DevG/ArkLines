@@ -73,12 +73,6 @@ export class TimelineSimulator {
 
                 // Set Cooldown
                 tempCooldowns[action.skillId] = action.startTime + (skill.cooldown || 0);
-
-                // Apply Gain (Immediate for validation flow)
-                if (skill.type === 'BASIC') {
-                    tempSp = Math.min(300, tempSp + 10);
-                    tempUlt[action.charId] = Math.min(100, (tempUlt[action.charId] || 0) + 5);
-                }
             }
         });
 
@@ -312,13 +306,6 @@ export class TimelineSimulator {
             // totalDamage not available in this scope. 
             // We calculate total at the end of run() from logs.
             this.enemy.stats.currentHp = Math.max(0, this.enemy.stats.currentHp - dmg);
-
-            // Resource Gain on Hit
-            // Basic Attacks gen SP
-            const skillDef = SKILLS[context.skillId]; // Warning: context.skillId might be undefined?
-            // Correct: use actionState.def.id if needed
-            this.sp = Math.min(300, this.sp + 10);
-            this.ultEnergy[charId] = Math.min(100, (this.ultEnergy[charId] || 0) + 5);
         }
 
         // Type: BUFF ADD
@@ -380,46 +367,39 @@ export class TimelineSimulator {
      * Returns { sp, ultEnergy: { [charId]: val }, cooldowns: { [skillId]: readyTime } }
      */
     simulateResourceStateAt(time) {
-        // Reset temp state
         let tempSp = 200;
         let tempUlt = {};
         this.characters.forEach(c => tempUlt[c.id] = 0);
-        let tempCooldowns = {}; // Map skillId -> readyTime
+        let tempCooldowns = {};
 
         const sorted = [...this.timelineActions].sort((a, b) => a.startTime - b.startTime);
+        let lastTime = 0;
 
-        // Iterate actions up to 'time'
-        // We can't do full tick simulation here (too slow for every frame UI).
-        // Approximate approach:
-        // 1. Natural SP gain = time * 8
-        tempSp += time * 8;
+        for (const action of sorted) {
+            if (action.startTime > time) break;
 
-        // 2. Process Actions
-        sorted.forEach(action => {
-            if (action.startTime >= time) return; // Future action
+            // Natural recovery up to this action
+            const dt = action.startTime - lastTime;
+            tempSp = Math.min(300, tempSp + dt * 8);
+            lastTime = action.startTime;
 
             const skill = SKILLS[action.skillId];
-            if (!skill) return;
+            if (!skill) continue;
 
-            // Cost
+            // Apply consumption
             if (skill.spCost) tempSp -= skill.spCost;
             if (skill.type === 'ULTIMATE') tempUlt[action.charId] = 0;
 
-            // Gain (Simplified: Flat gain per usage)
-            if (skill.type === 'BASIC') {
-                tempSp += 10;
-                tempUlt[action.charId] += 5;
-            }
-
-            // Cooldown tracking
+            // Set Cooldown
             const readyAt = action.startTime + (skill.cooldown || 0);
             if (tempCooldowns[action.skillId] === undefined || readyAt > tempCooldowns[action.skillId]) {
                 tempCooldowns[action.skillId] = readyAt;
             }
-        });
+        }
 
-        // Cap
-        tempSp = Math.min(300, Math.max(0, tempSp)); // Allow dip below 0? No, clamp 0.
+        // Final natural recovery from last action to 'time'
+        const finalDt = Math.max(0, time - lastTime);
+        tempSp = Math.min(300, tempSp + finalDt * 8);
 
         return { sp: tempSp, ultEnergy: tempUlt, cooldowns: tempCooldowns };
     }

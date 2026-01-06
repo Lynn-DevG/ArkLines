@@ -1,180 +1,4 @@
 export const SKILLS = {
-    "skill_chr_0002_endminm_basic": {
-        "id": "skill_chr_0002_endminm_basic",
-        "name": "管理员攻击",
-        "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
-            {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
-            }
-        ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "管理员连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "管理员连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "管理员连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "管理员连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "管理员重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
-    },
-    "skill_chr_0002_endminm_tactical": {
-        "id": "skill_chr_0002_endminm_tactical",
-        "name": "管理员战技",
-        "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 12,
-        "spCost": 100,
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            }
-        ]
-    },
-    "skill_chr_0002_endminm_chain": {
-        "id": "skill_chr_0002_endminm_chain",
-        "name": "管理员连携",
-        "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Physical",
-                "scaling": "atk"
-            }
-        ]
-    },
-    "skill_chr_0002_endminm_ultimate": {
-        "id": "skill_chr_0002_endminm_ultimate",
-        "name": "管理员终结技",
-        "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
-            }
-        ]
-    },
     "skill_chr_0003_endminf_basic": {
         "id": "skill_chr_0003_endminf_basic",
         "name": "管理员攻击",
@@ -282,7 +106,7 @@ export const SKILLS = {
         "name": "管理员战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -458,7 +282,7 @@ export const SKILLS = {
         "name": "佩丽卡战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -648,7 +472,7 @@ export const SKILLS = {
         "name": "陈千语战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -831,7 +655,7 @@ export const SKILLS = {
         "name": "狼卫战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -1021,7 +845,7 @@ export const SKILLS = {
         "name": "弧光战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -1187,7 +1011,7 @@ export const SKILLS = {
         "name": "余烬战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -1378,7 +1202,7 @@ export const SKILLS = {
         "name": "赛希战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -1568,7 +1392,7 @@ export const SKILLS = {
         "name": "艾维文娜战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -1744,7 +1568,7 @@ export const SKILLS = {
         "name": "洁尔佩塔战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -1910,7 +1734,7 @@ export const SKILLS = {
         "name": "昼雪战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -2100,7 +1924,7 @@ export const SKILLS = {
         "name": "黎风战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -2276,7 +2100,7 @@ export const SKILLS = {
         "name": "莱万汀战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -2459,7 +2283,7 @@ export const SKILLS = {
         "name": "伊冯战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -2625,7 +2449,7 @@ export const SKILLS = {
         "name": "大潘战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -2801,7 +2625,7 @@ export const SKILLS = {
         "name": "秋栗战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -2967,7 +2791,7 @@ export const SKILLS = {
         "name": "卡契尔战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -3151,7 +2975,7 @@ export const SKILLS = {
         "name": "埃特拉战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -3334,7 +3158,7 @@ export const SKILLS = {
         "name": "萤石战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -3524,7 +3348,7 @@ export const SKILLS = {
         "name": "安塔尔战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -3700,7 +3524,7 @@ export const SKILLS = {
         "name": "阿列什战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -3883,7 +3707,7 @@ export const SKILLS = {
         "name": "艾尔黛拉战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -4056,7 +3880,7 @@ export const SKILLS = {
         "name": "别礼战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -4239,7 +4063,7 @@ export const SKILLS = {
         "name": "骏卫战技",
         "type": "TACTICAL",
         "duration": 1.5,
-        "cooldown": 12,
+        "cooldown": 0.5,
         "spCost": 100,
         "nodes": [
             {
@@ -4274,182 +4098,6 @@ export const SKILLS = {
     "skill_chr_0029_pograni_ultimate": {
         "id": "skill_chr_0029_pograni_ultimate",
         "name": "骏卫终结技",
-        "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
-            }
-        ]
-    },
-    "skill_chr_9000_endmin_basic": {
-        "id": "skill_chr_9000_endmin_basic",
-        "name": "管理员攻击",
-        "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
-            {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
-            }
-        ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "管理员连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "管理员连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "管理员连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "管理员连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "管理员重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
-    },
-    "skill_chr_9000_endmin_tactical": {
-        "id": "skill_chr_9000_endmin_tactical",
-        "name": "管理员战技",
-        "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 12,
-        "spCost": 100,
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            }
-        ]
-    },
-    "skill_chr_9000_endmin_chain": {
-        "id": "skill_chr_9000_endmin_chain",
-        "name": "管理员连携",
-        "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Physical",
-                "scaling": "atk"
-            }
-        ]
-    },
-    "skill_chr_9000_endmin_ultimate": {
-        "id": "skill_chr_9000_endmin_ultimate",
-        "name": "管理员终结技",
         "type": "ULTIMATE",
         "duration": 3.5,
         "energyCost": 120,

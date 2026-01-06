@@ -1,50 +1,5 @@
 [
   {
-    "id": "chr_0002_endminm",
-    "name": "管理员",
-    "nameEn": "Endministrator",
-    "classType": "Guard",
-    "element": "physical",
-    "rarity": 6,
-    "weaponType": "one_handed_sword",
-    "mainAttr": "agility",
-    "subAttr": "strength",
-    "tags": [
-      "猛击",
-      "控制"
-    ],
-    "normalAttackRange": 3,
-    "toughnessCoef": 0.14,
-    "sortOrder": 2,
-    "stats": {
-      "baseStrength": 14.7422680412371,
-      "baseAgility": 14.2268041237113,
-      "baseIntelligence": 9.79381443298969,
-      "baseWillpower": 10.8247422680412,
-      "maxStrength": 134.721649484536,
-      "maxAgility": 153.649484536083,
-      "maxIntelligence": 105.773195876289,
-      "maxWillpower": 116.907216494845,
-      "maxAtk": 348
-    },
-    "level": 1,
-    "potential": 1,
-    "skills": {
-      "basic": "skill_chr_0002_endminm_basic",
-      "tactical": "skill_chr_0002_endminm_tactical",
-      "chain": "skill_chr_0002_endminm_chain",
-      "ultimate": "skill_chr_0002_endminm_ultimate"
-    },
-    "talents": [],
-    "equipment": {
-      "armor": null,
-      "gloves": null,
-      "accessory1": null,
-      "accessory2": null
-    },
-    "weapon": null
-  },
-  {
     "id": "chr_0003_endminf",
     "name": "管理员",
     "nameEn": "Endministrator",
@@ -1080,51 +1035,6 @@
       "tactical": "skill_chr_0029_pograni_tactical",
       "chain": "skill_chr_0029_pograni_chain",
       "ultimate": "skill_chr_0029_pograni_ultimate"
-    },
-    "talents": [],
-    "equipment": {
-      "armor": null,
-      "gloves": null,
-      "accessory1": null,
-      "accessory2": null
-    },
-    "weapon": null
-  },
-  {
-    "id": "chr_9000_endmin",
-    "name": "管理员",
-    "nameEn": "Endministrator",
-    "classType": "Guard",
-    "element": "physical",
-    "rarity": 6,
-    "weaponType": "one_handed_sword",
-    "mainAttr": "agility",
-    "subAttr": "strength",
-    "tags": [
-      "猛击",
-      "控制"
-    ],
-    "normalAttackRange": 3,
-    "toughnessCoef": 0.14,
-    "sortOrder": 1,
-    "stats": {
-      "baseStrength": 14.7422680412371,
-      "baseAgility": 14.2268041237113,
-      "baseIntelligence": 9.79381443298969,
-      "baseWillpower": 10.8247422680412,
-      "maxStrength": 134.721649484536,
-      "maxAgility": 153.649484536083,
-      "maxIntelligence": 105.773195876289,
-      "maxWillpower": 116.907216494845,
-      "maxAtk": 348
-    },
-    "level": 1,
-    "potential": 1,
-    "skills": {
-      "basic": "skill_chr_9000_endmin_basic",
-      "tactical": "skill_chr_9000_endmin_tactical",
-      "chain": "skill_chr_9000_endmin_chain",
-      "ultimate": "skill_chr_9000_endmin_ultimate"
     },
     "talents": [],
     "equipment": {

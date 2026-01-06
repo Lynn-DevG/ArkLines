@@ -10,21 +10,44 @@ import { getLevelStats as getLevelStatsFromMapping } from './levelMappings';
  */
 function processCharacterData(characters) {
     return characters.map(char => {
-        // Get base HP from level mappings (level 1)
-        const baseStats = getLevelStatsFromMapping(char.id, 1, 0);
-        const baseHp = baseStats ? baseStats.hp : 500; // Fallback value
+        // Get initial stats from level mappings (level 1, elite 0)
+        const levelData = getLevelStatsFromMapping(char.id, 1, 0);
+
+        // Define stats structure based on available data or fallbacks
+        const computedStats = levelData ? {
+            hp: levelData.hp,
+            atk: levelData.atk,
+            def: 0,
+            strength: levelData.strength,
+            agility: levelData.agility,
+            intelligence: levelData.intelligence,
+            willpower: levelData.willpower,
+            baseHp: levelData.hp,
+            baseAtk: levelData.atk,
+            baseDef: 0
+        } : {
+            // Fallback values if level mapping is missing
+            hp: 500,
+            atk: char.stats.maxAtk ? Math.round(char.stats.maxAtk * 0.1) : 30,
+            def: 0,
+            strength: char.stats.baseStrength || 10,
+            agility: char.stats.baseAgility || 10,
+            intelligence: char.stats.baseIntelligence || 10,
+            willpower: char.stats.baseWillpower || 10,
+            baseHp: 500,
+            baseAtk: 30,
+            baseDef: 0
+        };
 
         return {
             ...char,
-            // Add baseDef - per design.md, character base defense is 0
+            // Per design.md, character base defense is 0
             baseDef: 0,
-            // Add baseHp from level mappings
-            baseHp: baseHp,
-            // Ensure stats object includes all required fields
+            baseHp: computedStats.baseHp,
+            // Ensure stats object includes all computed fields for initialization
             stats: {
                 ...char.stats,
-                baseDef: 0,
-                baseHp: baseHp,
+                ...computedStats
             },
         };
     });

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSimulation } from '../../store/SimulationContext';
 import { ChevronLeft, Save } from 'lucide-react';
-import { getLevelStats } from '../../data/characters';
+import { getCharacterStatsAtLevel } from '../../data/characters';
 
 export const CharacterEditor = ({ charId, onClose }) => {
     const { team, updateCharacter } = useSimulation();
@@ -25,11 +25,18 @@ export const CharacterEditor = ({ charId, onClose }) => {
     };
 
     const handleLevelChange = (newLevel) => {
-        const stats = getLevelStats(localState.stats, newLevel);
+        const stats = getCharacterStatsAtLevel(localState, newLevel);
         setLocalState(prev => ({
             ...prev,
             level: newLevel,
-            stats: { ...prev.stats, ...stats } // Merge base/current logic if needed, simplify for now
+            stats: {
+                ...prev.stats,
+                ...stats,
+                // Preserve base stats format expected by the UI
+                baseHp: stats.hp,
+                baseAtk: stats.atk,
+                baseDef: stats.def,
+            }
         }));
     };
 
@@ -94,7 +101,7 @@ export const CharacterEditor = ({ charId, onClose }) => {
                                 <input
                                     type="number"
                                     className="w-12 bg-transparent text-right text-white border-b border-slate-600 focus:border-indigo-500 outline-none"
-                                    value={localState.stats[attr]}
+                                    value={Math.round(localState.stats[attr])}
                                     onChange={(e) => handleChange('stats', { ...localState.stats, [attr]: parseInt(e.target.value) })}
                                 />
                             </div>

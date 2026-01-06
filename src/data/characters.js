@@ -1,69 +1,85 @@
-export const CHARACTERS = [
-    {
-        id: 'char_001',
-        name: '烈焰先锋',
-        classType: 'Vanguard',
-        element: 'Fire',
-        stats: {
-            baseAtk: 600,
-            baseDef: 400,
-            baseHp: 2000,
-            strength: 80,
-            agility: 50,
-            intelligence: 20,
-            willpower: 40,
-        },
-        mainAttr: 'strength',
-        subAttr: 'agility',
-        level: 80, // Default level
-        potential: 1,
-        skills: {
-            basic: 'skill_001_basic',
-            tactical: 'skill_001_tactical',
-            chain: 'skill_001_chain',
-            ultimate: 'skill_001_ultimate',
-        },
-        talents: [
-            { id: 't1', name: 'Attack Up', active: true, effects: { type: 'stat', stat: 'atk', value: 50 } },
-            { id: 't2', name: 'Fire Mastery', active: true, effects: { type: 'dmg_boost', element: 'fire', value: 0.15 } }
-        ]
-    },
-    {
-        id: 'char_002',
-        name: '寒冰射手',
-        classType: 'Sniper',
-        element: 'Ice',
-        stats: {
-            baseAtk: 750,
-            baseDef: 200,
-            baseHp: 1600,
-            strength: 30,
-            agility: 90,
-            intelligence: 40,
-            willpower: 30,
-        },
-        mainAttr: 'agility',
-        subAttr: 'intelligence',
-        level: 80,
-        potential: 1,
-        skills: {
-            basic: 'skill_002_basic',
-            tactical: 'skill_002_tactical',
-            chain: 'skill_002_chain',
-            ultimate: 'skill_002_ultimate',
-        },
-        talents: []
-    }
-];
+/**
+ * Character data configuration.
+ * Sourced from character_info.json with additional computed fields.
+ */
+import characterInfoData from './characters/character_info.json';
+import { getLevelStats as getLevelStatsFromMapping } from './levelMappings';
 
-// Level scaling factors (simplified from design doc for now)
-export const getLevelStats = (baseStats, level) => {
-    const scale = 1 + (level - 1) * 0.05; // 5% per level
+/**
+ * Process character data to add any missing fields and ensure compatibility.
+ */
+function processCharacterData(characters) {
+    return characters.map(char => {
+        // Get base HP from level mappings (level 1)
+        const baseStats = getLevelStatsFromMapping(char.id, 1, 0);
+        const baseHp = baseStats ? baseStats.hp : 500; // Fallback value
+
+        return {
+            ...char,
+            // Add baseDef - per design.md, character base defense is 0
+            baseDef: 0,
+            // Add baseHp from level mappings
+            baseHp: baseHp,
+            // Ensure stats object includes all required fields
+            stats: {
+                ...char.stats,
+                baseDef: 0,
+                baseHp: baseHp,
+            },
+        };
+    });
+}
+
+export const CHARACTERS = processCharacterData(characterInfoData);
+
+/**
+ * Get character stats at a specific level using level mappings.
+ * @param {Object} character - The character object
+ * @param {number} level - The target level (1-99)
+ * @param {number} eliteLevel - Optional elite level
+ * @returns {Object} Computed stats at the specified level
+ */
+export function getCharacterStatsAtLevel(character, level, eliteLevel = null) {
+    const levelData = getLevelStatsFromMapping(character.id, level, eliteLevel);
+
+    if (!levelData) {
+        // Fallback to simple scaling if no level data
+        const scale = 1 + (level - 1) * 0.05;
+        return {
+            atk: Math.floor(character.stats.baseAtk * scale),
+            def: Math.floor(character.baseDef * scale),
+            hp: Math.floor(character.baseHp * scale),
+            strength: Math.floor(character.stats.baseStrength * scale),
+            agility: Math.floor(character.stats.baseAgility * scale),
+            intelligence: Math.floor(character.stats.baseIntelligence * scale),
+            willpower: Math.floor(character.stats.baseWillpower * scale),
+        };
+    }
+
+    return {
+        atk: levelData.atk,
+        def: 0, // Character base defense is 0 per design.md
+        hp: levelData.hp,
+        strength: levelData.strength,
+        agility: levelData.agility,
+        intelligence: levelData.intelligence,
+        willpower: levelData.willpower,
+        spellLevelCoef: levelData.spellLevelCoef,
+        normalAttackRange: levelData.normalAttackRange,
+        eliteLevel: levelData.eliteLevel,
+    };
+}
+
+/**
+ * Legacy function for backward compatibility.
+ * @deprecated Use getCharacterStatsAtLevel instead
+ */
+export const getLevelStatsLegacy = (baseStats, level) => {
+    const scale = 1 + (level - 1) * 0.05;
     return {
         atk: Math.floor(baseStats.baseAtk * scale),
         def: Math.floor(baseStats.baseDef * scale),
         hp: Math.floor(baseStats.baseHp * scale),
-        // Attributes might not scale linearly in design, but keeping simple for mock
         str: Math.floor(baseStats.strength * scale),
         agi: Math.floor(baseStats.agility * scale),
         int: Math.floor(baseStats.intelligence * scale),

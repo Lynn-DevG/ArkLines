@@ -1,0 +1,1138 @@
+[
+  {
+    "id": "chr_0002_endminm",
+    "name": "管理员",
+    "nameEn": "Endministrator",
+    "classType": "Guard",
+    "element": "physical",
+    "rarity": 6,
+    "weaponType": "one_handed_sword",
+    "mainAttr": "agility",
+    "subAttr": "strength",
+    "tags": [
+      "猛击",
+      "控制"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.14,
+    "sortOrder": 2,
+    "stats": {
+      "baseStrength": 14.7422680412371,
+      "baseAgility": 14.2268041237113,
+      "baseIntelligence": 9.79381443298969,
+      "baseWillpower": 10.8247422680412,
+      "maxStrength": 134.721649484536,
+      "maxAgility": 153.649484536083,
+      "maxIntelligence": 105.773195876289,
+      "maxWillpower": 116.907216494845,
+      "maxAtk": 348
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0002_endminm_basic",
+      "tactical": "skill_chr_0002_endminm_tactical",
+      "chain": "skill_chr_0002_endminm_chain",
+      "ultimate": "skill_chr_0002_endminm_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0003_endminf",
+    "name": "管理员",
+    "nameEn": "Endministrator",
+    "classType": "Guard",
+    "element": "physical",
+    "rarity": 6,
+    "weaponType": "one_handed_sword",
+    "mainAttr": "agility",
+    "subAttr": "strength",
+    "tags": [
+      "猛击",
+      "控制"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.14,
+    "sortOrder": 3,
+    "stats": {
+      "baseStrength": 14.7422680412371,
+      "baseAgility": 14.2268041237113,
+      "baseIntelligence": 9.79381443298969,
+      "baseWillpower": 10.8247422680412,
+      "maxStrength": 134.721649484536,
+      "maxAgility": 153.649484536083,
+      "maxIntelligence": 105.773195876289,
+      "maxWillpower": 116.907216494845,
+      "maxAtk": 348
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0003_endminf_basic",
+      "tactical": "skill_chr_0003_endminf_tactical",
+      "chain": "skill_chr_0003_endminf_chain",
+      "ultimate": "skill_chr_0003_endminf_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0004_pelica",
+    "name": "佩丽卡",
+    "nameEn": "Perlica",
+    "classType": "Caster",
+    "element": "electric",
+    "rarity": 5,
+    "weaponType": "caster_unit",
+    "mainAttr": "intelligence",
+    "subAttr": "willpower",
+    "tags": [
+      "电磁附着",
+      "导电"
+    ],
+    "normalAttackRange": 10,
+    "toughnessCoef": 0.13125,
+    "sortOrder": 4,
+    "stats": {
+      "baseStrength": 9.27835051546392,
+      "baseAgility": 9.48453608247423,
+      "baseIntelligence": 21.6494845360825,
+      "baseWillpower": 13.6082474226804,
+      "maxStrength": 100.20618556701,
+      "maxAgility": 102.432989690722,
+      "maxIntelligence": 175.861855670103,
+      "maxWillpower": 123.698969072165,
+      "maxAtk": 330
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0004_pelica_basic",
+      "tactical": "skill_chr_0004_pelica_tactical",
+      "chain": "skill_chr_0004_pelica_chain",
+      "ultimate": "skill_chr_0004_pelica_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0005_chen",
+    "name": "陈千语",
+    "nameEn": "Chen Qianyu",
+    "classType": "Guard",
+    "element": "physical",
+    "rarity": 5,
+    "weaponType": "one_handed_sword",
+    "mainAttr": "agility",
+    "subAttr": "strength",
+    "tags": [
+      "击飞",
+      "失衡"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.14,
+    "sortOrder": 5,
+    "stats": {
+      "baseStrength": 10.7731958762887,
+      "baseAgility": 20.5670103092784,
+      "baseIntelligence": 8.8659793814433,
+      "baseWillpower": 9.69072164948454,
+      "maxStrength": 116.350515463918,
+      "maxAgility": 187.051546391753,
+      "maxIntelligence": 93.5257731958763,
+      "maxWillpower": 102.432989690722,
+      "maxAtk": 324
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0005_chen_basic",
+      "tactical": "skill_chr_0005_chen_tactical",
+      "chain": "skill_chr_0005_chen_chain",
+      "ultimate": "skill_chr_0005_chen_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0006_wolfgd",
+    "name": "狼卫",
+    "nameEn": "Wulfgard",
+    "classType": "Caster",
+    "element": "fire",
+    "rarity": 5,
+    "weaponType": "handgun",
+    "mainAttr": "strength",
+    "subAttr": "agility",
+    "tags": [
+      "灼热附着",
+      "燃烧"
+    ],
+    "normalAttackRange": 10,
+    "toughnessCoef": 0.105,
+    "sortOrder": 6,
+    "stats": {
+      "baseStrength": 18.5567010309278,
+      "baseAgility": 9.63917525773196,
+      "baseIntelligence": 9.38144329896907,
+      "baseWillpower": 13.8144329896907,
+      "maxStrength": 176.19587628866,
+      "maxAgility": 104.103092783505,
+      "maxIntelligence": 101.319587628866,
+      "maxWillpower": 121.360824742268,
+      "maxAtk": 321
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0006_wolfgd_basic",
+      "tactical": "skill_chr_0006_wolfgd_tactical",
+      "chain": "skill_chr_0006_wolfgd_chain",
+      "ultimate": "skill_chr_0006_wolfgd_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0007_ikut",
+    "name": "弧光",
+    "nameEn": "Arclight",
+    "classType": "Vanguard",
+    "element": "electric",
+    "rarity": 5,
+    "weaponType": "one_handed_sword",
+    "mainAttr": "agility",
+    "subAttr": "intelligence",
+    "tags": [
+      "技力恢复",
+      "电磁附着"
+    ],
+    "normalAttackRange": 5,
+    "toughnessCoef": 0.14875,
+    "sortOrder": 7,
+    "stats": {
+      "baseStrength": 14.020618556701,
+      "baseAgility": 14.6907216494845,
+      "baseIntelligence": 12.4742268041237,
+      "baseWillpower": 10.1030927835052,
+      "maxStrength": 116.907216494845,
+      "maxAgility": 158.659793814433,
+      "maxIntelligence": 134.721649484536,
+      "maxWillpower": 109.113402061856,
+      "maxAtk": 334
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0007_ikut_basic",
+      "tactical": "skill_chr_0007_ikut_tactical",
+      "chain": "skill_chr_0007_ikut_chain",
+      "ultimate": "skill_chr_0007_ikut_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0009_azrila",
+    "name": "余烬",
+    "nameEn": "Ember",
+    "classType": "Defender",
+    "element": "fire",
+    "rarity": 6,
+    "weaponType": "two_handed_sword",
+    "mainAttr": "strength",
+    "subAttr": "willpower",
+    "tags": [
+      "倒地",
+      "治疗",
+      "护盾"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.0958125,
+    "sortOrder": 8,
+    "stats": {
+      "baseStrength": 21.6494845360825,
+      "baseAgility": 9.79381443298969,
+      "baseIntelligence": 8.76288659793815,
+      "baseWillpower": 13.6082474226804,
+      "maxStrength": 192.061855670103,
+      "maxAgility": 105.773195876289,
+      "maxIntelligence": 94.639175257732,
+      "maxWillpower": 131.047422680412,
+      "maxAtk": 353
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0009_azrila_basic",
+      "tactical": "skill_chr_0009_azrila_tactical",
+      "chain": "skill_chr_0009_azrila_chain",
+      "ultimate": "skill_chr_0009_azrila_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0011_seraph",
+    "name": "赛希",
+    "nameEn": "Xaihi",
+    "classType": "Supporter",
+    "element": "ice",
+    "rarity": 5,
+    "weaponType": "caster_unit",
+    "mainAttr": "willpower",
+    "subAttr": "intelligence",
+    "tags": [
+      "治疗",
+      "寒冷附着",
+      "增幅"
+    ],
+    "normalAttackRange": 10,
+    "toughnessCoef": 0.13,
+    "sortOrder": 9,
+    "stats": {
+      "baseStrength": 9.3298969072165,
+      "baseAgility": 9.38144329896907,
+      "baseIntelligence": 15.8762886597938,
+      "baseWillpower": 15.1546391752577,
+      "maxStrength": 97.979381443299,
+      "maxAgility": 100.20618556701,
+      "maxIntelligence": 138.39587628866,
+      "maxWillpower": 163.670103092784,
+      "maxAtk": 318
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0011_seraph_basic",
+      "tactical": "skill_chr_0011_seraph_tactical",
+      "chain": "skill_chr_0011_seraph_chain",
+      "ultimate": "skill_chr_0011_seraph_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0012_avywen",
+    "name": "艾维文娜",
+    "nameEn": "Avywenna",
+    "classType": "Striker",
+    "element": "electric",
+    "rarity": 5,
+    "weaponType": "polearm",
+    "mainAttr": "willpower",
+    "subAttr": "agility",
+    "tags": [
+      "大量伤害",
+      "法术脆弱"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.133875,
+    "sortOrder": 10,
+    "stats": {
+      "baseStrength": 12.8865979381443,
+      "baseAgility": 10.7731958762887,
+      "baseIntelligence": 14.1237113402062,
+      "baseWillpower": 15,
+      "maxStrength": 116.907216494845,
+      "maxAgility": 116.350515463918,
+      "maxIntelligence": 120.247422680412,
+      "maxWillpower": 162,
+      "maxAtk": 340
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0012_avywen_basic",
+      "tactical": "skill_chr_0012_avywen_tactical",
+      "chain": "skill_chr_0012_avywen_chain",
+      "ultimate": "skill_chr_0012_avywen_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0013_aglina",
+    "name": "洁尔佩塔",
+    "nameEn": "Gilberta",
+    "classType": "Supporter",
+    "element": "nature",
+    "rarity": 6,
+    "weaponType": "caster_unit",
+    "mainAttr": "willpower",
+    "subAttr": "intelligence",
+    "tags": [
+      "法术脆弱",
+      "自然附着",
+      "击飞"
+    ],
+    "normalAttackRange": 10,
+    "toughnessCoef": 0.1238125,
+    "sortOrder": 11,
+    "stats": {
+      "baseStrength": 9.07216494845361,
+      "baseAgility": 9.38144329896907,
+      "baseIntelligence": 16.1030927835052,
+      "baseWillpower": 20.4123711340206,
+      "maxStrength": 97.979381443299,
+      "maxAgility": 101.319587628866,
+      "maxIntelligence": 138.39587628866,
+      "maxWillpower": 187.051546391753,
+      "maxAtk": 360
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0013_aglina_basic",
+      "tactical": "skill_chr_0013_aglina_tactical",
+      "chain": "skill_chr_0013_aglina_chain",
+      "ultimate": "skill_chr_0013_aglina_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0014_aurora",
+    "name": "昼雪",
+    "nameEn": "Snowshine",
+    "classType": "Defender",
+    "element": "ice",
+    "rarity": 5,
+    "weaponType": "two_handed_sword",
+    "mainAttr": "strength",
+    "subAttr": "willpower",
+    "tags": [
+      "庇护",
+      "治疗",
+      "寒冷附着"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.083125,
+    "sortOrder": 12,
+    "stats": {
+      "baseStrength": 18.5567010309278,
+      "baseAgility": 12.3711340206186,
+      "baseIntelligence": 9.48453608247423,
+      "baseWillpower": 11,
+      "maxStrength": 168.680412371134,
+      "maxAgility": 113.901030927835,
+      "maxIntelligence": 102.432989690722,
+      "maxWillpower": 118.8,
+      "maxAtk": 324
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0014_aurora_basic",
+      "tactical": "skill_chr_0014_aurora_tactical",
+      "chain": "skill_chr_0014_aurora_chain",
+      "ultimate": "skill_chr_0014_aurora_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0015_lifeng",
+    "name": "黎风",
+    "nameEn": "Lifeng",
+    "classType": "Guard",
+    "element": "physical",
+    "rarity": 6,
+    "weaponType": "polearm",
+    "mainAttr": "agility",
+    "subAttr": "strength",
+    "tags": [
+      "倒地",
+      "物理脆弱",
+      "连击"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.118125,
+    "sortOrder": 13,
+    "stats": {
+      "baseStrength": 14.7422680412371,
+      "baseAgility": 20.1030927835052,
+      "baseIntelligence": 13.4020618556701,
+      "baseWillpower": 12.8865979381443,
+      "maxStrength": 134.721649484536,
+      "maxAgility": 143.628865979381,
+      "maxIntelligence": 125.814432989691,
+      "maxWillpower": 128.041237113402,
+      "maxAtk": 340
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0015_lifeng_basic",
+      "tactical": "skill_chr_0015_lifeng_tactical",
+      "chain": "skill_chr_0015_lifeng_chain",
+      "ultimate": "skill_chr_0015_lifeng_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0016_laevat",
+    "name": "莱万汀",
+    "nameEn": "Laevatain",
+    "classType": "Striker",
+    "element": "fire",
+    "rarity": 6,
+    "weaponType": "one_handed_sword",
+    "mainAttr": "intelligence",
+    "subAttr": "strength",
+    "tags": [
+      "大量伤害",
+      "燃烧"
+    ],
+    "normalAttackRange": 5,
+    "toughnessCoef": 0.091875,
+    "sortOrder": 14,
+    "stats": {
+      "baseStrength": 13.6082474226804,
+      "baseAgility": 9.58762886597939,
+      "baseIntelligence": 22.2680412371134,
+      "baseWillpower": 9.07216494845361,
+      "maxStrength": 132.272164948454,
+      "maxAgility": 109.113402061856,
+      "maxIntelligence": 193.731958762887,
+      "maxWillpower": 97.979381443299,
+      "maxAtk": 347
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0016_laevat_basic",
+      "tactical": "skill_chr_0016_laevat_tactical",
+      "chain": "skill_chr_0016_laevat_chain",
+      "ultimate": "skill_chr_0016_laevat_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0017_yvonne",
+    "name": "伊冯",
+    "nameEn": "Yvonne",
+    "classType": "Caster",
+    "element": "ice",
+    "rarity": 6,
+    "weaponType": "handgun",
+    "mainAttr": "intelligence",
+    "subAttr": "agility",
+    "tags": [
+      "寒冷附着",
+      "大量伤害",
+      "暴击"
+    ],
+    "normalAttackRange": 10,
+    "toughnessCoef": 0.1150625,
+    "sortOrder": 15,
+    "stats": {
+      "baseStrength": 8.35051546391753,
+      "baseAgility": 14.7422680412371,
+      "baseIntelligence": 24.5876288659794,
+      "baseWillpower": 10.6185567010309,
+      "maxStrength": 90.1855670103093,
+      "maxAgility": 139.620618556701,
+      "maxIntelligence": 192.061855670103,
+      "maxWillpower": 114.680412371134,
+      "maxAtk": 350
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0017_yvonne_basic",
+      "tactical": "skill_chr_0017_yvonne_tactical",
+      "chain": "skill_chr_0017_yvonne_chain",
+      "ultimate": "skill_chr_0017_yvonne_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0018_dapan",
+    "name": "大潘",
+    "nameEn": "Da Pan",
+    "classType": "Striker",
+    "element": "physical",
+    "rarity": 5,
+    "weaponType": "two_handed_sword",
+    "mainAttr": "strength",
+    "subAttr": "willpower",
+    "tags": [
+      "大量伤害",
+      "击飞",
+      "猛击"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.109375,
+    "sortOrder": 16,
+    "stats": {
+      "baseStrength": 24.2783505154639,
+      "baseAgility": 9.79381443298969,
+      "baseIntelligence": 10.1030927835052,
+      "baseWillpower": 10.4329896907217,
+      "maxStrength": 190.39175257732,
+      "maxAgility": 105.773195876289,
+      "maxIntelligence": 103.546391752577,
+      "maxWillpower": 111.451546391753,
+      "maxAtk": 330
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0018_dapan_basic",
+      "tactical": "skill_chr_0018_dapan_tactical",
+      "chain": "skill_chr_0018_dapan_chain",
+      "ultimate": "skill_chr_0018_dapan_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0019_karin",
+    "name": "秋栗",
+    "nameEn": "Akekuri",
+    "classType": "Vanguard",
+    "element": "fire",
+    "rarity": 4,
+    "weaponType": "one_handed_sword",
+    "mainAttr": "agility",
+    "subAttr": "intelligence",
+    "tags": [
+      "技力恢复",
+      "灼热附着",
+      "连击"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.14,
+    "sortOrder": 17,
+    "stats": {
+      "baseStrength": 13.4020618556701,
+      "baseAgility": 15.1546391752577,
+      "baseIntelligence": 12.4742268041237,
+      "baseWillpower": 9.27835051546392,
+      "maxStrength": 120.247422680412,
+      "maxAgility": 153.649484536083,
+      "maxIntelligence": 116.350515463918,
+      "maxWillpower": 118.020618556701,
+      "maxAtk": 348
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0019_karin_basic",
+      "tactical": "skill_chr_0019_karin_tactical",
+      "chain": "skill_chr_0019_karin_chain",
+      "ultimate": "skill_chr_0019_karin_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0020_meurs",
+    "name": "卡契尔",
+    "nameEn": "Catcher",
+    "classType": "Defender",
+    "element": "physical",
+    "rarity": 4,
+    "weaponType": "two_handed_sword",
+    "mainAttr": "strength",
+    "subAttr": "willpower",
+    "tags": [
+      "庇护",
+      "护盾",
+      "虚弱"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.0958125,
+    "sortOrder": 18,
+    "stats": {
+      "baseStrength": 21.6494845360825,
+      "baseAgility": 9.79381443298969,
+      "baseIntelligence": 8.76288659793815,
+      "baseWillpower": 11.4536082474227,
+      "maxStrength": 192.061855670103,
+      "maxAgility": 105.773195876289,
+      "maxIntelligence": 94.639175257732,
+      "maxWillpower": 116.350515463918,
+      "maxAtk": 327
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0020_meurs_basic",
+      "tactical": "skill_chr_0020_meurs_tactical",
+      "chain": "skill_chr_0020_meurs_chain",
+      "ultimate": "skill_chr_0020_meurs_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0021_whiten",
+    "name": "埃特拉",
+    "nameEn": "Estella",
+    "classType": "Guard",
+    "element": "ice",
+    "rarity": 4,
+    "weaponType": "polearm",
+    "mainAttr": "willpower",
+    "subAttr": "strength",
+    "tags": [
+      "寒冷附着",
+      "击飞",
+      "物理脆弱"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.133875,
+    "sortOrder": 19,
+    "stats": {
+      "baseStrength": 13.0412371134021,
+      "baseAgility": 8.76288659793815,
+      "baseIntelligence": 14.1237113402062,
+      "baseWillpower": 15,
+      "maxStrength": 113.901030927835,
+      "maxAgility": 106.886597938144,
+      "maxIntelligence": 120.247422680412,
+      "maxWillpower": 165.340206185567,
+      "maxAtk": 340
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0021_whiten_basic",
+      "tactical": "skill_chr_0021_whiten_tactical",
+      "chain": "skill_chr_0021_whiten_chain",
+      "ultimate": "skill_chr_0021_whiten_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0022_bounda",
+    "name": "萤石",
+    "nameEn": "Fluorite",
+    "classType": "Caster",
+    "element": "nature",
+    "rarity": 4,
+    "weaponType": "handgun",
+    "mainAttr": "agility",
+    "subAttr": "intelligence",
+    "tags": [
+      "自然附着",
+      "寒冷附着"
+    ],
+    "normalAttackRange": 10,
+    "toughnessCoef": 0.1150625,
+    "sortOrder": 20,
+    "stats": {
+      "baseStrength": 14.020618556701,
+      "baseAgility": 14.6907216494845,
+      "baseIntelligence": 12.4742268041237,
+      "baseWillpower": 10.1030927835052,
+      "maxStrength": 97.979381443299,
+      "maxAgility": 183.711340206186,
+      "maxIntelligence": 124.923711340206,
+      "maxWillpower": 100.20618556701,
+      "maxAtk": 330
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0022_bounda_basic",
+      "tactical": "skill_chr_0022_bounda_tactical",
+      "chain": "skill_chr_0022_bounda_chain",
+      "ultimate": "skill_chr_0022_bounda_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0023_antal",
+    "name": "安塔尔",
+    "nameEn": "Antal",
+    "classType": "Supporter",
+    "element": "electric",
+    "rarity": 4,
+    "weaponType": "caster_unit",
+    "mainAttr": "intelligence",
+    "subAttr": "strength",
+    "tags": [
+      "法术脆弱",
+      "增幅"
+    ],
+    "normalAttackRange": 10,
+    "toughnessCoef": 0.13125,
+    "sortOrder": 21,
+    "stats": {
+      "baseStrength": 15.8762886597938,
+      "baseAgility": 9.48453608247423,
+      "baseIntelligence": 15.4639175257732,
+      "baseWillpower": 9.79381443298969,
+      "maxStrength": 140.845360824742,
+      "maxAgility": 94.639175257732,
+      "maxIntelligence": 180.371134020619,
+      "maxWillpower": 90.1855670103093,
+      "maxAtk": 324
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0023_antal_basic",
+      "tactical": "skill_chr_0023_antal_tactical",
+      "chain": "skill_chr_0023_antal_chain",
+      "ultimate": "skill_chr_0023_antal_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0024_deepfin",
+    "name": "阿列什",
+    "nameEn": "Alesh",
+    "classType": "Vanguard",
+    "element": "ice",
+    "rarity": 5,
+    "weaponType": "one_handed_sword",
+    "mainAttr": "strength",
+    "subAttr": "intelligence",
+    "tags": [
+      "技力恢复",
+      "冻结"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.14,
+    "sortOrder": 22,
+    "stats": {
+      "baseStrength": 20.1030927835052,
+      "baseAgility": 9.48453608247423,
+      "baseIntelligence": 13.6082474226804,
+      "baseWillpower": 10.8247422680412,
+      "maxStrength": 172.020618556701,
+      "maxAgility": 104.659793814433,
+      "maxIntelligence": 137.171134020619,
+      "maxWillpower": 97.979381443299,
+      "maxAtk": 337
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0024_deepfin_basic",
+      "tactical": "skill_chr_0024_deepfin_tactical",
+      "chain": "skill_chr_0024_deepfin_chain",
+      "ultimate": "skill_chr_0024_deepfin_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0025_ardelia",
+    "name": "艾尔黛拉",
+    "nameEn": "Ardelia",
+    "classType": "Supporter",
+    "element": "nature",
+    "rarity": 6,
+    "weaponType": "caster_unit",
+    "mainAttr": "intelligence",
+    "subAttr": "willpower",
+    "tags": [
+      "治疗",
+      "腐蚀",
+      "脆弱"
+    ],
+    "normalAttackRange": 10,
+    "toughnessCoef": 0.112,
+    "sortOrder": 23,
+    "stats": {
+      "baseStrength": 9.79381443298969,
+      "baseAgility": 9.48453608247423,
+      "baseIntelligence": 20.1030927835052,
+      "baseWillpower": 15.8762886597938,
+      "maxStrength": 122.474226804124,
+      "maxAgility": 102.432989690722,
+      "maxIntelligence": 158.659793814433,
+      "maxWillpower": 128.59793814433,
+      "maxAtk": 353
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0025_ardelia_basic",
+      "tactical": "skill_chr_0025_ardelia_tactical",
+      "chain": "skill_chr_0025_ardelia_chain",
+      "ultimate": "skill_chr_0025_ardelia_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0026_lastrite",
+    "name": "别礼",
+    "nameEn": "Last Rite",
+    "classType": "Striker",
+    "element": "ice",
+    "rarity": 6,
+    "weaponType": "two_handed_sword",
+    "mainAttr": "strength",
+    "subAttr": "willpower",
+    "tags": [
+      "大量伤害",
+      "寒冷附着"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.09,
+    "sortOrder": 24,
+    "stats": {
+      "baseStrength": 21.6494845360825,
+      "baseAgility": 8.76288659793815,
+      "baseIntelligence": 9.48453608247423,
+      "baseWillpower": 15.8762886597938,
+      "maxStrength": 168.680412371134,
+      "maxAgility": 113.901030927835,
+      "maxIntelligence": 102.432989690722,
+      "maxWillpower": 118.8,
+      "maxAtk": 363
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0026_lastrite_basic",
+      "tactical": "skill_chr_0026_lastrite_tactical",
+      "chain": "skill_chr_0026_lastrite_chain",
+      "ultimate": "skill_chr_0026_lastrite_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_0029_pograni",
+    "name": "骏卫",
+    "nameEn": "Pogranichnik",
+    "classType": "Vanguard",
+    "element": "physical",
+    "rarity": 6,
+    "weaponType": "one_handed_sword",
+    "mainAttr": "willpower",
+    "subAttr": "agility",
+    "tags": [
+      "技力恢复",
+      "碎甲"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.14,
+    "sortOrder": 25,
+    "stats": {
+      "baseStrength": 12.3711340206186,
+      "baseAgility": 13.6082474226804,
+      "baseIntelligence": 10.3092783505155,
+      "baseWillpower": 20.1030927835052,
+      "maxStrength": 110.226804123711,
+      "maxAgility": 120.024742268041,
+      "maxIntelligence": 105.773195876289,
+      "maxWillpower": 188.721649484536,
+      "maxAtk": 350
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_0029_pograni_basic",
+      "tactical": "skill_chr_0029_pograni_tactical",
+      "chain": "skill_chr_0029_pograni_chain",
+      "ultimate": "skill_chr_0029_pograni_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  },
+  {
+    "id": "chr_9000_endmin",
+    "name": "管理员",
+    "nameEn": "Endministrator",
+    "classType": "Guard",
+    "element": "physical",
+    "rarity": 6,
+    "weaponType": "one_handed_sword",
+    "mainAttr": "agility",
+    "subAttr": "strength",
+    "tags": [
+      "猛击",
+      "控制"
+    ],
+    "normalAttackRange": 3,
+    "toughnessCoef": 0.14,
+    "sortOrder": 1,
+    "stats": {
+      "baseStrength": 14.7422680412371,
+      "baseAgility": 14.2268041237113,
+      "baseIntelligence": 9.79381443298969,
+      "baseWillpower": 10.8247422680412,
+      "maxStrength": 134.721649484536,
+      "maxAgility": 153.649484536083,
+      "maxIntelligence": 105.773195876289,
+      "maxWillpower": 116.907216494845,
+      "maxAtk": 348
+    },
+    "level": 1,
+    "potential": 1,
+    "skills": {
+      "basic": "skill_chr_9000_endmin_basic",
+      "tactical": "skill_chr_9000_endmin_tactical",
+      "chain": "skill_chr_9000_endmin_chain",
+      "ultimate": "skill_chr_9000_endmin_ultimate"
+    },
+    "talents": [],
+    "equipment": {
+      "armor": null,
+      "gloves": null,
+      "accessory1": null,
+      "accessory2": null
+    },
+    "weapon": null
+  }
+]

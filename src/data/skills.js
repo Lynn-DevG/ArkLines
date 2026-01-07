@@ -286,7 +286,8 @@ export const SKILLS = {
                         "poise": 10
                     }
                 ],
-                "uspGain": 6.5
+                "uspGain": 6.5,
+                "condition": null
             }
         ]
     },
@@ -395,7 +396,8 @@ export const SKILLS = {
                         "poise": 10
                     }
                 ],
-                "uspGain": 6.5
+                "uspGain": 6.5,
+                "condition": null
             }
         ]
     },
@@ -657,7 +659,8 @@ export const SKILLS = {
                         "poise": 30
                     }
                 ],
-                "uspGain": 6.5
+                "uspGain": 6.5,
+                "condition": null
             }
         ]
     },
@@ -957,7 +960,8 @@ export const SKILLS = {
                         "atb": 0
                     }
                 ],
-                "uspGain": 0
+                "uspGain": 0,
+                "condition": null
             }
         ]
     },
@@ -1088,7 +1092,8 @@ export const SKILLS = {
                         "poise": 24
                     }
                 ],
-                "uspGain": 0
+                "uspGain": 0,
+                "condition": null
             },
             {
                 "id": "v_1765344082644",
@@ -1102,7 +1107,8 @@ export const SKILLS = {
                         "poise": 20
                     }
                 ],
-                "uspGain": 106.5
+                "uspGain": 106.5,
+                "condition": null
             },
             {
                 "id": "v_1767269025680",
@@ -1116,7 +1122,8 @@ export const SKILLS = {
                         "poise": 10
                     }
                 ],
-                "uspGain": 0
+                "uspGain": 0,
+                "condition": null
             },
             {
                 "id": "v_1765344189692",
@@ -1130,7 +1137,8 @@ export const SKILLS = {
                         "poise": 30
                     }
                 ],
-                "uspGain": 0
+                "uspGain": 0,
+                "condition": null
             }
         ]
     },
@@ -1260,7 +1268,8 @@ export const SKILLS = {
                         "poise": 10
                     }
                 ],
-                "uspGain": 6.5
+                "uspGain": 6.5,
+                "condition": null
             }
         ]
     },
@@ -1884,7 +1893,8 @@ export const SKILLS = {
                         "poise": 10
                     }
                 ],
-                "uspGain": 17
+                "uspGain": 17,
+                "condition": null
             }
         ]
     },
@@ -2157,7 +2167,11 @@ export const SKILLS = {
                         "poise": 3
                     }
                 ],
-                "uspGain": 10
+                "uspGain": 10,
+                "condition": {
+                    "type": "combo",
+                    "value": 1
+                }
             },
             {
                 "id": "v_1765344406616",
@@ -2176,7 +2190,11 @@ export const SKILLS = {
                         "atb": 7
                     }
                 ],
-                "uspGain": 10
+                "uspGain": 10,
+                "condition": {
+                    "type": "combo",
+                    "value": 2
+                }
             },
             {
                 "id": "v_1765344414601",
@@ -2200,7 +2218,11 @@ export const SKILLS = {
                         "atb": 13
                     }
                 ],
-                "uspGain": 10
+                "uspGain": 10,
+                "condition": {
+                    "type": "combo",
+                    "value": 3
+                }
             },
             {
                 "id": "v_1766424867630",
@@ -2224,7 +2246,11 @@ export const SKILLS = {
                         "atb": 23
                     }
                 ],
-                "uspGain": 10
+                "uspGain": 10,
+                "condition": {
+                    "type": "combo",
+                    "value": 4
+                }
             }
         ]
     },
@@ -2353,11 +2379,4 @@ export const SKILLS = {
         "element": "physical",
         "animationTime": 2.5
     }
-};
-
-export const SKILL_TYPES = {
-    BASIC: { name: '普通攻击', color: 'bg-slate-500' },
-    TACTICAL: { name: '战技', color: 'bg-blue-500' },
-    CHAIN: { name: '连携技', color: 'bg-purple-500' },
-    ULTIMATE: { name: '终结技', color: 'bg-amber-500' },
 };

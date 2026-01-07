@@ -98,7 +98,10 @@ try {
                 duration: v.duration,
                 damage_ticks: v.damageTicks || [], // Note: camelCase in variants in characters_skills.json?
                 uspGain: v.uspGain || 0,
-                condition: v.condition // Need to ensure conditions are compatible
+                condition: v.condition || (v.type === 'combo' ? {
+                    type: 'combo',
+                    value: v.name.includes('重击') || v.name.includes('Heavy') ? 'heavy' : parseInt(v.name.replace(/[^0-9]/g, '')) || 1
+                } : null)
             }));
         }
     });

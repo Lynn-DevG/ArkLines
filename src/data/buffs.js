@@ -1,31 +1,31 @@
 export const BUFFS = {
     // --- Elemental Attachments ---
-    'attachment_fire': {
-        id: 'attachment_fire',
+    'blaze_attach': {
+        id: 'blaze_attach',
         name: '灼热附着',
         type: 'ATTACHMENT',
         element: 'Fire',
         maxLayers: 4,
         description: 'Applies Fire alignment. Triggers Burn on reaction.'
     },
-    'attachment_ice': {
-        id: 'attachment_ice',
+    'cold_attach': {
+        id: 'cold_attach',
         name: '寒冷附着',
         type: 'ATTACHMENT',
         element: 'Ice',
         maxLayers: 4,
         description: 'Applies Ice alignment. Triggers Freeze on reaction.'
     },
-    'attachment_nature': {
-        id: 'attachment_nature',
+    'nature_attach': {
+        id: 'nature_attach',
         name: '自然附着',
         type: 'ATTACHMENT',
         element: 'Nature',
         maxLayers: 4,
         description: 'Applies Nature alignment. Triggers Corrosion on reaction.'
     },
-    'attachment_electric': {
-        id: 'attachment_electric',
+    'emag_attach': {
+        id: 'emag_attach',
         name: '电气附着',
         type: 'ATTACHMENT',
         element: 'Electric',

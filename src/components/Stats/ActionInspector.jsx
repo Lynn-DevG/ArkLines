@@ -91,26 +91,39 @@ export const ActionInspector = ({ action, onClose }) => {
                         <div className="text-white font-mono">{skill.duration}s</div>
                     </div>
                     <div className="bg-slate-800 p-2 rounded">
-                        <div className="text-slate-400 mb-1 flex items-center gap-1"><Zap size={10} /> SP Cost</div>
-                        <div className="text-white font-mono">{skill.spCost || 0}</div>
+                        <div className="text-slate-400 mb-1 flex items-center gap-1"><Zap size={10} /> ATB Cost</div>
+                        <div className="text-white font-mono">{skill.atbCost || 0}</div>
                     </div>
                 </div>
 
-                {/* Nodes Timeline */}
+                {/* Nodes Timeline (Damage Ticks & Anomalies) */}
                 <div>
-                    <h3 className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Action Nodes</h3>
+                    <h3 className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Skill Events</h3>
                     <div className="space-y-2">
-                        {skill.nodes.map((node, i) => (
-                            <div key={i} className="bg-slate-800/50 p-2 rounded border border-slate-700 text-xs relatives">
+                        {skill.damage_ticks && skill.damage_ticks.map((tick, i) => (
+                            <div key={`tick-${i}`} className="bg-slate-800/50 p-2 rounded border border-slate-700 text-xs relatives">
                                 <div className="flex justify-between mb-1">
-                                    <span className="text-indigo-400 font-bold uppercase">{node.type}</span>
-                                    <span className="text-slate-500 font-mono">{(action.startTime + node.time).toFixed(2)}s</span>
+                                    <span className="text-red-400 font-bold uppercase">Damage</span>
+                                    <span className="text-slate-500 font-mono">{(action.startTime + tick.offset).toFixed(2)}s</span>
                                 </div>
                                 <div className="text-slate-300">
-                                    {node.type === 'damage' && `Multiplier: ${node.multiplier}x (${node.element})`}
-                                    {node.type === 'status_apply' && `Apply: ${node.status} (${node.layers} stacks)`}
+                                    {tick.atb ? `ATB: +${tick.atb} ` : ''}
+                                    {tick.poise ? `Poise: +${tick.poise}` : ''}
                                 </div>
                             </div>
+                        ))}
+                        {skill.anomalies && skill.anomalies.map((list, listIdx) => (
+                            list.map((ano, anoIdx) => (
+                                <div key={`ano-${listIdx}-${anoIdx}`} className="bg-slate-800/50 p-2 rounded border border-slate-700 text-xs relatives">
+                                    <div className="flex justify-between mb-1">
+                                        <span className="text-amber-400 font-bold uppercase">Status</span>
+                                        <span className="text-slate-500 font-mono">{(action.startTime + ano.offset).toFixed(2)}s</span>
+                                    </div>
+                                    <div className="text-slate-300">
+                                        {ano.type} x{ano.stacks || 1} ({ano.duration}s)
+                                    </div>
+                                </div>
+                            ))
                         ))}
                     </div>
                 </div>

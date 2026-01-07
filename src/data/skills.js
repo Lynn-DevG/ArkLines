@@ -1,4136 +1,2357 @@
 export const SKILLS = {
-    "skill_chr_0003_endminf_basic": {
-        "id": "skill_chr_0003_endminf_basic",
+    "skill_chr_0003_endminf_attack": {
+        "id": "skill_chr_0003_endminf_attack",
         "name": "管理员攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 3.7,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 3.7,
+                "atb": 20,
+                "poise": 18
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "管理员连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "管理员连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "管理员连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "管理员连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "管理员重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "physical"
     },
-    "skill_chr_0003_endminf_tactical": {
-        "id": "skill_chr_0003_endminf_tactical",
+    "skill_chr_0003_endminf_normal_skill": {
+        "id": "skill_chr_0003_endminf_normal_skill",
         "name": "管理员战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 0.8,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0.4,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "poise",
+                    "stacks": 2,
+                    "duration": 0,
+                    "offset": 0.4
+                }
+            ]
+        ],
+        "element": "physical"
     },
-    "skill_chr_0003_endminf_chain": {
-        "id": "skill_chr_0003_endminf_chain",
+    "skill_chr_0003_endminf_combo_skill": {
+        "id": "skill_chr_0003_endminf_combo_skill",
         "name": "管理员连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.2,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 16,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0.8,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "endmin_debuff",
+                    "stacks": 1,
+                    "duration": 4,
+                    "offset": 0.8
+                }
+            ]
+        ],
+        "element": "physical"
     },
-    "skill_chr_0003_endminf_ultimate": {
-        "id": "skill_chr_0003_endminf_ultimate",
+    "skill_chr_0003_endminf_ultimate_skill": {
+        "id": "skill_chr_0003_endminf_ultimate_skill",
         "name": "管理员终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 1.5,
+        "uspCost": 80,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 25
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "physical",
+        "animationTime": 1.5
     },
-    "skill_chr_0004_pelica_basic": {
-        "id": "skill_chr_0004_pelica_basic",
+    "skill_chr_0004_pelica_attack": {
+        "id": "skill_chr_0004_pelica_attack",
         "name": "佩丽卡攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 3.3,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 15,
+                "poise": 15
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "佩丽卡连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "佩丽卡连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "佩丽卡连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "佩丽卡连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "佩丽卡重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Electric",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "emag"
     },
-    "skill_chr_0004_pelica_tactical": {
-        "id": "skill_chr_0004_pelica_tactical",
+    "skill_chr_0004_pelica_normal_skill": {
+        "id": "skill_chr_0004_pelica_normal_skill",
         "name": "佩丽卡战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 0.8,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 1
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "status_conduct",
-                "layers": 1
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "emag_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "emag"
     },
-    "skill_chr_0004_pelica_chain": {
-        "id": "skill_chr_0004_pelica_chain",
+    "skill_chr_0004_pelica_combo_skill": {
+        "id": "skill_chr_0004_pelica_combo_skill",
         "name": "佩丽卡连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.2,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 20,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Electric",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "conductive",
+                    "stacks": 1,
+                    "duration": 8.75
+                }
+            ]
+        ],
+        "element": "emag"
     },
-    "skill_chr_0004_pelica_ultimate": {
-        "id": "skill_chr_0004_pelica_ultimate",
+    "skill_chr_0004_pelica_ultimate_skill": {
+        "id": "skill_chr_0004_pelica_ultimate_skill",
         "name": "佩丽卡终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 1.6,
+        "uspCost": 68,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "emag",
+        "animationTime": 1.6
     },
-    "skill_chr_0005_chen_basic": {
-        "id": "skill_chr_0005_chen_basic",
+    "skill_chr_0005_chen_attack": {
+        "id": "skill_chr_0005_chen_attack",
         "name": "陈千语攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 3.2,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 3.2,
+                "atb": 18,
+                "poise": 16
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "陈千语连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "陈千语连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "陈千语连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "陈千语连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "陈千语重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "physical"
     },
-    "skill_chr_0005_chen_tactical": {
-        "id": "skill_chr_0005_chen_tactical",
+    "skill_chr_0005_chen_normal_skill": {
+        "id": "skill_chr_0005_chen_normal_skill",
         "name": "陈千语战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 0.8,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "status_stun",
-                "layers": 1
+                "offset": 0.4,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "knockup",
+                    "stacks": 2,
+                    "duration": 0,
+                    "offset": 0.4
+                }
+            ]
+        ],
+        "element": "physical"
     },
-    "skill_chr_0005_chen_chain": {
-        "id": "skill_chr_0005_chen_chain",
+    "skill_chr_0005_chen_combo_skill": {
+        "id": "skill_chr_0005_chen_combo_skill",
         "name": "陈千语连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 0.9,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 16,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0.56,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "knockup",
+                    "stacks": 2,
+                    "duration": 0,
+                    "offset": 0.56
+                }
+            ]
+        ],
+        "element": "physical"
     },
-    "skill_chr_0005_chen_ultimate": {
-        "id": "skill_chr_0005_chen_ultimate",
+    "skill_chr_0005_chen_ultimate_skill": {
+        "id": "skill_chr_0005_chen_ultimate_skill",
         "name": "陈千语终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 2,
+        "uspCost": 59.5,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "physical",
+        "animationTime": 1.6
     },
-    "skill_chr_0006_wolfgd_basic": {
-        "id": "skill_chr_0006_wolfgd_basic",
+    "skill_chr_0006_wolfgd_attack": {
+        "id": "skill_chr_0006_wolfgd_attack",
         "name": "狼卫攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 4,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 18,
+                "poise": 18
             }
         ],
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "blaze",
         "variants": [
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "狼卫连击1",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1765344273644",
+                "name": "强化战技",
+                "type": "normal_skill",
+                "duration": 2,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0,
+                        "atb": 0,
+                        "poise": 10
                     }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "狼卫连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "狼卫连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "狼卫连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "狼卫重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Fire",
-                        "scaling": "atk"
-                    }
-                ]
+                ],
+                "uspGain": 6.5
             }
         ]
     },
-    "skill_chr_0006_wolfgd_tactical": {
-        "id": "skill_chr_0006_wolfgd_tactical",
+    "skill_chr_0006_wolfgd_normal_skill": {
+        "id": "skill_chr_0006_wolfgd_normal_skill",
         "name": "狼卫战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 1.2,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_fire",
-                "layers": 1
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "status_burn",
-                "layers": 1
-            }
-        ]
-    },
-    "skill_chr_0006_wolfgd_chain": {
-        "id": "skill_chr_0006_wolfgd_chain",
-        "name": "狼卫连携",
-        "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Fire",
-                "scaling": "atk"
-            }
-        ]
-    },
-    "skill_chr_0006_wolfgd_ultimate": {
-        "id": "skill_chr_0006_wolfgd_ultimate",
-        "name": "狼卫终结技",
-        "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
-            }
-        ]
-    },
-    "skill_chr_0007_ikut_basic": {
-        "id": "skill_chr_0007_ikut_basic",
-        "name": "弧光攻击",
-        "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
-            {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 5
             }
         ],
+        "anomalies": [
+            [
+                {
+                    "type": "blaze_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "blaze"
+    },
+    "skill_chr_0006_wolfgd_combo_skill": {
+        "id": "skill_chr_0006_wolfgd_combo_skill",
+        "name": "狼卫连携",
+        "type": "CHAIN",
+        "duration": 1.2,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 20,
+        "damage_ticks": [
+            {
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
+            }
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "blaze_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "blaze"
+    },
+    "skill_chr_0006_wolfgd_ultimate_skill": {
+        "id": "skill_chr_0006_wolfgd_ultimate_skill",
+        "name": "狼卫终结技",
+        "type": "ULTIMATE",
+        "duration": 1.5,
+        "uspCost": 76.5,
+        "uspReply": 0,
+        "damage_ticks": [
+            {
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
+            }
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "burning",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "blaze",
+        "animationTime": 1.5
+    },
+    "skill_chr_0007_ikut_attack": {
+        "id": "skill_chr_0007_ikut_attack",
+        "name": "弧光攻击",
+        "type": "BASIC",
+        "duration": 3,
+        "damage_ticks": [
+            {
+                "offset": 0,
+                "atb": 17,
+                "poise": 16
+            }
+        ],
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "emag",
         "variants": [
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "弧光连击1",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1767273184428",
+                "name": "强化战技",
+                "type": "normal_skill",
+                "duration": 1,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0,
+                        "atb": 0,
+                        "poise": 10
                     }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "弧光连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "弧光连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "弧光连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "弧光重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Electric",
-                        "scaling": "atk"
-                    }
-                ]
+                ],
+                "uspGain": 6.5
             }
         ]
     },
-    "skill_chr_0007_ikut_tactical": {
-        "id": "skill_chr_0007_ikut_tactical",
+    "skill_chr_0007_ikut_normal_skill": {
+        "id": "skill_chr_0007_ikut_normal_skill",
         "name": "弧光战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 1,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 1
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "emag"
     },
-    "skill_chr_0007_ikut_chain": {
-        "id": "skill_chr_0007_ikut_chain",
+    "skill_chr_0007_ikut_combo_skill": {
+        "id": "skill_chr_0007_ikut_combo_skill",
         "name": "弧光连携",
         "type": "CHAIN",
         "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "atbCost": 0,
+        "uspGain": 5,
+        "cooldown": 3,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Electric",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 5
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "emag"
     },
-    "skill_chr_0007_ikut_ultimate": {
-        "id": "skill_chr_0007_ikut_ultimate",
+    "skill_chr_0007_ikut_ultimate_skill": {
+        "id": "skill_chr_0007_ikut_ultimate_skill",
         "name": "弧光终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 1.9,
+        "uspCost": 76.5,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "emag_attach",
+                    "stacks": 1,
+                    "duration": 1.9,
+                    "offset": 2.1
+                },
+                {
+                    "type": "conductive",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 4
+                }
+            ]
+        ],
+        "element": "emag",
+        "animationTime": 1.9
     },
-    "skill_chr_0009_azrila_basic": {
-        "id": "skill_chr_0009_azrila_basic",
+    "skill_chr_0009_azrila_attack": {
+        "id": "skill_chr_0009_azrila_attack",
         "name": "余烬攻击",
         "type": "BASIC",
-        "duration": 1.2,
-        "nodes": [
+        "duration": 4.2,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 28,
+                "poise": 25
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "余烬连击1",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "余烬连击2",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "余烬连击3",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "余烬重击",
-                "duration": 1.8,
-                "nodes": [
-                    {
-                        "time": 0.9,
-                        "type": "damage",
-                        "multiplier": 1.8,
-                        "element": "Fire",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "blaze"
     },
-    "skill_chr_0009_azrila_tactical": {
-        "id": "skill_chr_0009_azrila_tactical",
+    "skill_chr_0009_azrila_normal_skill": {
+        "id": "skill_chr_0009_azrila_normal_skill",
         "name": "余烬战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 2,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "heal",
-                "target": "team",
-                "multiplier": 1.5,
-                "scaling": "willpower"
-            },
-            {
-                "time": 0.5,
-                "type": "shield",
-                "target": "team",
-                "multiplier": 2,
-                "scaling": "strength",
-                "duration": 10
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "knockdown",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "blaze"
     },
-    "skill_chr_0009_azrila_chain": {
-        "id": "skill_chr_0009_azrila_chain",
+    "skill_chr_0009_azrila_combo_skill": {
+        "id": "skill_chr_0009_azrila_combo_skill",
         "name": "余烬连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.1,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 19,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Fire",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "knockdown",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "blaze"
     },
-    "skill_chr_0009_azrila_ultimate": {
-        "id": "skill_chr_0009_azrila_ultimate",
+    "skill_chr_0009_azrila_ultimate_skill": {
+        "id": "skill_chr_0009_azrila_ultimate_skill",
         "name": "余烬终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 1.7,
+        "uspCost": 100,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "blaze",
+        "animationTime": 1.7
     },
-    "skill_chr_0011_seraph_basic": {
-        "id": "skill_chr_0011_seraph_basic",
+    "skill_chr_0011_seraph_attack": {
+        "id": "skill_chr_0011_seraph_attack",
         "name": "赛希攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 3.3,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 15,
+                "poise": 15
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "赛希连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "赛希连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "赛希连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "赛希连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "赛希重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Ice",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "cold"
     },
-    "skill_chr_0011_seraph_tactical": {
-        "id": "skill_chr_0011_seraph_tactical",
+    "skill_chr_0011_seraph_normal_skill": {
+        "id": "skill_chr_0011_seraph_normal_skill",
         "name": "赛希战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 0.5,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "heal",
-                "target": "team",
-                "multiplier": 1.5,
-                "scaling": "willpower"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_ice",
-                "layers": 1
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "cold"
     },
-    "skill_chr_0011_seraph_chain": {
-        "id": "skill_chr_0011_seraph_chain",
+    "skill_chr_0011_seraph_combo_skill": {
+        "id": "skill_chr_0011_seraph_combo_skill",
         "name": "赛希连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.2,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 8,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Ice",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "cold_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "cold"
     },
-    "skill_chr_0011_seraph_ultimate": {
-        "id": "skill_chr_0011_seraph_ultimate",
+    "skill_chr_0011_seraph_ultimate_skill": {
+        "id": "skill_chr_0011_seraph_ultimate_skill",
         "name": "赛希终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 1.5,
+        "uspCost": 72,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "cold",
+        "animationTime": 1.5
     },
-    "skill_chr_0012_avywen_basic": {
-        "id": "skill_chr_0012_avywen_basic",
+    "skill_chr_0012_avywen_attack": {
+        "id": "skill_chr_0012_avywen_attack",
         "name": "艾维文娜攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 3.2,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 19,
+                "poise": 17
             }
         ],
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "emag",
         "variants": [
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "艾维文娜连击1",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1767273720814",
+                "name": "战技-回收雷枪",
+                "type": "normal_skill",
+                "duration": 0.5,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0,
+                        "atb": 0,
+                        "poise": 30
                     }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "艾维文娜连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "艾维文娜连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "艾维文娜连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "艾维文娜重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Electric",
-                        "scaling": "atk"
-                    }
-                ]
+                ],
+                "uspGain": 6.5
             }
         ]
     },
-    "skill_chr_0012_avywen_tactical": {
-        "id": "skill_chr_0012_avywen_tactical",
+    "skill_chr_0012_avywen_normal_skill": {
+        "id": "skill_chr_0012_avywen_normal_skill",
         "name": "艾维文娜战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 0.5,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Electric",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 30
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "emag"
     },
-    "skill_chr_0012_avywen_chain": {
-        "id": "skill_chr_0012_avywen_chain",
+    "skill_chr_0012_avywen_combo_skill": {
+        "id": "skill_chr_0012_avywen_combo_skill",
         "name": "艾维文娜连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 2.5,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 13,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Electric",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "Thunderlances",
+                    "stacks": 3,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ]
+        ],
+        "element": "emag"
     },
-    "skill_chr_0012_avywen_ultimate": {
-        "id": "skill_chr_0012_avywen_ultimate",
+    "skill_chr_0012_avywen_ultimate_skill": {
+        "id": "skill_chr_0012_avywen_ultimate_skill",
         "name": "艾维文娜终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 1.5,
+        "uspCost": 85,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "Thunderlances EX",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ]
+        ],
+        "element": "emag",
+        "animationTime": 1.5
     },
-    "skill_chr_0013_aglina_basic": {
-        "id": "skill_chr_0013_aglina_basic",
+    "skill_chr_0013_aglina_attack": {
+        "id": "skill_chr_0013_aglina_attack",
         "name": "洁尔佩塔攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 3.5,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 16,
+                "poise": 16
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "洁尔佩塔连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "洁尔佩塔连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "洁尔佩塔连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "洁尔佩塔连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "洁尔佩塔重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Nature",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "nature"
     },
-    "skill_chr_0013_aglina_tactical": {
-        "id": "skill_chr_0013_aglina_tactical",
+    "skill_chr_0013_aglina_normal_skill": {
+        "id": "skill_chr_0013_aglina_normal_skill",
         "name": "洁尔佩塔战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 4,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_nature",
-                "layers": 1
-            }
-        ]
-    },
-    "skill_chr_0013_aglina_chain": {
-        "id": "skill_chr_0013_aglina_chain",
-        "name": "洁尔佩塔连携",
-        "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Nature",
-                "scaling": "atk"
-            }
-        ]
-    },
-    "skill_chr_0013_aglina_ultimate": {
-        "id": "skill_chr_0013_aglina_ultimate",
-        "name": "洁尔佩塔终结技",
-        "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
-            }
-        ]
-    },
-    "skill_chr_0014_aurora_basic": {
-        "id": "skill_chr_0014_aurora_basic",
-        "name": "昼雪攻击",
-        "type": "BASIC",
-        "duration": 1.2,
-        "nodes": [
-            {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "昼雪连击1",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "昼雪连击2",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "昼雪连击3",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "昼雪重击",
-                "duration": 1.8,
-                "nodes": [
-                    {
-                        "time": 0.9,
-                        "type": "damage",
-                        "multiplier": 1.8,
-                        "element": "Ice",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [
+            [
+                {
+                    "type": "nature_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "nature"
     },
-    "skill_chr_0014_aurora_tactical": {
-        "id": "skill_chr_0014_aurora_tactical",
+    "skill_chr_0013_aglina_combo_skill": {
+        "id": "skill_chr_0013_aglina_combo_skill",
+        "name": "洁尔佩塔连携",
+        "type": "CHAIN",
+        "duration": 2,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 20,
+        "damage_ticks": [
+            {
+                "offset": 0,
+                "atb": 0,
+                "poise": 5
+            }
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "knockup",
+                    "stacks": 2,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "nature"
+    },
+    "skill_chr_0013_aglina_ultimate_skill": {
+        "id": "skill_chr_0013_aglina_ultimate_skill",
+        "name": "洁尔佩塔终结技",
+        "type": "ULTIMATE",
+        "duration": 0.5,
+        "uspCost": 90,
+        "uspReply": 0,
+        "damage_ticks": [
+            {
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
+            }
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "affix_slow",
+                    "stacks": 1,
+                    "duration": 5,
+                    "offset": 0
+                }
+            ],
+            [
+                {
+                    "type": "spell_vulnerable",
+                    "stacks": 1,
+                    "duration": 5,
+                    "offset": 0
+                }
+            ],
+            [
+                {
+                    "type": "nature_attach",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ]
+        ],
+        "element": "nature",
+        "animationTime": 0.5
+    },
+    "skill_chr_0014_aurora_attack": {
+        "id": "skill_chr_0014_aurora_attack",
+        "name": "昼雪攻击",
+        "type": "BASIC",
+        "duration": 3.8,
+        "damage_ticks": [
+            {
+                "offset": 0,
+                "atb": 25,
+                "poise": 23
+            }
+        ],
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "cold"
+    },
+    "skill_chr_0014_aurora_normal_skill": {
+        "id": "skill_chr_0014_aurora_normal_skill",
         "name": "昼雪战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 0.5,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "heal",
-                "target": "team",
-                "multiplier": 1.5,
-                "scaling": "willpower"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_ice",
-                "layers": 1
+                "offset": 0,
+                "atb": 35,
+                "poise": 20
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "cold"
     },
-    "skill_chr_0014_aurora_chain": {
-        "id": "skill_chr_0014_aurora_chain",
+    "skill_chr_0014_aurora_combo_skill": {
+        "id": "skill_chr_0014_aurora_combo_skill",
         "name": "昼雪连携",
         "type": "CHAIN",
         "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 25,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Ice",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "cold"
     },
-    "skill_chr_0014_aurora_ultimate": {
-        "id": "skill_chr_0014_aurora_ultimate",
+    "skill_chr_0014_aurora_ultimate_skill": {
+        "id": "skill_chr_0014_aurora_ultimate_skill",
         "name": "昼雪终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 2,
+        "uspCost": 80,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "frozen",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "cold",
+        "animationTime": 2
     },
-    "skill_chr_0015_lifeng_basic": {
-        "id": "skill_chr_0015_lifeng_basic",
+    "skill_chr_0015_lifeng_attack": {
+        "id": "skill_chr_0015_lifeng_attack",
         "name": "黎风攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 3.2,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 3.2,
+                "atb": 21,
+                "poise": 19
             }
         ],
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "physical",
         "variants": [
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "黎风连击1",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1765344650632",
+                "name": "强化大招",
+                "type": "ultimate",
+                "duration": 1.9,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "黎风连击2",
-                "duration": 0.8,
-                "nodes": [
+                        "offset": 0,
+                        "atb": 0,
+                        "poise": 5
+                    },
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "黎风连击3",
-                "duration": 0.8,
-                "nodes": [
+                        "offset": 2,
+                        "poise": 5,
+                        "atb": 0
+                    },
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 3.9,
+                        "poise": 5,
+                        "atb": 0
                     }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "黎风连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "黎风重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
+                ],
+                "uspGain": 0
             }
         ]
     },
-    "skill_chr_0015_lifeng_tactical": {
-        "id": "skill_chr_0015_lifeng_tactical",
+    "skill_chr_0015_lifeng_normal_skill": {
+        "id": "skill_chr_0015_lifeng_normal_skill",
         "name": "黎风战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 2.2,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 1.9,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "knockdown",
+                    "stacks": 2,
+                    "duration": 0,
+                    "offset": 1.9
+                }
+            ],
+            [
+                {
+                    "type": "physical_vulnerable",
+                    "stacks": 1,
+                    "duration": 10,
+                    "offset": 1.9
+                }
+            ]
+        ],
+        "element": "physical"
     },
-    "skill_chr_0015_lifeng_chain": {
-        "id": "skill_chr_0015_lifeng_chain",
+    "skill_chr_0015_lifeng_combo_skill": {
+        "id": "skill_chr_0015_lifeng_combo_skill",
         "name": "黎风连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 2,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 16,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 1.6,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "combo",
+                    "stacks": 1,
+                    "duration": 20,
+                    "offset": 1.6
+                }
+            ]
+        ],
+        "element": "physical"
     },
-    "skill_chr_0015_lifeng_ultimate": {
-        "id": "skill_chr_0015_lifeng_ultimate",
+    "skill_chr_0015_lifeng_ultimate_skill": {
+        "id": "skill_chr_0015_lifeng_ultimate_skill",
         "name": "黎风终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 1.9,
+        "uspCost": 90,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 5
             },
             {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 2,
+                "poise": 5,
+                "atb": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "knockdown",
+                    "stacks": 1,
+                    "duration": 2,
+                    "hideDuration": true
+                },
+                {
+                    "type": "knockdown",
+                    "stacks": 1,
+                    "duration": 1.9,
+                    "hideDuration": true
+                }
+            ]
+        ],
+        "element": "physical",
+        "animationTime": 1.9
     },
-    "skill_chr_0016_laevat_basic": {
-        "id": "skill_chr_0016_laevat_basic",
+    "skill_chr_0016_laevat_attack": {
+        "id": "skill_chr_0016_laevat_attack",
         "name": "莱万汀攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 3.3,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 20,
+                "poise": 18
             }
         ],
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "blaze",
         "variants": [
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "莱万汀连击1",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1765344039364",
+                "name": "强化重击",
+                "type": "attack",
+                "duration": 3.3,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0,
+                        "atb": 22,
+                        "poise": 24
                     }
-                ]
+                ],
+                "uspGain": 0
             },
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "莱万汀连击2",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1765344082644",
+                "name": "强化战技",
+                "type": "normal_skill",
+                "duration": 1.9,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0,
+                        "atb": 0,
+                        "poise": 20
                     }
-                ]
+                ],
+                "uspGain": 106.5
             },
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "莱万汀连击3",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1767269025680",
+                "name": "大招内战技",
+                "type": "normal_skill",
+                "duration": 1.9,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0,
+                        "atb": 0,
+                        "poise": 10
                     }
-                ]
+                ],
+                "uspGain": 0
             },
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "莱万汀连击4",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1765344189692",
+                "name": "大招内强化战技",
+                "type": "normal_skill",
+                "duration": 1.9,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0,
+                        "atb": 0,
+                        "poise": 30
                     }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "莱万汀重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Fire",
-                        "scaling": "atk"
-                    }
-                ]
+                ],
+                "uspGain": 0
             }
         ]
     },
-    "skill_chr_0016_laevat_tactical": {
-        "id": "skill_chr_0016_laevat_tactical",
+    "skill_chr_0016_laevat_normal_skill": {
+        "id": "skill_chr_0016_laevat_normal_skill",
         "name": "莱万汀战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 1,
+        "atbCost": 100,
+        "uspGain": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "status_burn",
-                "layers": 1
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "magma_1",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ]
+        ],
+        "element": "blaze"
     },
-    "skill_chr_0016_laevat_chain": {
-        "id": "skill_chr_0016_laevat_chain",
+    "skill_chr_0016_laevat_combo_skill": {
+        "id": "skill_chr_0016_laevat_combo_skill",
         "name": "莱万汀连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.7,
+        "atbCost": 0,
+        "uspGain": 30,
+        "cooldown": 10,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Fire",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "magma_1",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ]
+        ],
+        "element": "blaze"
     },
-    "skill_chr_0016_laevat_ultimate": {
-        "id": "skill_chr_0016_laevat_ultimate",
+    "skill_chr_0016_laevat_ultimate_skill": {
+        "id": "skill_chr_0016_laevat_ultimate_skill",
         "name": "莱万汀终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 2,
+        "uspCost": 300,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "magma_1",
+                    "stacks": 1,
+                    "duration": 3.5,
+                    "offset": 0
+                },
+                {
+                    "type": "magma_2",
+                    "stacks": 1,
+                    "duration": 3.5,
+                    "offset": 0
+                },
+                {
+                    "type": "magma_3",
+                    "stacks": 1,
+                    "duration": 3.5,
+                    "offset": 0
+                },
+                {
+                    "type": "magma_4",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ]
+        ],
+        "element": "blaze",
+        "animationTime": 2
     },
-    "skill_chr_0017_yvonne_basic": {
-        "id": "skill_chr_0017_yvonne_basic",
+    "skill_chr_0017_yvonne_attack": {
+        "id": "skill_chr_0017_yvonne_attack",
         "name": "伊冯攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 3.7,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 17,
+                "poise": 17
             }
         ],
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "cold",
         "variants": [
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "伊冯连击1",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1765344226962",
+                "name": "强化战技",
+                "type": "normal_skill",
+                "duration": 1,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0,
+                        "atb": 0,
+                        "poise": 10
                     }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "伊冯连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "伊冯连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "伊冯连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "伊冯重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Ice",
-                        "scaling": "atk"
-                    }
-                ]
+                ],
+                "uspGain": 6.5
             }
         ]
     },
-    "skill_chr_0017_yvonne_tactical": {
-        "id": "skill_chr_0017_yvonne_tactical",
+    "skill_chr_0017_yvonne_normal_skill": {
+        "id": "skill_chr_0017_yvonne_normal_skill",
         "name": "伊冯战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 1.3,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_ice",
-                "layers": 1
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "cold_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "cold"
     },
-    "skill_chr_0017_yvonne_chain": {
-        "id": "skill_chr_0017_yvonne_chain",
+    "skill_chr_0017_yvonne_combo_skill": {
+        "id": "skill_chr_0017_yvonne_combo_skill",
         "name": "伊冯连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.1,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 22,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Ice",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "cold_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "cold"
     },
-    "skill_chr_0017_yvonne_ultimate": {
-        "id": "skill_chr_0017_yvonne_ultimate",
+    "skill_chr_0017_yvonne_ultimate_skill": {
+        "id": "skill_chr_0017_yvonne_ultimate_skill",
         "name": "伊冯终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 2,
+        "uspCost": 200,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "cold_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "cold",
+        "animationTime": 2
     },
-    "skill_chr_0018_dapan_basic": {
-        "id": "skill_chr_0018_dapan_basic",
+    "skill_chr_0018_dapan_attack": {
+        "id": "skill_chr_0018_dapan_attack",
         "name": "大潘攻击",
         "type": "BASIC",
-        "duration": 1.2,
-        "nodes": [
+        "duration": 3.5,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 3.5,
+                "atb": 21,
+                "poise": 20
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "大潘连击1",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "大潘连击2",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "大潘连击3",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "大潘重击",
-                "duration": 1.8,
-                "nodes": [
-                    {
-                        "time": 0.9,
-                        "type": "damage",
-                        "multiplier": 1.8,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "physical"
     },
-    "skill_chr_0018_dapan_tactical": {
-        "id": "skill_chr_0018_dapan_tactical",
+    "skill_chr_0018_dapan_normal_skill": {
+        "id": "skill_chr_0018_dapan_normal_skill",
         "name": "大潘战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 1.8,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 1.5,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "knockup",
+                    "stacks": 2,
+                    "duration": 0,
+                    "offset": 1.5
+                }
+            ]
+        ],
+        "element": "physical"
     },
-    "skill_chr_0018_dapan_chain": {
-        "id": "skill_chr_0018_dapan_chain",
+    "skill_chr_0018_dapan_combo_skill": {
+        "id": "skill_chr_0018_dapan_combo_skill",
         "name": "大潘连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 2.1,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 20,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 1.76,
+                "atb": 0,
+                "poise": 15
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "poise",
+                    "stacks": 4,
+                    "duration": 0,
+                    "offset": 1.76
+                }
+            ]
+        ],
+        "element": "physical"
     },
-    "skill_chr_0018_dapan_ultimate": {
-        "id": "skill_chr_0018_dapan_ultimate",
+    "skill_chr_0018_dapan_ultimate_skill": {
+        "id": "skill_chr_0018_dapan_ultimate_skill",
         "name": "大潘终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 3,
+        "uspCost": 76.5,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 1.5,
+                "atb": 0,
+                "poise": 0
             },
             {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 2.7,
+                "poise": 0,
+                "atb": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "knockup",
+                    "stacks": 1,
+                    "duration": 1.1,
+                    "offset": 1.5
+                },
+                {
+                    "type": "knockdown",
+                    "stacks": 2,
+                    "duration": 0,
+                    "offset": 2.7
+                }
+            ],
+            [
+                {
+                    "type": "dapan_buff",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ]
+        ],
+        "element": "physical",
+        "animationTime": 1.5
     },
-    "skill_chr_0019_karin_basic": {
-        "id": "skill_chr_0019_karin_basic",
+    "skill_chr_0019_karin_attack": {
+        "id": "skill_chr_0019_karin_attack",
         "name": "秋栗攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 2.5,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 19,
+                "poise": 17
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "秋栗连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "秋栗连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "秋栗连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "秋栗连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "秋栗重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Fire",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "blaze"
     },
-    "skill_chr_0019_karin_tactical": {
-        "id": "skill_chr_0019_karin_tactical",
+    "skill_chr_0019_karin_normal_skill": {
+        "id": "skill_chr_0019_karin_normal_skill",
         "name": "秋栗战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 2,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_fire",
-                "layers": 1
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "blaze_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "blaze"
     },
-    "skill_chr_0019_karin_chain": {
-        "id": "skill_chr_0019_karin_chain",
+    "skill_chr_0019_karin_combo_skill": {
+        "id": "skill_chr_0019_karin_combo_skill",
         "name": "秋栗连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.5,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 15,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Fire",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "blaze"
     },
-    "skill_chr_0019_karin_ultimate": {
-        "id": "skill_chr_0019_karin_ultimate",
+    "skill_chr_0019_karin_ultimate_skill": {
+        "id": "skill_chr_0019_karin_ultimate_skill",
         "name": "秋栗终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 3,
+        "uspCost": 90,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Fire",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "blaze",
+        "animationTime": 1.7
     },
-    "skill_chr_0020_meurs_basic": {
-        "id": "skill_chr_0020_meurs_basic",
+    "skill_chr_0020_meurs_attack": {
+        "id": "skill_chr_0020_meurs_attack",
         "name": "卡契尔攻击",
         "type": "BASIC",
-        "duration": 1.2,
-        "nodes": [
+        "duration": 2.5,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 25,
+                "poise": 22
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "卡契尔连击1",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "卡契尔连击2",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "卡契尔连击3",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "卡契尔重击",
-                "duration": 1.8,
-                "nodes": [
-                    {
-                        "time": 0.9,
-                        "type": "damage",
-                        "multiplier": 1.8,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "physical"
     },
-    "skill_chr_0020_meurs_tactical": {
-        "id": "skill_chr_0020_meurs_tactical",
+    "skill_chr_0020_meurs_normal_skill": {
+        "id": "skill_chr_0020_meurs_normal_skill",
         "name": "卡契尔战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 2,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "shield",
-                "target": "team",
-                "multiplier": 2,
-                "scaling": "strength",
-                "duration": 10
+                "offset": 0,
+                "atb": 0,
+                "poise": 20
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "physical"
     },
-    "skill_chr_0020_meurs_chain": {
-        "id": "skill_chr_0020_meurs_chain",
+    "skill_chr_0020_meurs_combo_skill": {
+        "id": "skill_chr_0020_meurs_combo_skill",
         "name": "卡契尔连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.5,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 15,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "physical"
     },
-    "skill_chr_0020_meurs_ultimate": {
-        "id": "skill_chr_0020_meurs_ultimate",
+    "skill_chr_0020_meurs_ultimate_skill": {
+        "id": "skill_chr_0020_meurs_ultimate_skill",
         "name": "卡契尔终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 3,
+        "uspCost": 72,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Physical",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "physical",
+        "animationTime": 1.3
     },
-    "skill_chr_0021_whiten_basic": {
-        "id": "skill_chr_0021_whiten_basic",
+    "skill_chr_0021_whiten_attack": {
+        "id": "skill_chr_0021_whiten_attack",
         "name": "埃特拉攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 2.5,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 19,
+                "poise": 17
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "埃特拉连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "埃特拉连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "埃特拉连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "埃特拉连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "埃特拉重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Ice",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "cold"
     },
-    "skill_chr_0021_whiten_tactical": {
-        "id": "skill_chr_0021_whiten_tactical",
+    "skill_chr_0021_whiten_normal_skill": {
+        "id": "skill_chr_0021_whiten_normal_skill",
         "name": "埃特拉战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 2,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_ice",
-                "layers": 1
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "cold_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "cold"
     },
-    "skill_chr_0021_whiten_chain": {
-        "id": "skill_chr_0021_whiten_chain",
+    "skill_chr_0021_whiten_combo_skill": {
+        "id": "skill_chr_0021_whiten_combo_skill",
         "name": "埃特拉连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.5,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 15,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Ice",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "knockup",
+                    "stacks": 1,
+                    "duration": 0
+                },
+                {
+                    "type": "ice_shatter",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "cold"
     },
-    "skill_chr_0021_whiten_ultimate": {
-        "id": "skill_chr_0021_whiten_ultimate",
+    "skill_chr_0021_whiten_ultimate_skill": {
+        "id": "skill_chr_0021_whiten_ultimate_skill",
         "name": "埃特拉终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 3,
+        "uspCost": 63,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "cold",
+        "animationTime": 1.8
     },
-    "skill_chr_0022_bounda_basic": {
-        "id": "skill_chr_0022_bounda_basic",
+    "skill_chr_0022_bounda_attack": {
+        "id": "skill_chr_0022_bounda_attack",
         "name": "萤石攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 2.5,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 15,
+                "poise": 15
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "萤石连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "萤石连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "萤石连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "萤石连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "萤石重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Nature",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "nature"
     },
-    "skill_chr_0022_bounda_tactical": {
-        "id": "skill_chr_0022_bounda_tactical",
+    "skill_chr_0022_bounda_normal_skill": {
+        "id": "skill_chr_0022_bounda_normal_skill",
         "name": "萤石战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 2,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_nature",
-                "layers": 1
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_ice",
-                "layers": 1
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "nature"
     },
-    "skill_chr_0022_bounda_chain": {
-        "id": "skill_chr_0022_bounda_chain",
+    "skill_chr_0022_bounda_combo_skill": {
+        "id": "skill_chr_0022_bounda_combo_skill",
         "name": "萤石连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.5,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 25,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Nature",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "nature"
     },
-    "skill_chr_0022_bounda_ultimate": {
-        "id": "skill_chr_0022_bounda_ultimate",
+    "skill_chr_0022_bounda_ultimate_skill": {
+        "id": "skill_chr_0022_bounda_ultimate_skill",
         "name": "萤石终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 3,
+        "uspCost": 72,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "nature",
+        "animationTime": 0.5
     },
-    "skill_chr_0023_antal_basic": {
-        "id": "skill_chr_0023_antal_basic",
+    "skill_chr_0023_antal_attack": {
+        "id": "skill_chr_0023_antal_attack",
         "name": "安塔尔攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 2.5,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 15,
+                "poise": 15
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "安塔尔连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "安塔尔连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "安塔尔连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "安塔尔连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "安塔尔重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Electric",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "emag"
     },
-    "skill_chr_0023_antal_tactical": {
-        "id": "skill_chr_0023_antal_tactical",
+    "skill_chr_0023_antal_normal_skill": {
+        "id": "skill_chr_0023_antal_normal_skill",
         "name": "安塔尔战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 2,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Electric",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "antal_buff",
+                    "stacks": 1,
+                    "duration": 60,
+                    "offset": 2
+                }
+            ]
+        ],
+        "element": "emag"
     },
-    "skill_chr_0023_antal_chain": {
-        "id": "skill_chr_0023_antal_chain",
+    "skill_chr_0023_antal_combo_skill": {
+        "id": "skill_chr_0023_antal_combo_skill",
         "name": "安塔尔连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.5,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 15,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Electric",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "emag"
     },
-    "skill_chr_0023_antal_ultimate": {
-        "id": "skill_chr_0023_antal_ultimate",
+    "skill_chr_0023_antal_ultimate_skill": {
+        "id": "skill_chr_0023_antal_ultimate_skill",
         "name": "安塔尔终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 1.4,
+        "uspCost": 90,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Electric",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "pulse_enhance",
+                    "stacks": 1,
+                    "duration": 12,
+                    "offset": 1.4
+                }
+            ],
+            [
+                {
+                    "type": "fire_enhance",
+                    "stacks": 1,
+                    "duration": 12,
+                    "offset": 1.4
+                }
+            ]
+        ],
+        "element": "emag",
+        "animationTime": 1.4
     },
-    "skill_chr_0024_deepfin_basic": {
-        "id": "skill_chr_0024_deepfin_basic",
+    "skill_chr_0024_deepfin_attack": {
+        "id": "skill_chr_0024_deepfin_attack",
         "name": "阿列什攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 3.2,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 19,
+                "poise": 17
             }
         ],
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "cold",
         "variants": [
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "阿列什连击1",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1767274880488",
+                "name": "强化战技",
+                "type": "normal_skill",
+                "duration": 1.3,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0,
+                        "atb": 30,
+                        "poise": 10
                     }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "阿列什连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "阿列什连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "阿列什连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "阿列什重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Ice",
-                        "scaling": "atk"
-                    }
-                ]
+                ],
+                "uspGain": 17
             }
         ]
     },
-    "skill_chr_0024_deepfin_tactical": {
-        "id": "skill_chr_0024_deepfin_tactical",
+    "skill_chr_0024_deepfin_normal_skill": {
+        "id": "skill_chr_0024_deepfin_normal_skill",
         "name": "阿列什战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 1.3,
+        "atbCost": 100,
+        "uspGain": 17,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "status_freeze",
-                "layers": 1
+                "offset": 0,
+                "atb": 30,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "frozen",
+                    "stacks": 1,
+                    "duration": 5
+                }
+            ]
+        ],
+        "element": "cold"
     },
-    "skill_chr_0024_deepfin_chain": {
-        "id": "skill_chr_0024_deepfin_chain",
+    "skill_chr_0024_deepfin_combo_skill": {
+        "id": "skill_chr_0024_deepfin_combo_skill",
         "name": "阿列什连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.5,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 9,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Ice",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 10,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "cold"
     },
-    "skill_chr_0024_deepfin_ultimate": {
-        "id": "skill_chr_0024_deepfin_ultimate",
+    "skill_chr_0024_deepfin_ultimate_skill": {
+        "id": "skill_chr_0024_deepfin_ultimate_skill",
         "name": "阿列什终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 1.6,
+        "uspCost": 85,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 30,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "cold_attach",
+                    "stacks": 1,
+                    "duration": 0
+                }
+            ]
+        ],
+        "element": "cold",
+        "animationTime": 1.6
     },
-    "skill_chr_0025_ardelia_basic": {
-        "id": "skill_chr_0025_ardelia_basic",
+    "skill_chr_0025_ardelia_attack": {
+        "id": "skill_chr_0025_ardelia_attack",
         "name": "艾尔黛拉攻击",
         "type": "BASIC",
-        "duration": 0.8,
-        "nodes": [
+        "duration": 4.3,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 4.3,
+                "atb": 18,
+                "poise": 18
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "艾尔黛拉连击1",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "艾尔黛拉连击2",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "艾尔黛拉连击3",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "艾尔黛拉连击4",
-                "duration": 0.8,
-                "nodes": [
-                    {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "艾尔黛拉重击",
-                "duration": 1.5,
-                "nodes": [
-                    {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Nature",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "nature"
     },
-    "skill_chr_0025_ardelia_tactical": {
-        "id": "skill_chr_0025_ardelia_tactical",
+    "skill_chr_0025_ardelia_normal_skill": {
+        "id": "skill_chr_0025_ardelia_normal_skill",
         "name": "艾尔黛拉战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 1.3,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "heal",
-                "target": "team",
-                "multiplier": 1.5,
-                "scaling": "willpower"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "status_corrosion",
-                "layers": 1
+                "offset": 1.3,
+                "atb": 0,
+                "poise": 10
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "spell_vulnerable",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ],
+            [
+                {
+                    "type": "physical_vulnerable",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ]
+        ],
+        "element": "nature"
     },
-    "skill_chr_0025_ardelia_chain": {
-        "id": "skill_chr_0025_ardelia_chain",
+    "skill_chr_0025_ardelia_combo_skill": {
+        "id": "skill_chr_0025_ardelia_combo_skill",
         "name": "艾尔黛拉连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 1.2,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 18,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Nature",
-                "scaling": "atk"
+                "offset": 0.8,
+                "poise": 0,
+                "atb": 0
+            },
+            {
+                "offset": 2.6,
+                "poise": 10,
+                "atb": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "corrosion",
+                    "stacks": 1,
+                    "duration": 10,
+                    "offset": 2.6
+                }
+            ]
+        ],
+        "element": "nature"
     },
-    "skill_chr_0025_ardelia_ultimate": {
-        "id": "skill_chr_0025_ardelia_ultimate",
+    "skill_chr_0025_ardelia_ultimate_skill": {
+        "id": "skill_chr_0025_ardelia_ultimate_skill",
         "name": "艾尔黛拉终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 2.7,
+        "uspCost": 90,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Nature",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "nature",
+        "animationTime": 2.7
     },
-    "skill_chr_0026_lastrite_basic": {
-        "id": "skill_chr_0026_lastrite_basic",
+    "skill_chr_0026_lastrite_attack": {
+        "id": "skill_chr_0026_lastrite_attack",
         "name": "别礼攻击",
         "type": "BASIC",
-        "duration": 1.2,
-        "nodes": [
+        "duration": 4.3,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 20,
+                "poise": 25
             }
         ],
-        "variants": [
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "别礼连击1",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "别礼连击2",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "别礼连击3",
-                "duration": 1.2,
-                "nodes": [
-                    {
-                        "time": 0.6,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "别礼重击",
-                "duration": 1.8,
-                "nodes": [
-                    {
-                        "time": 0.9,
-                        "type": "damage",
-                        "multiplier": 1.8,
-                        "element": "Ice",
-                        "scaling": "atk"
-                    }
-                ]
-            }
-        ]
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "cold"
     },
-    "skill_chr_0026_lastrite_tactical": {
-        "id": "skill_chr_0026_lastrite_tactical",
+    "skill_chr_0026_lastrite_normal_skill": {
+        "id": "skill_chr_0026_lastrite_normal_skill",
         "name": "别礼战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 0.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_ice",
-                "layers": 1
-            }
-        ]
+        "duration": 0.5,
+        "atbCost": 100,
+        "uspGain": 16,
+        "damage_ticks": [],
+        "anomalies": [
+            [
+                {
+                    "type": "lastrite_buff",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ]
+        ],
+        "element": "cold"
     },
-    "skill_chr_0026_lastrite_chain": {
-        "id": "skill_chr_0026_lastrite_chain",
+    "skill_chr_0026_lastrite_combo_skill": {
+        "id": "skill_chr_0026_lastrite_combo_skill",
         "name": "别礼连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Ice",
-                "scaling": "atk"
-            }
-        ]
-    },
-    "skill_chr_0026_lastrite_ultimate": {
-        "id": "skill_chr_0026_lastrite_ultimate",
-        "name": "别礼终结技",
-        "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
-            {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Ice",
-                "scaling": "atk"
-            },
-            {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
-            }
-        ]
-    },
-    "skill_chr_0029_pograni_basic": {
-        "id": "skill_chr_0029_pograni_basic",
-        "name": "骏卫攻击",
-        "type": "BASIC",
         "duration": 0.8,
-        "nodes": [
+        "atbCost": 0,
+        "uspGain": 85,
+        "cooldown": 9,
+        "damage_ticks": [
             {
-                "time": 0.4,
-                "type": "damage",
-                "multiplier": 1,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 15
             }
         ],
+        "anomalies": [],
+        "element": "cold"
+    },
+    "skill_chr_0026_lastrite_ultimate_skill": {
+        "id": "skill_chr_0026_lastrite_ultimate_skill",
+        "name": "别礼终结技",
+        "type": "ULTIMATE",
+        "duration": 2.9,
+        "uspCost": 240,
+        "uspReply": 0,
+        "damage_ticks": [
+            {
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
+            }
+        ],
+        "anomalies": [],
+        "element": "cold",
+        "animationTime": 2.9
+    },
+    "skill_chr_0029_pograni_attack": {
+        "id": "skill_chr_0029_pograni_attack",
+        "name": "骏卫攻击",
+        "type": "BASIC",
+        "duration": 3.3,
+        "damage_ticks": [
+            {
+                "offset": 3.3,
+                "atb": 20,
+                "poise": 18
+            }
+        ],
+        "anomalies": [],
+        "uspGain": 0,
+        "element": "physical",
         "variants": [
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 1
-                },
-                "name": "骏卫连击1",
+                "id": "v_1765344369190",
+                "name": "连携1",
+                "type": "combo",
                 "duration": 0.8,
-                "nodes": [
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0.76,
+                        "atb": 5,
+                        "poise": 3
                     }
-                ]
+                ],
+                "uspGain": 10
             },
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 2
-                },
-                "name": "骏卫连击2",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1765344406616",
+                "name": "连携2",
+                "type": "combo",
+                "duration": 1.4,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.1,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0.76,
+                        "atb": 5,
+                        "poise": 3
+                    },
+                    {
+                        "offset": 1.38,
+                        "poise": 4,
+                        "atb": 7
                     }
-                ]
+                ],
+                "uspGain": 10
             },
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 3
-                },
-                "name": "骏卫连击3",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1765344414601",
+                "name": "连携3",
+                "type": "combo",
+                "duration": 2.4,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.2,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 0.76,
+                        "atb": 5,
+                        "poise": 3
+                    },
+                    {
+                        "offset": 1.38,
+                        "poise": 4,
+                        "atb": 7
+                    },
+                    {
+                        "offset": 2.3,
+                        "poise": 9,
+                        "atb": 13
                     }
-                ]
+                ],
+                "uspGain": 10
             },
             {
-                "condition": {
-                    "type": "combo",
-                    "value": 4
-                },
-                "name": "骏卫连击4",
-                "duration": 0.8,
-                "nodes": [
+                "id": "v_1766424867630",
+                "name": "连携4",
+                "type": "combo",
+                "duration": 2.4,
+                "damage_ticks": [
                     {
-                        "time": 0.4,
-                        "type": "damage",
-                        "multiplier": 1.3,
-                        "element": "Physical",
-                        "scaling": "atk"
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "combo",
-                    "value": "heavy"
-                },
-                "name": "骏卫重击",
-                "duration": 1.5,
-                "nodes": [
+                        "offset": 0.76,
+                        "atb": 5,
+                        "poise": 3
+                    },
                     {
-                        "time": 0.75,
-                        "type": "damage",
-                        "multiplier": 1.6,
-                        "element": "Physical",
-                        "scaling": "atk"
+                        "offset": 1.38,
+                        "poise": 4,
+                        "atb": 7
+                    },
+                    {
+                        "offset": 2.3,
+                        "poise": 9,
+                        "atb": 23
                     }
-                ]
+                ],
+                "uspGain": 10
             }
         ]
     },
-    "skill_chr_0029_pograni_tactical": {
-        "id": "skill_chr_0029_pograni_tactical",
+    "skill_chr_0029_pograni_normal_skill": {
+        "id": "skill_chr_0029_pograni_normal_skill",
         "name": "骏卫战技",
         "type": "TACTICAL",
-        "duration": 1.5,
-        "cooldown": 0.5,
-        "spCost": 100,
-        "nodes": [
+        "duration": 1.7,
+        "atbCost": 100,
+        "uspGain": 6.5,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 1.4,
+                "atb": 5,
+                "poise": 5
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "armor_break",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 1.4
+                }
+            ]
+        ],
+        "element": "physical"
     },
-    "skill_chr_0029_pograni_chain": {
-        "id": "skill_chr_0029_pograni_chain",
+    "skill_chr_0029_pograni_combo_skill": {
+        "id": "skill_chr_0029_pograni_combo_skill",
         "name": "骏卫连携",
         "type": "CHAIN",
-        "duration": 1,
-        "energyGain": 10,
-        "condition": {
-            "type": "status_on_enemy",
-            "status": "break"
-        },
-        "nodes": [
+        "duration": 2.7,
+        "atbCost": 0,
+        "uspGain": 10,
+        "cooldown": 18,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 3.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0.76,
+                "atb": 5,
+                "poise": 3
+            },
+            {
+                "offset": 1.38,
+                "poise": 4,
+                "atb": 7
+            },
+            {
+                "offset": 2.3,
+                "poise": 9,
+                "atb": 13
             }
-        ]
+        ],
+        "anomalies": [],
+        "element": "physical"
     },
-    "skill_chr_0029_pograni_ultimate": {
-        "id": "skill_chr_0029_pograni_ultimate",
+    "skill_chr_0029_pograni_ultimate_skill": {
+        "id": "skill_chr_0029_pograni_ultimate_skill",
         "name": "骏卫终结技",
         "type": "ULTIMATE",
-        "duration": 3.5,
-        "energyCost": 120,
-        "nodes": [
+        "duration": 2.5,
+        "uspCost": 90,
+        "uspReply": 0,
+        "damage_ticks": [
             {
-                "time": 0.5,
-                "type": "damage",
-                "multiplier": 1.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "atb": 0,
+                "poise": 0
             },
             {
-                "time": 1.5,
-                "type": "damage",
-                "multiplier": 2.5,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "poise": 0,
+                "atb": 0
             },
             {
-                "time": 2.5,
-                "type": "damage",
-                "multiplier": 3,
-                "element": "Physical",
-                "scaling": "atk"
+                "offset": 0,
+                "poise": 0,
+                "atb": 0
             },
             {
-                "time": 2.5,
-                "type": "status_apply",
-                "target": "enemy",
-                "status": "attachment_electric",
-                "layers": 4
+                "offset": 0,
+                "poise": 0,
+                "atb": 0
+            },
+            {
+                "offset": 0,
+                "poise": 0,
+                "atb": 0
             }
-        ]
+        ],
+        "anomalies": [
+            [
+                {
+                    "type": "pograni_buff",
+                    "stacks": 5,
+                    "duration": 0,
+                    "offset": 0
+                },
+                {
+                    "type": "pograni_buff",
+                    "stacks": 4,
+                    "duration": 0,
+                    "offset": 0
+                },
+                {
+                    "type": "pograni_buff",
+                    "stacks": 3,
+                    "duration": 0,
+                    "offset": 0
+                },
+                {
+                    "type": "pograni_buff",
+                    "stacks": 2,
+                    "duration": 0,
+                    "offset": 0
+                },
+                {
+                    "type": "pograni_buff",
+                    "stacks": 1,
+                    "duration": 0,
+                    "offset": 0
+                }
+            ]
+        ],
+        "element": "physical",
+        "animationTime": 2.5
     }
 };
 

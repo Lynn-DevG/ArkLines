@@ -1,0 +1,3886 @@
+{
+  "ICON_DATABASE": {
+    "break": "dist/assets/icons/icon_battle_physical_no_guard.png",
+    "armor_break": "dist/assets/icons/icon_battle_physical_fracture.png",
+    "poise": "dist/assets/icons/icon_battle_physical_crush.png",
+    "knockdown": "dist/assets/icons/icon_battle_physical_knockdown.png",
+    "knockup": "dist/assets/icons/icon_battle_physical_airborne.png",
+    "blaze_attach": "dist/assets/icons/icon_energy_fusion_fire.png",
+    "emag_attach": "dist/assets/icons/icon_energy_fusion_pulse.png",
+    "cold_attach": "dist/assets/icons/icon_energy_fusion_cryst.png",
+    "nature_attach": "dist/assets/icons/icon_energy_fusion_nature.png",
+    "blaze_burst": "dist/assets/icons/icon_burst_fusion_fire.png",
+    "emag_burst": "dist/assets/icons/icon_burst_fusion_pulse.png",
+    "cold_burst": "dist/assets/icons/icon_burst_fusion_cryst.png",
+    "nature_burst": "dist/assets/icons/icon_burst_fusion_nature.png",
+    "burning": "dist/assets/icons/icon_battle_debuff_burning.png",
+    "conductive": "dist/assets/icons/icon_battle_debuff_conduct.png",
+    "frozen": "dist/assets/icons/icon_battle_debuff_frozen.png",
+    "ice_shatter": "dist/assets/icons/icon_battle_debuff_crystbreak.png",
+    "corrosion": "dist/assets/icons/icon_battle_debuff_corrupt.png",
+    "default": "dist/assets/icons/default_icon.png"
+  },
+  "characterRoster": [
+    {
+      "id": "ENDMINISTRATOR",
+      "name": "管理员",
+      "rarity": 6,
+      "element": "physical",
+      "avatar": "dist/assets/avatars/ENDMINISTRATOR/ENDMINISTRATOR.png",
+      "exclusive_buffs": [
+        {
+          "key": "endmin_debuff",
+          "name": "结晶",
+          "path": "dist/assets/avatars/ENDMINISTRATOR/icon_skill_endmin_debuff.png"
+        }
+      ],
+      "attack_duration": 3.7,
+      "attack_damage_ticks": [
+        {
+          "offset": 3.7,
+          "atb": 20,
+          "poise": 18
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "ice_shatter",
+        "poise",
+        "knockdown",
+        "knockup",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "emag_attach",
+        "conductive",
+        "emag_burst",
+        "blaze_burst",
+        "burning",
+        "blaze_attach",
+        "default"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 0.8,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0.4,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "poise",
+        "break",
+        "ice_shatter"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "poise",
+            "stacks": 2,
+            "duration": 0,
+            "offset": 0.4
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        0.5
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.2,
+      "combo_cooldown": 16,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0.8,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "endmin_debuff"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "endmin_debuff",
+            "stacks": 1,
+            "duration": 4,
+            "offset": 0.8
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        0.8
+      ],
+      "ultimate_duration": 1.5,
+      "ultimate_uspMax": 80,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 25
+        }
+      ],
+      "ultimate_allowed_types": [
+        "default"
+      ],
+      "ultimate_anomalies": [],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "blaze_burst",
+        "burning",
+        "blaze_attach",
+        "knockup",
+        "break",
+        "ice_shatter",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "knockdown",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "poise",
+        "armor_break"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "variants": [],
+      "ultimate_animationTime": 1.5,
+      "ultimate_enhancementTime": 0,
+      "attack_uspGain": 0,
+      "weapon": "sword",
+      "normal_skill_icon": "dist/assets/avatars/ENDMINISTRATOR/icon_skill_endmin_01.png",
+      "combo_icon": "dist/assets/avatars/ENDMINISTRATOR/icon_combo_skill_endmin_01.png",
+      "ultimate_icon": "dist/assets/avatars/ENDMINISTRATOR/icon_ultimate_skill_endmin_01.png"
+    },
+    {
+      "id": "POGRANICHNK",
+      "name": "骏卫",
+      "rarity": 6,
+      "element": "physical",
+      "avatar": "dist/assets/avatars/POGRANICHNK/POGRANICHNK.png",
+      "exclusive_buffs": [
+        {
+          "key": "pograni_buff",
+          "name": "铁誓",
+          "path": "dist/assets/avatars/POGRANICHNK/icon_battle_pograni_buff.png"
+        },
+        {
+          "key": "pograni_talent",
+          "name": "士气激昂",
+          "path": "dist/assets/avatars/POGRANICHNK/icon_battle_pograni_talent_1.png"
+        }
+      ],
+      "attack_duration": 3.3,
+      "attack_damage_ticks": [
+        {
+          "offset": 3.3,
+          "atb": 20,
+          "poise": 18
+        }
+      ],
+      "attack_allowed_types": [
+        "armor_break",
+        "break",
+        "ice_shatter",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_burst",
+        "burning",
+        "blaze_attach",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "emag_attach",
+        "conductive",
+        "emag_burst"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 1.7,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 1.4,
+          "atb": 5,
+          "poise": 5
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "armor_break",
+        "break",
+        "ice_shatter",
+        "pograni_talent_1"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "armor_break",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 1.4
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        1.5
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 2.7,
+      "combo_cooldown": 18,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0.76,
+          "atb": 5,
+          "poise": 3
+        },
+        {
+          "offset": 1.38,
+          "poise": 4,
+          "atb": 7
+        },
+        {
+          "offset": 2.3,
+          "poise": 9,
+          "atb": 13
+        }
+      ],
+      "combo_allowed_types": [
+        "pograni_talent_1"
+      ],
+      "combo_anomalies": [],
+      "combo_anomaly_delays": [
+        0.7
+      ],
+      "ultimate_duration": 2.5,
+      "ultimate_uspMax": 90,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        },
+        {
+          "offset": 0,
+          "poise": 0,
+          "atb": 0
+        },
+        {
+          "offset": 0,
+          "poise": 0,
+          "atb": 0
+        },
+        {
+          "offset": 0,
+          "poise": 0,
+          "atb": 0
+        },
+        {
+          "offset": 0,
+          "poise": 0,
+          "atb": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "pograni_buff",
+        "pograni_talent_1"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "pograni_buff",
+            "stacks": 5,
+            "duration": 0,
+            "offset": 0
+          },
+          {
+            "type": "pograni_buff",
+            "stacks": 4,
+            "duration": 0,
+            "offset": 0
+          },
+          {
+            "type": "pograni_buff",
+            "stacks": 3,
+            "duration": 0,
+            "offset": 0
+          },
+          {
+            "type": "pograni_buff",
+            "stacks": 2,
+            "duration": 0,
+            "offset": 0
+          },
+          {
+            "type": "pograni_buff",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 0
+          }
+        ]
+      ],
+      "ultimate_anomaly_delays": [
+        0.5
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "knockup",
+        "break",
+        "ice_shatter",
+        "knockdown",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "poise",
+        "armor_break",
+        "emag_attach",
+        "conductive",
+        "emag_burst"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "variants": [
+        {
+          "id": "v_1765344369190",
+          "name": "连携1",
+          "type": "combo",
+          "duration": 0.8,
+          "allowedTypes": [
+            "pograni_talent"
+          ],
+          "physicalAnomaly": [],
+          "damageTicks": [
+            {
+              "offset": 0.76,
+              "atb": 5,
+              "poise": 3
+            }
+          ],
+          "cooldown": 18,
+          "uspGain": 10,
+          "icon": "dist/assets/avatars/POGRANICHNK/icon_combo_skill_pograni_01.png"
+        },
+        {
+          "id": "v_1765344406616",
+          "name": "连携2",
+          "type": "combo",
+          "duration": 1.4,
+          "allowedTypes": [
+            "pograni_talent"
+          ],
+          "physicalAnomaly": [],
+          "damageTicks": [
+            {
+              "offset": 0.76,
+              "atb": 5,
+              "poise": 3
+            },
+            {
+              "offset": 1.38,
+              "poise": 4,
+              "atb": 7
+            }
+          ],
+          "cooldown": 18,
+          "uspGain": 10,
+          "icon": "dist/assets/avatars/POGRANICHNK/icon_combo_skill_pograni_01.png"
+        },
+        {
+          "id": "v_1765344414601",
+          "name": "连携3",
+          "type": "combo",
+          "duration": 2.4,
+          "allowedTypes": [
+            "pograni_talent"
+          ],
+          "physicalAnomaly": [],
+          "damageTicks": [
+            {
+              "offset": 0.76,
+              "atb": 5,
+              "poise": 3
+            },
+            {
+              "offset": 1.38,
+              "poise": 4,
+              "atb": 7
+            },
+            {
+              "offset": 2.3,
+              "poise": 9,
+              "atb": 13
+            }
+          ],
+          "cooldown": 18,
+          "uspGain": 10,
+          "icon": "dist/assets/avatars/POGRANICHNK/icon_combo_skill_pograni_01.png"
+        },
+        {
+          "id": "v_1766424867630",
+          "name": "连携4",
+          "type": "combo",
+          "duration": 2.4,
+          "allowedTypes": [
+            "pograni_talent"
+          ],
+          "physicalAnomaly": [],
+          "damageTicks": [
+            {
+              "offset": 0.76,
+              "atb": 5,
+              "poise": 3
+            },
+            {
+              "offset": 1.38,
+              "poise": 4,
+              "atb": 7
+            },
+            {
+              "offset": 2.3,
+              "poise": 9,
+              "atb": 23
+            }
+          ],
+          "cooldown": 18,
+          "uspGain": 10,
+          "icon": "dist/assets/avatars/POGRANICHNK/icon_combo_skill_pograni_01.png"
+        }
+      ],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 2.5,
+      "attack_uspGain": 0,
+      "weapon": "sword",
+      "normal_skill_icon": "dist/assets/avatars/POGRANICHNK/icon_skill_pograni_01.png",
+      "combo_icon": "dist/assets/avatars/POGRANICHNK/icon_combo_skill_pograni_01.png",
+      "ultimate_icon": "dist/assets/avatars/POGRANICHNK/icon_ultimate_skill_pograni_01.png"
+    },
+    {
+      "id": "ARDELIA",
+      "name": "艾尔黛拉",
+      "rarity": 6,
+      "element": "nature",
+      "avatar": "dist/assets/avatars/ARDELIA/ARDELIA.png",
+      "exclusive_buffs": [
+        {
+          "key": "spell_vulnerable",
+          "name": "法术脆弱",
+          "path": "dist/assets/icons/icon_battle_affix_spell_vulnerable.png"
+        },
+        {
+          "key": "physical_vulnerable",
+          "name": "物理脆弱",
+          "path": "dist/assets/icons/icon_battle_affix_physical_vulnerable.png"
+        }
+      ],
+      "attack_duration": 4.3,
+      "attack_damage_ticks": [
+        {
+          "offset": 4.3,
+          "atb": 18,
+          "poise": 18
+        }
+      ],
+      "attack_allowed_types": [
+        "knockup",
+        "break",
+        "ice_shatter",
+        "knockdown",
+        "poise",
+        "armor_break",
+        "emag_attach",
+        "conductive",
+        "emag_burst",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "blaze_burst",
+        "burning",
+        "blaze_attach"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 1.3,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 1.3,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "spell_vulnerable",
+        "physical_vulnerable"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "spell_vulnerable",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 0
+          }
+        ],
+        [
+          {
+            "type": "physical_vulnerable",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 0
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        1
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.2,
+      "combo_cooldown": 18,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0.8,
+          "poise": 0,
+          "atb": 0
+        },
+        {
+          "offset": 2.6,
+          "poise": 10,
+          "atb": 0
+        }
+      ],
+      "combo_allowed_types": [
+        "corrosion",
+        "nature_attach",
+        "nature_burst"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "corrosion",
+            "stacks": 1,
+            "duration": 10,
+            "offset": 2.6
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        2.6
+      ],
+      "ultimate_duration": 2.7,
+      "ultimate_uspMax": 90,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [],
+      "ultimate_anomalies": [],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "corrosion",
+        "nature_attach",
+        "nature_burst",
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "knockup",
+        "break",
+        "ice_shatter",
+        "knockdown",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "poise",
+        "armor_break"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 2.7,
+      "attack_uspGain": 0,
+      "weapon": "funnel",
+      "normal_skill_icon": "dist/assets/avatars/ARDELIA/icon_skill_ardelia_01.png",
+      "combo_icon": "dist/assets/avatars/ARDELIA/icon_combo_skill_ardelia_01.png",
+      "ultimate_icon": "dist/assets/avatars/ARDELIA/icon_ultimate_skill_ardelia_01.png"
+    },
+    {
+      "id": "LASTRITE",
+      "name": "别礼",
+      "rarity": 6,
+      "element": "cold",
+      "avatar": "dist/assets/avatars/LASTRITE/LASTRITE.png",
+      "exclusive_buffs": [
+        {
+          "key": "lastrite_buff",
+          "name": "低温灌注",
+          "path": "icon_battle_lastrite_buff.png"
+        }
+      ],
+      "attack_duration": 4.3,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 20,
+          "poise": 25
+        }
+      ],
+      "attack_allowed_types": [
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "blaze_burst",
+        "burning",
+        "blaze_attach",
+        "knockup",
+        "break",
+        "ice_shatter",
+        "knockdown",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "poise",
+        "armor_break",
+        "cold_attach",
+        "frozen",
+        "cold_burst"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 0.5,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 16,
+      "normal_skill_damage_ticks": [],
+      "normal_skill_allowed_types": [
+        "lastrite_buff"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "lastrite_buff",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 0
+          }
+        ]
+      ],
+      "normal_skill_teamUspGain": 0,
+      "combo_duration": 0.8,
+      "combo_cooldown": 9,
+      "combo_uspGain": 85,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 15
+        }
+      ],
+      "combo_allowed_types": [],
+      "combo_anomalies": [],
+      "ultimate_duration": 2.9,
+      "ultimate_uspMax": 240,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [],
+      "ultimate_anomalies": [],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "knockdown",
+        "break",
+        "ice_shatter",
+        "knockup",
+        "poise",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "armor_break"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": false,
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 2.9,
+      "attack_uspGain": 0,
+      "weapon": "claym",
+      "normal_skill_icon": "dist/assets/avatars/LASTRITE/icon_skill_lastrite_01.png",
+      "combo_icon": "dist/assets/avatars/LASTRITE/icon_combo_skill_lastrite_01.png",
+      "ultimate_icon": "dist/assets/avatars/LASTRITE/icon_ultimate_skill_lastrite_01.png"
+    },
+    {
+      "id": "GILBERTA",
+      "name": "洁尔佩塔",
+      "rarity": 6,
+      "element": "nature",
+      "avatar": "dist/assets/avatars/GILBERTA/GILBERTA.png",
+      "exclusive_buffs": [
+        {
+          "key": "affix_slow",
+          "name": "缓速",
+          "path": "dist/assets/icons/icon_battle_affix_slow.png"
+        },
+        {
+          "key": "spell_vulnerable",
+          "name": "法术脆弱",
+          "path": "dist/assets/icons/icon_battle_affix_spell_vulnerable.png"
+        }
+      ],
+      "attack_duration": 3.5,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 16,
+          "poise": 16
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 4,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "corrosion",
+        "nature_attach",
+        "nature_burst"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "nature_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        3.6
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 2,
+      "combo_cooldown": 20,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 5
+        }
+      ],
+      "combo_allowed_types": [
+        "knockup",
+        "break",
+        "ice_shatter"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "knockup",
+            "stacks": 2,
+            "duration": 0
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        1.6
+      ],
+      "ultimate_duration": 0.5,
+      "ultimate_uspMax": 90,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "affix_slow",
+        "spell_vulnerable"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "affix_slow",
+            "stacks": 1,
+            "duration": 5,
+            "offset": 0
+          }
+        ],
+        [
+          {
+            "type": "spell_vulnerable",
+            "stacks": 1,
+            "duration": 5,
+            "offset": 0
+          }
+        ],
+        [
+          {
+            "type": "nature_attach",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 0
+          }
+        ]
+      ],
+      "ultimate_anomaly_delays": [
+        0
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "blaze_burst",
+        "burning",
+        "blaze_attach",
+        "knockup",
+        "break",
+        "ice_shatter",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "knockdown",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "poise",
+        "armor_break"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 0.5,
+      "attack_uspGain": 0,
+      "weapon": "funnel",
+      "normal_skill_icon": "dist/assets/avatars/GILBERTA/icon_skill_aglina_01.png",
+      "combo_icon": "dist/assets/avatars/GILBERTA/icon_combo_skill_aglina_01.png",
+      "ultimate_icon": "dist/assets/avatars/GILBERTA/icon_ultimate_skill_aglina_01.png"
+    },
+    {
+      "id": "YVONNE",
+      "name": "伊冯",
+      "rarity": 6,
+      "element": "cold",
+      "avatar": "dist/assets/avatars/YVONNE/YVONNE.png",
+      "exclusive_buffs": [],
+      "attack_duration": 3.7,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 17,
+          "poise": 17
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 1.3,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "frozen",
+        "cold_attach",
+        "cold_burst"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "cold_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        1
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.1,
+      "combo_cooldown": 22,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "cold_burst",
+        "frozen",
+        "cold_attach"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "cold_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        4.2
+      ],
+      "ultimate_duration": 2,
+      "ultimate_uspMax": 200,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "frozen",
+        "cold_attach",
+        "cold_burst"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "cold_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "ultimate_anomaly_delays": [
+        12
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "knockup",
+        "break",
+        "ice_shatter",
+        "knockdown",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "poise",
+        "armor_break"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "variants": [
+        {
+          "id": "v_1765344226962",
+          "name": "强化战技",
+          "type": "normal_skill",
+          "duration": 1,
+          "allowedTypes": [
+            "frozen",
+            "cold_attach",
+            "cold_burst"
+          ],
+          "physicalAnomaly": [
+            [
+              {
+                "type": "cold_attach",
+                "stacks": 1,
+                "duration": 0
+              }
+            ]
+          ],
+          "damageTicks": [
+            {
+              "offset": 0,
+              "atb": 0,
+              "poise": 10
+            }
+          ],
+          "atbCost": 100,
+          "uspGain": 6.5,
+          "teamUspGain": 6.5,
+          "icon": "dist/assets/avatars/YVONNE/icon_skill_yvonne_01.png"
+        }
+      ],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 2,
+      "weapon": "pistol",
+      "normal_skill_icon": "dist/assets/avatars/YVONNE/icon_skill_yvonne_01.png",
+      "combo_icon": "dist/assets/avatars/YVONNE/icon_combo_skill_yvonne_01.png",
+      "ultimate_icon": "dist/assets/avatars/YVONNE/icon_ultimate_skill_yvonne_01.png"
+    },
+    {
+      "id": "LAEVATAIN",
+      "name": "莱万汀",
+      "rarity": 6,
+      "element": "blaze",
+      "avatar": "dist/assets/avatars/LAEVATAIN/LAEVATAIN.png",
+      "exclusive_buffs": [
+        {
+          "key": "magma_0",
+          "name": "熔火0",
+          "path": "dist/assets/avatars/LAEVATAIN/magma_0.png"
+        },
+        {
+          "key": "magma_1",
+          "name": "熔火1",
+          "path": "dist/assets/avatars/LAEVATAIN/magma_1.png"
+        },
+        {
+          "key": "magma_2",
+          "name": "熔火2",
+          "path": "dist/assets/avatars/LAEVATAIN/magma_2.png"
+        },
+        {
+          "key": "magma_3",
+          "name": "熔火3",
+          "path": "dist/assets/avatars/LAEVATAIN/magma_3.png"
+        },
+        {
+          "key": "magma_4",
+          "name": "熔火4",
+          "path": "dist/assets/avatars/LAEVATAIN/magma_4.png"
+        }
+      ],
+      "attack_duration": 3.3,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 20,
+          "poise": 18
+        }
+      ],
+      "attack_allowed_types": [
+        "magma_1",
+        "magma_2",
+        "magma_3",
+        "magma_4",
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion",
+        "magma_0"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 1,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 0,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "magma_1",
+        "magma_2",
+        "magma_3",
+        "magma_4",
+        "magma_0"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "magma_1",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 0
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        0.7
+      ],
+      "normal_skill_teamUspGain": 0,
+      "combo_duration": 1.7,
+      "combo_cooldown": 10,
+      "combo_uspGain": 30,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "magma_1",
+        "magma_2",
+        "magma_3",
+        "magma_4",
+        "magma_0"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "magma_1",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 0
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        1.3
+      ],
+      "ultimate_duration": 2,
+      "ultimate_uspMax": 300,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "magma_1",
+        "magma_2",
+        "magma_3",
+        "magma_4",
+        "blaze_attach",
+        "burning",
+        "blaze_burst",
+        "magma_0"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "magma_1",
+            "stacks": 1,
+            "duration": 3.5,
+            "offset": 0
+          },
+          {
+            "type": "magma_2",
+            "stacks": 1,
+            "duration": 3.5,
+            "offset": 0
+          },
+          {
+            "type": "magma_3",
+            "stacks": 1,
+            "duration": 3.5,
+            "offset": 0
+          },
+          {
+            "type": "magma_4",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 0
+          }
+        ]
+      ],
+      "ultimate_anomaly_delays": [
+        3.5
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "magma_1",
+        "magma_2",
+        "magma_3",
+        "magma_4",
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "blaze_burst",
+        "burning",
+        "blaze_attach",
+        "knockdown",
+        "break",
+        "ice_shatter",
+        "knockup",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "poise",
+        "armor_break",
+        "magma_0"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "variants": [
+        {
+          "id": "v_1765344039364",
+          "name": "强化重击",
+          "type": "attack",
+          "duration": 3.3,
+          "allowedTypes": [
+            "magma_1",
+            "magma_2",
+            "magma_3",
+            "magma_4",
+            "blaze_attach",
+            "blaze_burst",
+            "burning",
+            "magma_0"
+          ],
+          "physicalAnomaly": [],
+          "damageTicks": [
+            {
+              "offset": 0,
+              "atb": 22,
+              "poise": 24
+            }
+          ]
+        },
+        {
+          "id": "v_1765344082644",
+          "name": "强化战技",
+          "type": "normal_skill",
+          "duration": 1.9,
+          "allowedTypes": [
+            "burning",
+            "blaze_attach",
+            "blaze_burst",
+            "magma_1",
+            "magma_2",
+            "magma_3",
+            "magma_4",
+            "magma_0"
+          ],
+          "physicalAnomaly": [
+            [
+              {
+                "type": "magma_4",
+                "stacks": 1,
+                "duration": 0
+              }
+            ]
+          ],
+          "damageTicks": [
+            {
+              "offset": 0,
+              "atb": 0,
+              "poise": 20
+            }
+          ],
+          "atbCost": 100,
+          "uspGain": 106.5,
+          "teamUspGain": 6.5,
+          "icon": "dist/assets/avatars/LAEVATAIN/icon_skill_laevat_01.png"
+        },
+        {
+          "id": "v_1767269025680",
+          "name": "大招内战技",
+          "type": "normal_skill",
+          "duration": 1.9,
+          "allowedTypes": [
+            "burning",
+            "blaze_attach",
+            "blaze_burst",
+            "magma_1",
+            "magma_2",
+            "magma_3",
+            "magma_4",
+            "magma_0"
+          ],
+          "physicalAnomaly": [
+            [
+              {
+                "type": "magma_1",
+                "stacks": 1,
+                "duration": 0
+              }
+            ]
+          ],
+          "damageTicks": [
+            {
+              "offset": 0,
+              "atb": 0,
+              "poise": 10
+            }
+          ],
+          "atbCost": 100,
+          "uspGain": 0,
+          "teamUspGain": 0,
+          "icon": "dist/assets/avatars/LAEVATAIN/icon_skill_laevat_02_line.png"
+        },
+        {
+          "id": "v_1765344189692",
+          "name": "大招内强化战技",
+          "type": "normal_skill",
+          "duration": 1.9,
+          "icon": "dist/assets/avatars/LAEVATAIN/icon_skill_laevat_02.png",
+          "allowedTypes": [
+            "burning",
+            "blaze_attach",
+            "blaze_burst",
+            "magma_1",
+            "magma_2",
+            "magma_3",
+            "magma_4",
+            "magma_0"
+          ],
+          "physicalAnomaly": [
+            [
+              {
+                "type": "magma_4",
+                "stacks": 1,
+                "duration": 0,
+                "offset": 0
+              }
+            ]
+          ],
+          "damageTicks": [
+            {
+              "offset": 0,
+              "atb": 0,
+              "poise": 30
+            }
+          ],
+          "atbCost": 100,
+          "uspGain": 0,
+          "teamUspGain": 0
+        }
+      ],
+      "ultimate_enhancementTime": 15,
+      "ultimate_animationTime": 2,
+      "weapon": "sword",
+      "normal_skill_icon": "dist/assets/avatars/LAEVATAIN/icon_skill_laevat_01_line.png",
+      "combo_icon": "dist/assets/avatars/LAEVATAIN/icon_combo_skill_laevat_01.png",
+      "ultimate_icon": "dist/assets/avatars/LAEVATAIN/icon_ultimate_skill_laevat_01.png"
+    },
+    {
+      "id": "LIFENG",
+      "name": "黎风",
+      "rarity": 6,
+      "element": "physical",
+      "avatar": "dist/assets/avatars/LIFENG/LIFENG.png",
+      "exclusive_buffs": [
+        {
+          "key": "combo",
+          "name": "连击",
+          "path": "dist/assets/icons/icon_battle_affix_combo.png"
+        },
+        {
+          "key": "physical_vulnerable",
+          "name": "物理脆弱",
+          "path": "dist/assets/icons/icon_battle_affix_physical_vulnerable.png"
+        }
+      ],
+      "attack_duration": 3.2,
+      "attack_damage_ticks": [
+        {
+          "offset": 3.2,
+          "atb": 21,
+          "poise": 19
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 2.2,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 1.9,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "knockdown",
+        "break",
+        "ice_shatter",
+        "physical_vulnerable"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "knockdown",
+            "stacks": 2,
+            "duration": 0,
+            "offset": 1.9
+          }
+        ],
+        [
+          {
+            "type": "physical_vulnerable",
+            "stacks": 1,
+            "duration": 10,
+            "offset": 1.9
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        1.9
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 2,
+      "combo_cooldown": 16,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 1.6,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "combo"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "combo",
+            "stacks": 1,
+            "duration": 20,
+            "offset": 1.6
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        0.7
+      ],
+      "ultimate_duration": 1.9,
+      "ultimate_uspMax": 90,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 5
+        },
+        {
+          "offset": 2,
+          "poise": 5,
+          "atb": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "knockdown",
+        "break",
+        "ice_shatter"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "knockdown",
+            "stacks": 1,
+            "duration": 2,
+            "hideDuration": true
+          },
+          {
+            "type": "knockdown",
+            "stacks": 1,
+            "duration": 1.9,
+            "hideDuration": true
+          }
+        ]
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "variants": [
+        {
+          "id": "v_1765344650632",
+          "name": "强化大招",
+          "type": "ultimate",
+          "duration": 1.9,
+          "allowedTypes": [
+            "knockdown",
+            "break",
+            "ice_shatter"
+          ],
+          "physicalAnomaly": [
+            [
+              {
+                "type": "knockdown",
+                "stacks": 1,
+                "duration": 0,
+                "offset": 0
+              },
+              {
+                "type": "knockdown",
+                "stacks": 1,
+                "duration": 0,
+                "offset": 2
+              },
+              {
+                "type": "knockdown",
+                "stacks": 1,
+                "duration": 0,
+                "offset": 3.9
+              }
+            ]
+          ],
+          "damageTicks": [
+            {
+              "offset": 0,
+              "atb": 0,
+              "poise": 5
+            },
+            {
+              "offset": 2,
+              "poise": 5,
+              "atb": 0
+            },
+            {
+              "offset": 3.9,
+              "poise": 5,
+              "atb": 0
+            }
+          ],
+          "uspCost": 90,
+          "uspGain": 0,
+          "enhancementTime": 0,
+          "animationTime": 1.9,
+          "icon": "dist/assets/avatars/LIFENG/icon_ultimate_skill_lifeng_01.png"
+        }
+      ],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.9,
+      "weapon": "lance",
+      "normal_skill_icon": "dist/assets/avatars/LIFENG/icon_skill_lifeng_01.png",
+      "combo_icon": "dist/assets/avatars/LIFENG/icon_combo_skill_lifeng_01.png",
+      "ultimate_icon": "dist/assets/avatars/LIFENG/icon_ultimate_skill_lifeng_01.png"
+    },
+    {
+      "id": "EMBER",
+      "name": "余烬",
+      "rarity": 6,
+      "element": "blaze",
+      "avatar": "dist/assets/avatars/EMBER/EMBER.png",
+      "exclusive_buffs": [],
+      "attack_duration": 4.2,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 28,
+          "poise": 25
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 2,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "knockdown",
+        "break",
+        "ice_shatter"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "knockdown",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        1.6
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.1,
+      "combo_cooldown": 19,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "knockdown",
+        "break",
+        "ice_shatter"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "knockdown",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        0.9
+      ],
+      "ultimate_duration": 1.7,
+      "ultimate_uspMax": 100,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [],
+      "ultimate_anomalies": [],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.7,
+      "weapon": "claym",
+      "normal_skill_icon": "dist/assets/avatars/EMBER/icon_skill_azrila_01.png",
+      "combo_icon": "dist/assets/avatars/EMBER/icon_combo_skill_azrila_01.png",
+      "ultimate_icon": "dist/assets/avatars/EMBER/icon_ultimate_skill_azrila_01.png"
+    },
+    {
+      "id": "XAIHI",
+      "name": "赛希",
+      "rarity": 5,
+      "element": "cold",
+      "avatar": "dist/assets/avatars/XAIHI/XAIHI.png",
+      "exclusive_buffs": [],
+      "accept_team_usp": true,
+      "attack_duration": 3.3,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 15,
+          "poise": 15
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 0.5,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "normal_skill_allowed_types": [],
+      "normal_skill_anomalies": [],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.2,
+      "combo_cooldown": 8,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "cold_attach",
+        "frozen",
+        "cold_burst"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "cold_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        1
+      ],
+      "ultimate_duration": 1.5,
+      "ultimate_uspMax": 72,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [],
+      "ultimate_anomalies": [],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.5,
+      "weapon": "funnel",
+      "normal_skill_icon": "dist/assets/avatars/XAIHI/icon_skill_seraph_01.png",
+      "combo_icon": "dist/assets/avatars/XAIHI/icon_combo_skill_seraph_01.png",
+      "ultimate_icon": "dist/assets/avatars/XAIHI/icon_ultimate_skill_seraph_01.png"
+    },
+    {
+      "id": "SNOWSHINE",
+      "name": "昼雪",
+      "rarity": 5,
+      "element": "cold",
+      "avatar": "dist/assets/avatars/SNOWSHINE/SNOWSHINE.png",
+      "exclusive_buffs": [],
+      "accept_team_usp": true,
+      "attack_duration": 3.8,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 25,
+          "poise": 23
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 0.5,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 35,
+          "poise": 20
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "cold_attach",
+        "frozen",
+        "cold_burst"
+      ],
+      "normal_skill_anomalies": [],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1,
+      "combo_cooldown": 25,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "combo_allowed_types": [],
+      "combo_anomalies": [],
+      "ultimate_duration": 2,
+      "ultimate_uspMax": 80,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "frozen",
+        "cold_attach",
+        "cold_burst"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "frozen",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "ultimate_anomaly_delays": [
+        2
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 2,
+      "weapon": "claym",
+      "normal_skill_icon": "dist/assets/avatars/SNOWSHINE/icon_skill_aurora_01.png",
+      "combo_icon": "dist/assets/avatars/SNOWSHINE/icon_combo_skill_aurora_01.png",
+      "ultimate_icon": "dist/assets/avatars/SNOWSHINE/icon_ultimate_skill_aurora_01.png"
+    },
+    {
+      "id": "ARCLIGHT",
+      "name": "弧光",
+      "rarity": 5,
+      "element": "emag",
+      "avatar": "dist/assets/avatars/ARCLIGHT/ARCLIGHT.png",
+      "exclusive_buffs": [
+        {
+          "key": "ikut_talent",
+          "name": "荒野游人",
+          "path": "dist/assets/avatars/ARCLIGHT/icon_battle_ikut_talent_1.png"
+        }
+      ],
+      "accept_team_usp": true,
+      "attack_duration": 3,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 17,
+          "poise": 16
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 1,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [],
+      "normal_skill_anomalies": [],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1,
+      "combo_cooldown": 3,
+      "combo_uspGain": 5,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 5
+        }
+      ],
+      "combo_allowed_types": [],
+      "combo_anomalies": [],
+      "ultimate_duration": 1.9,
+      "ultimate_uspMax": 76.5,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "emag_attach",
+        "conductive",
+        "emag_burst"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "emag_attach",
+            "stacks": 1,
+            "duration": 1.9,
+            "offset": 2.1
+          },
+          {
+            "type": "conductive",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 4
+          }
+        ]
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.9,
+      "weapon": "sword",
+      "normal_skill_icon": "dist/assets/avatars/ARCLIGHT/icon_skill_ikut_01_line.png",
+      "combo_icon": "dist/assets/avatars/ARCLIGHT/icon_combo_skill_ikut_01.png",
+      "ultimate_icon": "dist/assets/avatars/ARCLIGHT/icon_ultimate_skill_ikut_01.png",
+      "variants": [
+        {
+          "id": "v_1767273184428",
+          "name": "强化战技",
+          "type": "normal_skill",
+          "duration": 1,
+          "icon": "dist/assets/avatars/ARCLIGHT/icon_skill_ikut_01.png",
+          "allowedTypes": [],
+          "physicalAnomaly": [],
+          "damageTicks": [
+            {
+              "offset": 0,
+              "atb": 0,
+              "poise": 10
+            }
+          ],
+          "atbCost": 100,
+          "uspGain": 6.5,
+          "teamUspGain": 6.5
+        }
+      ]
+    },
+    {
+      "id": "AVYWENNA",
+      "name": "艾维文娜",
+      "rarity": 5,
+      "element": "emag",
+      "avatar": "dist/assets/avatars/AVYWENNA/AVYWENNA.png",
+      "exclusive_buffs": [
+        {
+          "key": "Thunderlances",
+          "name": "雷枪",
+          "path": "dist/assets/avatars/AVYWENNA/icon_combo_skill_avywen_01.png"
+        },
+        {
+          "key": "Thunderlances EX",
+          "name": "强雷枪",
+          "path": "dist/assets/avatars/AVYWENNA/icon_ultimate_skill_avywen_01.png"
+        }
+      ],
+      "accept_team_usp": true,
+      "attack_duration": 3.2,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 19,
+          "poise": 17
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 0.5,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 30
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "emag_burst",
+        "conductive",
+        "emag_attach"
+      ],
+      "normal_skill_anomalies": [],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 2.5,
+      "combo_cooldown": 13,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "Thunderlances"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "Thunderlances",
+            "stacks": 3,
+            "duration": 0,
+            "offset": 0
+          }
+        ]
+      ],
+      "ultimate_duration": 1.5,
+      "ultimate_uspMax": 85,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "Thunderlances EX"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "Thunderlances EX",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 0
+          }
+        ]
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.5,
+      "weapon": "lance",
+      "normal_skill_icon": "dist/assets/avatars/AVYWENNA/icon_skill_avywen_01_line.png",
+      "combo_icon": "dist/assets/avatars/AVYWENNA/icon_combo_skill_avywen_01.png",
+      "ultimate_icon": "dist/assets/avatars/AVYWENNA/icon_ultimate_skill_avywen_01.png",
+      "variants": [
+        {
+          "id": "v_1767273720814",
+          "name": "战技-回收雷枪",
+          "type": "normal_skill",
+          "duration": 0.5,
+          "icon": "dist/assets/avatars/AVYWENNA/icon_skill_avywen_01.png",
+          "allowedTypes": [
+            "emag_burst",
+            "conductive",
+            "emag_attach"
+          ],
+          "physicalAnomaly": [],
+          "damageTicks": [
+            {
+              "offset": 0,
+              "atb": 0,
+              "poise": 30
+            }
+          ],
+          "atbCost": 100,
+          "uspGain": 6.5,
+          "teamUspGain": 6.5
+        }
+      ]
+    },
+    {
+      "id": "DAPAN",
+      "name": "大潘",
+      "rarity": 5,
+      "element": "physical",
+      "avatar": "dist/assets/avatars/DAPAN/DAPAN.png",
+      "exclusive_buffs": [
+        {
+          "key": "dapan_buff",
+          "name": "备料",
+          "path": "dist/assets/avatars/DAPAN/icon_battle_dapan_buff.png"
+        }
+      ],
+      "accept_team_usp": true,
+      "attack_duration": 3.5,
+      "attack_damage_ticks": [
+        {
+          "offset": 3.5,
+          "atb": 21,
+          "poise": 20
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 1.8,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 1.5,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "knockup",
+        "break",
+        "ice_shatter"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "knockup",
+            "stacks": 2,
+            "duration": 0,
+            "offset": 1.5
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        1.5
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 2.1,
+      "combo_cooldown": 20,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 1.76,
+          "atb": 0,
+          "poise": 15
+        }
+      ],
+      "combo_allowed_types": [
+        "poise",
+        "break",
+        "ice_shatter"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "poise",
+            "stacks": 4,
+            "duration": 0,
+            "offset": 1.76
+          }
+        ]
+      ],
+      "ultimate_duration": 3,
+      "ultimate_uspMax": 76.5,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 1.5,
+          "atb": 0,
+          "poise": 0
+        },
+        {
+          "offset": 2.7,
+          "poise": 0,
+          "atb": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "knockdown",
+        "break",
+        "ice_shatter",
+        "knockup",
+        "dapan_buff"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "knockup",
+            "stacks": 1,
+            "duration": 1.1,
+            "offset": 1.5
+          },
+          {
+            "type": "knockdown",
+            "stacks": 2,
+            "duration": 0,
+            "offset": 2.7
+          }
+        ],
+        [
+          {
+            "type": "dapan_buff",
+            "stacks": 1,
+            "duration": 0,
+            "offset": 0
+          }
+        ]
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "variants": [],
+      "attack_uspGain": 0,
+      "ultimate_animationTime": 1.5,
+      "ultimate_enhancementTime": 0,
+      "weapon": "claym",
+      "normal_skill_icon": "dist/assets/avatars/DAPAN/icon_skill_dapan_01.png",
+      "combo_icon": "dist/assets/avatars/DAPAN/icon_combo_skill_dapan_01.png",
+      "ultimate_icon": "dist/assets/avatars/DAPAN/icon_ultimate_skill_dapan_01.png"
+    },
+    {
+      "id": "WULFGARD",
+      "name": "狼卫",
+      "rarity": 5,
+      "element": "blaze",
+      "avatar": "dist/assets/avatars/WULFGARD/WULFGARD.png",
+      "exclusive_buffs": [],
+      "accept_team_usp": true,
+      "attack_duration": 4,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 18,
+          "poise": 18
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 1.2,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 5
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "blaze_attach",
+        "burning",
+        "blaze_burst"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "blaze_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        0.9
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.2,
+      "combo_cooldown": 20,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "blaze_attach",
+        "burning",
+        "blaze_burst"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "blaze_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        0.9
+      ],
+      "ultimate_duration": 1.5,
+      "ultimate_uspMax": 76.5,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "burning",
+        "blaze_attach",
+        "blaze_burst"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "burning",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "variants": [
+        {
+          "id": "v_1765344273644",
+          "name": "强化战技",
+          "type": "normal_skill",
+          "duration": 2,
+          "allowedTypes": [],
+          "physicalAnomaly": [],
+          "damageTicks": [
+            {
+              "offset": 0,
+              "atb": 0,
+              "poise": 10
+            }
+          ],
+          "atbCost": 75,
+          "uspGain": 6.5,
+          "teamUspGain": 6.5,
+          "icon": "dist/assets/avatars/WULFGARD/icon_skill_wolfgd_01.png"
+        }
+      ],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.5,
+      "weapon": "pistol",
+      "normal_skill_icon": "dist/assets/avatars/WULFGARD/icon_skill_wolfgd_01_line.png",
+      "combo_icon": "dist/assets/avatars/WULFGARD/icon_combo_skill_wolfgd_01.png",
+      "ultimate_icon": "dist/assets/avatars/WULFGARD/icon_ultimate_skill_wolfgd_01.png"
+    },
+    {
+      "id": "PERLICA",
+      "name": "佩丽卡",
+      "rarity": 5,
+      "element": "emag",
+      "avatar": "dist/assets/avatars/PERLICA/PERLICA.png",
+      "exclusive_buffs": [],
+      "accept_team_usp": true,
+      "attack_duration": 3.3,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 15,
+          "poise": 15
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 0.8,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "emag_attach",
+        "conductive",
+        "emag_burst"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "emag_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        0.5
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.2,
+      "combo_cooldown": 20,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "conductive",
+        "emag_attach",
+        "emag_burst"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "conductive",
+            "stacks": 1,
+            "duration": 8.75
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        0.9
+      ],
+      "ultimate_duration": 1.6,
+      "ultimate_uspMax": 68,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [],
+      "ultimate_anomalies": [],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.6,
+      "weapon": "funnel",
+      "normal_skill_icon": "dist/assets/avatars/PERLICA/icon_skill_pelica_01.png",
+      "combo_icon": "dist/assets/avatars/PERLICA/icon_combo_skill_pelica_01.png",
+      "ultimate_icon": "dist/assets/avatars/PERLICA/icon_ultimate_skill_pelica_01.png"
+    },
+    {
+      "id": "CHENQIANYU",
+      "name": "陈千语",
+      "rarity": 5,
+      "element": "physical",
+      "avatar": "dist/assets/avatars/CHENQIANYU/CHENQIANYU.png",
+      "exclusive_buffs": [],
+      "attack_duration": 3.2,
+      "attack_damage_ticks": [
+        {
+          "offset": 3.2,
+          "atb": 18,
+          "poise": 16
+        }
+      ],
+      "attack_allowed_types": [
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "knockup",
+        "break",
+        "ice_shatter",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "knockdown",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "poise",
+        "armor_break"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 0.8,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0.4,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "knockup",
+        "break",
+        "ice_shatter"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "knockup",
+            "stacks": 2,
+            "duration": 0,
+            "offset": 0.4
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        0.5
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 0.9,
+      "combo_cooldown": 16,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0.56,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "knockup",
+        "break",
+        "ice_shatter"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "knockup",
+            "stacks": 2,
+            "duration": 0,
+            "offset": 0.56
+          }
+        ]
+      ],
+      "combo_anomaly_delays": [
+        0.6
+      ],
+      "ultimate_duration": 2,
+      "ultimate_uspMax": 59.5,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [],
+      "ultimate_anomalies": [],
+      "execution_duration": 2.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "blaze_attach",
+        "burning",
+        "blaze_burst",
+        "emag_burst",
+        "conductive",
+        "emag_attach",
+        "frozen",
+        "cold_attach",
+        "cold_burst",
+        "ice_shatter",
+        "corrosion",
+        "nature_attach",
+        "nature_burst",
+        "knockdown",
+        "knockup",
+        "poise",
+        "armor_break"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.6,
+      "weapon": "sword",
+      "normal_skill_icon": "dist/assets/avatars/CHENQIANYU/icon_skill_chen_01.png",
+      "combo_icon": "dist/assets/avatars/CHENQIANYU/icon_combo_skill_chen_01.png",
+      "ultimate_icon": "dist/assets/avatars/CHENQIANYU/icon_ultimate_skill_chen_01.png"
+    },
+    {
+      "id": "ALESH",
+      "name": "阿列什",
+      "rarity": 5,
+      "element": "cold",
+      "avatar": "dist/assets/avatars/ALESH/ALESH.png",
+      "exclusive_buffs": [],
+      "attack_duration": 3.2,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 19,
+          "poise": 17
+        }
+      ],
+      "attack_allowed_types": [
+        "corrosion",
+        "nature_attach",
+        "nature_burst",
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "knockup",
+        "break",
+        "ice_shatter",
+        "knockdown",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "poise",
+        "armor_break"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 1.3,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 17,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 30,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "frozen",
+        "cold_attach",
+        "cold_burst"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "frozen",
+            "stacks": 1,
+            "duration": 5
+          }
+        ]
+      ],
+      "normal_skill_anomaly_delays": [
+        1
+      ],
+      "normal_skill_teamUspGain": 8.5,
+      "combo_duration": 1.5,
+      "combo_cooldown": 9,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 10,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [],
+      "combo_anomalies": [],
+      "ultimate_duration": 1.6,
+      "ultimate_uspMax": 85,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 30,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "cold_burst",
+        "frozen",
+        "cold_attach"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "cold_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "frozen",
+        "cold_attach",
+        "cold_burst",
+        "emag_burst",
+        "conductive",
+        "emag_attach",
+        "blaze_attach",
+        "burning",
+        "blaze_burst",
+        "break",
+        "armor_break",
+        "ice_shatter",
+        "knockdown",
+        "knockup",
+        "poise",
+        "corrosion",
+        "nature_attach",
+        "nature_burst"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "ultimate_animationTime": 1.6,
+      "ultimate_enhancementTime": 0,
+      "weapon": "sword",
+      "normal_skill_icon": "dist/assets/avatars/ALESH/icon_skill_deepfin_01_line.png",
+      "combo_icon": "dist/assets/avatars/ALESH/icon_combo_skill_deepfin_01.png",
+      "ultimate_icon": "dist/assets/avatars/ALESH/icon_ultimate_skill_deepfin_01.png",
+      "variants": [
+        {
+          "id": "v_1767274880488",
+          "name": "强化战技",
+          "type": "normal_skill",
+          "duration": 1.3,
+          "icon": "dist/assets/avatars/ALESH/icon_skill_deepfin_01.png",
+          "allowedTypes": [
+            "frozen",
+            "cold_attach",
+            "cold_burst"
+          ],
+          "physicalAnomaly": [
+            [
+              {
+                "type": "frozen",
+                "stacks": 1,
+                "duration": 5
+              }
+            ]
+          ],
+          "damageTicks": [
+            {
+              "offset": 0,
+              "atb": 30,
+              "poise": 10
+            }
+          ],
+          "atbCost": 100,
+          "uspGain": 17,
+          "teamUspGain": 8.5
+        }
+      ]
+    },
+    {
+      "id": "CATCHER",
+      "name": "卡契尔",
+      "rarity": 4,
+      "element": "physical",
+      "avatar": "dist/assets/avatars/CATCHER/CATCHER.png",
+      "exclusive_buffs": [],
+      "accept_team_usp": true,
+      "attack_duration": 2.5,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 25,
+          "poise": 22
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 2,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 20
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "armor_break",
+        "break",
+        "ice_shatter",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_burst",
+        "burning",
+        "blaze_attach",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "emag_attach",
+        "conductive",
+        "emag_burst"
+      ],
+      "normal_skill_anomalies": [],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.5,
+      "combo_cooldown": 15,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [],
+      "combo_anomalies": [],
+      "ultimate_duration": 3,
+      "ultimate_uspMax": 72,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [],
+      "ultimate_anomalies": [],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.3,
+      "weapon": "claym",
+      "normal_skill_icon": "dist/assets/avatars/CATCHER/icon_skill_meurs_01.png",
+      "combo_icon": "dist/assets/avatars/CATCHER/icon_combo_skill_meurs_01.png",
+      "ultimate_icon": "dist/assets/avatars/CATCHER/icon_ultimate_skill_meurs_01.png"
+    },
+    {
+      "id": "FLUORITE",
+      "name": "萤石",
+      "rarity": 4,
+      "element": "nature",
+      "avatar": "dist/assets/avatars/FLUORITE/FLUORITE.png",
+      "exclusive_buffs": [],
+      "accept_team_usp": true,
+      "attack_duration": 2.5,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 15,
+          "poise": 15
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 2,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [],
+      "normal_skill_anomalies": [],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.5,
+      "combo_cooldown": 25,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [],
+      "combo_anomalies": [],
+      "ultimate_duration": 3,
+      "ultimate_uspMax": 72,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [],
+      "ultimate_anomalies": [],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 0.5,
+      "weapon": "pistol",
+      "normal_skill_icon": "dist/assets/avatars/FLUORITE/icon_skill_bounda_01.png",
+      "combo_icon": "dist/assets/avatars/FLUORITE/icon_combo_skill_bounda_01.png",
+      "ultimate_icon": "dist/assets/avatars/FLUORITE/icon_ultimate_skill_bounda_01.png"
+    },
+    {
+      "id": "ANTAL",
+      "name": "安塔尔",
+      "rarity": 4,
+      "element": "emag",
+      "avatar": "dist/assets/avatars/ANTAL/ANTAL.png",
+      "exclusive_buffs": [
+        {
+          "key": "antal_buff",
+          "name": "聚焦",
+          "path": "dist/assets/avatars/ANTAL/icon_battle_antal_buff.png"
+        },
+        {
+          "key": "fire_enhance",
+          "name": "灼热增幅",
+          "path": "dist/assets/icons/icon_battle_affix_fire_enhance.png"
+        },
+        {
+          "key": "pulse_enhance",
+          "name": "电磁增幅",
+          "path": "dist/assets/icons/icon_battle_affix_pulse_enhance.png"
+        }
+      ],
+      "accept_team_usp": true,
+      "attack_duration": 2.5,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 15,
+          "poise": 15
+        }
+      ],
+      "attack_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 2,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "antal_buff"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "antal_buff",
+            "stacks": 1,
+            "duration": 60,
+            "offset": 2
+          }
+        ]
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.5,
+      "combo_cooldown": 15,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "emag_attach",
+        "conductive",
+        "emag_burst",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "nature_burst",
+        "corrosion",
+        "nature_attach"
+      ],
+      "combo_anomalies": [],
+      "ultimate_duration": 1.4,
+      "ultimate_uspMax": 90,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [
+        "pulse_enhance",
+        "fire_enhance"
+      ],
+      "ultimate_anomalies": [
+        [
+          {
+            "type": "pulse_enhance",
+            "stacks": 1,
+            "duration": 12,
+            "offset": 1.4
+          }
+        ],
+        [
+          {
+            "type": "fire_enhance",
+            "stacks": 1,
+            "duration": 12,
+            "offset": 1.4
+          }
+        ]
+      ],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "break",
+        "armor_break",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_attach",
+        "emag_attach",
+        "cold_attach",
+        "nature_attach",
+        "blaze_burst",
+        "emag_burst",
+        "cold_burst",
+        "nature_burst",
+        "burning",
+        "conductive",
+        "frozen",
+        "ice_shatter",
+        "corrosion"
+      ],
+      "execution_anomalies": [],
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.4,
+      "weapon": "funnel",
+      "normal_skill_icon": "dist/assets/avatars/ANTAL/icon_skill_antal_01.png",
+      "combo_icon": "dist/assets/avatars/ANTAL/icon_combo_skill_antal_01.png",
+      "ultimate_icon": "dist/assets/avatars/ANTAL/icon_ultimate_skill_antal_01.png"
+    },
+    {
+      "id": "ESTELLA",
+      "name": "埃特拉",
+      "rarity": 4,
+      "element": "cold",
+      "avatar": "dist/assets/avatars/ESTELLA/ESTELLA.png",
+      "exclusive_buffs": [],
+      "attack_duration": 2.5,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 19,
+          "poise": 17
+        }
+      ],
+      "attack_allowed_types": [
+        "corrosion",
+        "nature_attach",
+        "nature_burst",
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "knockdown",
+        "break",
+        "ice_shatter",
+        "knockup",
+        "poise",
+        "armor_break"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 2,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "cold_burst",
+        "frozen",
+        "cold_attach"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "cold_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.5,
+      "combo_cooldown": 15,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [
+        "knockup",
+        "break",
+        "ice_shatter"
+      ],
+      "combo_anomalies": [
+        [
+          {
+            "type": "knockup",
+            "stacks": 1,
+            "duration": 0
+          },
+          {
+            "type": "ice_shatter",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "ultimate_duration": 3,
+      "ultimate_uspMax": 63,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [],
+      "ultimate_anomalies": [],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "armor_break",
+        "break",
+        "ice_shatter",
+        "poise",
+        "knockdown",
+        "knockup",
+        "blaze_burst",
+        "burning",
+        "blaze_attach",
+        "nature_attach",
+        "corrosion",
+        "nature_burst",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "emag_attach",
+        "conductive",
+        "emag_burst"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "ultimate_enhancementTime": 0,
+      "ultimate_animationTime": 1.8,
+      "weapon": "lance",
+      "normal_skill_icon": "dist/assets/avatars/ESTELLA/icon_skill_whiten_01.png",
+      "combo_icon": "dist/assets/avatars/ESTELLA/icon_combo_skill_whiten_01.png",
+      "ultimate_icon": "dist/assets/avatars/ESTELLA/icon_ultimate_skill_whiten_01.png"
+    },
+    {
+      "id": "AKEKURI",
+      "name": "秋栗",
+      "rarity": 4,
+      "element": "blaze",
+      "avatar": "dist/assets/avatars/AKEKURI/AKEKURI.png",
+      "exclusive_buffs": [],
+      "attack_duration": 2.5,
+      "attack_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 19,
+          "poise": 17
+        }
+      ],
+      "attack_allowed_types": [
+        "corrosion",
+        "nature_attach",
+        "nature_burst",
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "ice_shatter",
+        "knockdown",
+        "break",
+        "knockup",
+        "poise",
+        "armor_break"
+      ],
+      "attack_anomalies": [],
+      "normal_skill_duration": 2,
+      "normal_skill_atbCost": 100,
+      "normal_skill_uspGain": 6.5,
+      "normal_skill_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "normal_skill_allowed_types": [
+        "blaze_attach",
+        "burning",
+        "blaze_burst"
+      ],
+      "normal_skill_anomalies": [
+        [
+          {
+            "type": "blaze_attach",
+            "stacks": 1,
+            "duration": 0
+          }
+        ]
+      ],
+      "normal_skill_teamUspGain": 6.5,
+      "combo_duration": 1.5,
+      "combo_cooldown": 15,
+      "combo_uspGain": 10,
+      "combo_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 10
+        }
+      ],
+      "combo_allowed_types": [],
+      "combo_anomalies": [],
+      "ultimate_duration": 3,
+      "ultimate_uspMax": 90,
+      "ultimate_uspReply": 0,
+      "ultimate_damage_ticks": [
+        {
+          "offset": 0,
+          "atb": 0,
+          "poise": 0
+        }
+      ],
+      "ultimate_allowed_types": [],
+      "ultimate_anomalies": [],
+      "execution_duration": 1.5,
+      "execution_damage_ticks": [],
+      "execution_allowed_types": [
+        "ice_shatter",
+        "corrosion",
+        "nature_attach",
+        "nature_burst",
+        "burning",
+        "blaze_attach",
+        "blaze_burst",
+        "conductive",
+        "emag_attach",
+        "emag_burst",
+        "cold_attach",
+        "frozen",
+        "cold_burst",
+        "knockdown",
+        "break",
+        "knockup",
+        "poise",
+        "armor_break"
+      ],
+      "execution_anomalies": [],
+      "accept_team_usp": true,
+      "ultimate_animationTime": 1.7,
+      "ultimate_enhancementTime": 0,
+      "weapon": "sword",
+      "normal_skill_icon": "dist/assets/avatars/AKEKURI/icon_skill_karin_01.png",
+      "combo_icon": "dist/assets/avatars/AKEKURI/icon_combo_skill_karin_01.png",
+      "ultimate_icon": "dist/assets/avatars/AKEKURI/icon_ultimate_skill_karin_01.png"
+    }
+  ],
+  "enemyDatabase": [
+    {
+      "id": "eny_0045_agtrinit",
+      "name": "三位一体",
+      "avatar": "/Icon_Enemy/eny_0045_agtrinit.png",
+      "maxPoise": 280,
+      "poiseNodeCount": 1,
+      "poiseNodeDuration": 2,
+      "poiseBreakDuration": 11,
+      "executionRecovery": 100,
+      "category": "天使",
+      "tier": "boss"
+    },
+    {
+      "id": "eny_0051_rodin",
+      "name": "“碾骨之拳”罗丹",
+      "avatar": "/Icon_Enemy/eny_0051_rodin.png",
+      "maxPoise": 280,
+      "poiseNodeCount": 1,
+      "poiseNodeDuration": 2,
+      "poiseBreakDuration": 10,
+      "executionRecovery": 100,
+      "category": "裂地者",
+      "tier": "boss"
+    },
+    {
+      "id": "eny_0053_hsmob",
+      "name": "莫留财",
+      "avatar": "/Icon_Enemy/eny_0053_hsmob.png",
+      "maxPoise": 80,
+      "poiseNodeCount": 0,
+      "poiseNodeDuration": 0,
+      "poiseBreakDuration": 6,
+      "executionRecovery": 25,
+      "category": "沧贼",
+      "tier": "normal"
+    },
+    {
+      "id": "eny_0093_hshog",
+      "name": "球刺兽",
+      "avatar": "/Icon_Enemy/eny_0093_hshog.png",
+      "maxPoise": 200,
+      "poiseNodeCount": 0,
+      "poiseNodeDuration": 0,
+      "poiseBreakDuration": 7,
+      "executionRecovery": 35,
+      "category": "野外生物",
+      "tier": "elite"
+    },
+    {
+      "id": "eny_0107_wgshoal2",
+      "name": "潮行天使δ",
+      "avatar": "/Icon_Enemy/eny_0107_wgshoal2.png",
+      "maxPoise": 320,
+      "poiseNodeCount": 1,
+      "poiseNodeDuration": 2,
+      "poiseBreakDuration": 9,
+      "executionRecovery": 50,
+      "category": "天使",
+      "tier": "champion"
+    }
+  ],
+  "enemyCategories": [
+    "天使",
+    "裂地者",
+    "沧贼",
+    "野外生物"
+  ]
+}

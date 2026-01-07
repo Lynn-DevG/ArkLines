@@ -1,3 +1,5 @@
+import { getSkillValue } from '../data/levelMappings.js';
+
 /**
  * Damage Calculator Engine
  * Implements the formula from design.md
@@ -6,17 +8,25 @@
 export class DamageCalculator {
     static calculate(attacker, target, skillNode, context) {
         // context includes active buffs, breaking state, etc.
+        // context should now also include skillId and skillLevel
 
         // 1. Base Damage Zone
         const baseAtk = this.calculateAttack(attacker, context);
-        const multiplier = skillNode.multiplier || 0; // Skill Multiplier
+
+        // Dynamic Multiplier (Skill Multiplier)
+        let multiplier = 0;
+        if (context.skillId) {
+            multiplier = getSkillValue(context.skillId, 'atk_scale', context.skillLevel || 1, skillNode.index || null);
+        } else {
+            multiplier = skillNode.multiplier || 0;
+        }
+
         // Weakness Zone (Weaken) = Product(1 - weaken_effect)
         const weakenMult = this.calculateWeaken(context);
 
         let baseDamage = multiplier * baseAtk * weakenMult;
 
         // 2. Crit Zone
-        // TODO: Random vs Fixed setting
         const critRate = (attacker.stats.critRate || 0) + (context.critRateBonus || 0);
         const critDmg = (attacker.stats.critDmg || 0.5) + (context.critDmgBonus || 0);
         let critMult = 1.0;
@@ -28,7 +38,7 @@ export class DamageCalculator {
         const dmgBonus = 1 + this.sumModifiers(context, 'dmg_bonus', skillNode);
 
         // 4. Damage Reduction Zone (1 - Reduc)
-        const dmgReduc = 1 - this.sumModifiers(context, 'dmg_reduc', skillNode); // Capped at 1?
+        const dmgReduc = 1 - this.sumModifiers(context, 'dmg_reduc', skillNode);
 
         // 5. Vulnerability Zone (1 + Vuln)
         const vulnerability = 1 + this.sumModifiers(context, 'vulnerability', skillNode);
@@ -45,10 +55,12 @@ export class DamageCalculator {
         // 9. Defense Zone
         const defMult = this.calculateDefMult(target, context);
 
-        // 10. Stun/Break Vulnerability
+        // 10. Stun/Poise Vulnerability (Renamed stagger to poise in context)
         let stunMult = 1.0;
-        if (target.isStunned) {
+        if (target.isStunned || target.status === 'stunned') { // Simplified check
             stunMult = 1.3; // Fixed coefficient
+        } else if (context.isPoiseBroken) {
+            stunMult = 1.3;
         }
 
         // 11. Resistance Zone
@@ -72,9 +84,7 @@ export class DamageCalculator {
 
     static calculateAttack(attacker, context) {
         // Formula: [(Base + Weap) * (1 + %) + Flat] * (1 + AttrBonus)
-        // Attribute Bonus: Main * 0.005 + Sub * 0.002
         let atk = attacker.stats.baseAtk || 0;
-        // ... add weapon/buff logic here
 
         // Mock Attribute Bonus
         const main = attacker.stats[attacker.mainAttr] || 0;
@@ -85,11 +95,7 @@ export class DamageCalculator {
     }
 
     static calculateDefMult(target, context) {
-        // Def Efficiency = 0.01
-        // Formula: 100 / (Def + 100)
-        const def = target.stats.baseDef || 0; // + modifiers
-
-        // Handle negative def (if any debuffs reduce it below 0)
+        const def = target.stats.baseDef || 0;
         if (def >= 0) {
             return 100 / (def + 100);
         } else {
@@ -98,40 +104,28 @@ export class DamageCalculator {
     }
 
     static calculateResMult(target, element, context) {
-        // Element Res Map
-        const resValue = target.stats[`res_${element}`] || 0;
-
-        // Add shred from context
-        // Example: 'res_shred' = value (absolute reduction?)
-        // Design says: "Current Res - Res Shred"
-
+        if (!element) return 1.0;
+        const lowerElement = element.toLowerCase();
+        const resKey = `res_${lowerElement}`;
+        const resValue = target.stats[resKey] || 0;
         const shred = this.sumModifiers(context, 'res_shred', null);
         const finalRes = resValue - shred;
-
         return (100 - finalRes) / 100;
     }
 
     static sumModifiers(context, type, skillNode) {
-        // Extract multipliers of 'type' from context.buffs 
         let sum = 0;
         if (!context.activeModifiers) return 0;
 
         context.activeModifiers.forEach(mod => {
             if (mod.type === type) {
-                // Check condition
-                if (mod.condition) {
-                    if (skillNode) {
-                        // Check Magic/Physical
-                        const isMagic = ['Fire', 'Ice', 'Nature', 'Electric'].includes(skillNode.element);
-                        const isPhys = skillNode.element === 'Physical';
+                if (mod.condition && skillNode) {
+                    const el = (skillNode.element || '').toLowerCase();
+                    const isMagic = ['fire', 'ice', 'nature', 'electric', 'emag', 'blaze', 'cold'].includes(el);
+                    const isPhys = el === 'physical';
 
-                        if (mod.condition.type === 'magic' && !isMagic) return;
-                        if (mod.condition.type === 'physical' && !isPhys) return;
-                        if (mod.condition.type === 'stun' && !mod.condition.active) {
-                            // Usually stun condition implies target IS stunned.
-                            // Handled by context setup.
-                        }
-                    }
+                    if (mod.condition.type === 'magic' && !isMagic) return;
+                    if (mod.condition.type === 'physical' && !isPhys) return;
                 }
                 sum += mod.value;
             }
@@ -147,13 +141,10 @@ export class DamageCalculator {
                 if (mod.condition) {
                     if (skillNode) {
                         const isMagic = ['Fire', 'Ice', 'Nature', 'Electric'].includes(skillNode.element);
-                        const isPhys = skillNode.element === 'Physical';
+                        const isPhys = skillNode.element === 'Physical' || (skillNode.element && skillNode.element.toLowerCase() === 'physical');
 
                         if (mod.condition.type === 'magic' && !isMagic) return;
                         if (mod.condition.type === 'physical' && !isPhys) return;
-                        if (mod.condition.type === 'stun' && !mod.condition.active) {
-                            // handled by context
-                        }
                     }
                 }
                 if (mod.value > max) {
@@ -165,61 +156,30 @@ export class DamageCalculator {
     }
 
     static calculateReactionDamage(anomalyType, context, enemyStats) {
-        // Design.md 2.3.2 Reaction Damage
-        // Base Reaction Damage = 160% * Attack (Source)
-        // Assume context.sourceChar passed.
-
         const sourceAtk = context.sourceChar ? this.calculateAttack(context.sourceChar, context) : 500;
-        const anomalyLevel = context.level || 1; // Passed from event
+        const anomalyLevel = context.level || 1;
 
         let multiplier = 0;
+        let element = 'physical';
 
-        switch (anomalyType) {
-            case 'status_burn': // DoT
-                // Burn: 12% + 12% * Lv
-                multiplier = 0.12 + 0.12 * anomalyLevel;
-                break;
+        const type = String(anomalyType).toLowerCase();
 
-            // Direct Damage Anomalies (Explosion on Trigger)
-            // Note: TimelineSimulator might treat app as Reaction event, but 'Reaction Damage' usually refers to the burst?
-            // Or only DoT?
-            // Burn is DoT.
-            // Shatter (Ice) is Burst. 120% + 120% * Lv
-            // Discharge (Electric) is implicit in Conduct? No, Conduct is vuln.
-            // Design says: "法术爆发伤害倍率 = 160%". This is for Same-Element Stacking (Attachment 4 layers?)
-            // Design says: "Conduct/Corrosion/Burn Base = 80% + 80% * Lv" (Initial Burst?)
-            // "Burn DoT = 12%..."
-
-            // Let's implement the Initial Burst if this is called for it.
-            // Assuming this method is called for the 'REACTION' event burst.
-
-            case 'BURST': // Placeholder for generic reaction burst?
-                multiplier = 0.80 + 0.80 * anomalyLevel;
-                break;
-
-            default:
-                // Default Burn DoT tick call uses 'status_burn'
-                if (anomalyType === 'status_burn') {
-                    multiplier = 0.12 + 0.12 * anomalyLevel;
-                } else {
-                    return 0;
-                }
+        if (type.includes('burn') || type === 'blaze') {
+            multiplier = 0.12 + 0.12 * anomalyLevel;
+            element = 'blaze';
+        } else if (type === 'burst') {
+            multiplier = 0.80 + 0.80 * anomalyLevel;
+            element = 'physical';
+        } else {
+            // Default/Fallback
+            multiplier = 0.1 * anomalyLevel;
         }
 
-        // Apply Res
-        // Reactions usually elemental.
-        // Burn = Fire.
-        let element = 'Physical';
-        if (anomalyType === 'status_burn') element = 'Fire';
-
         const resMult = this.calculateResMult({ stats: enemyStats }, element, context);
-
         return Math.floor(sourceAtk * multiplier * resMult);
     }
 
     static calculateWeaken(context) {
-        // Product(1 - v)
-        // For simplicity returning 1.0
         return 1.0;
     }
 }

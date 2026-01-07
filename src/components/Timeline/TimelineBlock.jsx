@@ -14,8 +14,25 @@ export const TimelineBlock = ({ action, pxPerSec, onRemove, onDragStart, comboIn
     // Visual override for Heavy
     let displayName = skillDef.name;
     let styleClass = typeConfig.color;
+    let activeDamageTicks = skillDef.damage_ticks || [];
+    let activeDuration = skillDef.duration;
 
     if (comboInfo) {
+        // Resolve variant for basic combo if present
+        if (skillDef.variants) {
+            const variant = skillDef.variants.find(v => {
+                if (v.condition && v.condition.type === 'combo') {
+                    if (v.condition.value === 'heavy' && comboInfo.isHeavy) return true;
+                    if (v.condition.value === comboInfo.step && !comboInfo.isHeavy) return true;
+                }
+                return false;
+            });
+            if (variant) {
+                activeDamageTicks = variant.damage_ticks || activeDamageTicks;
+                activeDuration = variant.duration || activeDuration;
+            }
+        }
+
         if (comboInfo.isHeavy) {
             displayName = 'Heavy';
             styleClass = 'bg-orange-600'; // Override color
@@ -52,55 +69,50 @@ export const TimelineBlock = ({ action, pxPerSec, onRemove, onDragStart, comboIn
                 <X size={10} />
             </button>
 
-            {/* Node Indicators */}
-            {skillDef.nodes.map((node, idx) => (
+            {/* Node Indicators (Damage Ticks) */}
+            {activeDamageTicks.map((tick, idx) => (
                 <div
-                    key={idx}
+                    key={`tick-${idx}`}
                     className="absolute top-0 bottom-0 w-px bg-white/50"
-                    style={{ left: `${(node.time / skillDef.duration) * 100}%` }}
+                    style={{ left: `${(tick.offset / activeDuration) * 100}%` }}
                 />
             ))}
 
-            {/* Buff Duration Bars (Extending beyond block) */}
-            {skillDef.nodes.map((node, idx) => {
-                if (node.type !== 'buff_add' && node.type !== 'status_apply') return null;
+            {/* Buff Duration Bars (Anomalies) */}
+            {skillDef.anomalies && skillDef.anomalies.map((list, listIdx) => {
+                return list.map((ano, anoIdx) => {
+                    let duration = ano.duration;
+                    let color = 'bg-green-400/30';
+                    let borderColor = 'border-green-400';
 
-                let duration = node.duration;
-                let color = 'bg-green-400/30';
-                let borderColor = 'border-green-400';
+                    // Lookup duration if missing
+                    if (!duration) {
+                        const buffDef = BUFFS[ano.type];
+                        if (buffDef?.duration) duration = buffDef.duration;
+                        color = 'bg-red-500/30';
+                        borderColor = 'border-red-500';
+                    }
 
-                // Lookup duration
-                if (!duration && node.status) {
-                    const buffDef = BUFFS[node.status];
-                    if (buffDef?.duration) duration = buffDef.duration;
-                    color = 'bg-red-500/30';
-                    borderColor = 'border-red-500';
-                } else if (!duration && node.buffId) {
-                    const buffDef = BUFFS[node.buffId];
-                    if (buffDef?.duration) duration = buffDef.duration;
-                    color = 'bg-blue-400/30';
-                    borderColor = 'border-blue-400';
-                }
+                    if (duration) {
+                        const barLeft = ano.offset * pxPerSec;
+                        const barWidth = duration * pxPerSec;
 
-                if (duration) {
-                    const barLeft = node.time * pxPerSec;
-                    const barWidth = duration * pxPerSec;
-
-                    return (
-                        <div
-                            key={`buff-${idx}`}
-                            className={`absolute h-1.5 bottom-0 z-0 pointer-events-none border-l border-t rounded-br ${color} ${borderColor}`}
-                            style={{
-                                left: `${barLeft}px`,
-                                width: `${barWidth}px`,
-                                transform: 'translateY(100%)', // Below the block
-                                opacity: 0.8
-                            }}
-                            title={`Duration: ${duration}s`}
-                        />
-                    );
-                }
-                return null;
+                        return (
+                            <div
+                                key={`ano-${listIdx}-${anoIdx}`}
+                                className={`absolute h-1.5 bottom-0 z-0 pointer-events-none border-l border-t rounded-br ${color} ${borderColor}`}
+                                style={{
+                                    left: `${barLeft}px`,
+                                    width: `${barWidth}px`,
+                                    transform: 'translateY(100%)', // Below the block
+                                    opacity: 0.8
+                                }}
+                                title={`${ano.type} (${duration}s)`}
+                            />
+                        );
+                    }
+                    return null;
+                });
             })}
         </div>
     );

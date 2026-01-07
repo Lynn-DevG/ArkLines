@@ -30,10 +30,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0003_endminf_attack",
-      "tactical": "skill_chr_0003_endminf_normal_skill",
-      "chain": "skill_chr_0003_endminf_combo_skill",
-      "ultimate": "skill_chr_0003_endminf_ultimate_skill"
+      "basic": "chr_0003_endminf_attack",
+      "tactical": "chr_0003_endminf_normal_skill",
+      "chain": "chr_0003_endminf_combo_skill",
+      "ultimate": "chr_0003_endminf_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -75,10 +75,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0004_pelica_attack",
-      "tactical": "skill_chr_0004_pelica_normal_skill",
-      "chain": "skill_chr_0004_pelica_combo_skill",
-      "ultimate": "skill_chr_0004_pelica_ultimate_skill"
+      "basic": "chr_0004_pelica_attack",
+      "tactical": "chr_0004_pelica_normal_skill",
+      "chain": "chr_0004_pelica_combo_skill",
+      "ultimate": "chr_0004_pelica_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -120,10 +120,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0005_chen_attack",
-      "tactical": "skill_chr_0005_chen_normal_skill",
-      "chain": "skill_chr_0005_chen_combo_skill",
-      "ultimate": "skill_chr_0005_chen_ultimate_skill"
+      "basic": "chr_0005_chen_attack",
+      "tactical": "chr_0005_chen_normal_skill",
+      "chain": "chr_0005_chen_combo_skill",
+      "ultimate": "chr_0005_chen_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -165,10 +165,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0006_wolfgd_attack",
-      "tactical": "skill_chr_0006_wolfgd_normal_skill",
-      "chain": "skill_chr_0006_wolfgd_combo_skill",
-      "ultimate": "skill_chr_0006_wolfgd_ultimate_skill"
+      "basic": "chr_0006_wolfgd_attack",
+      "tactical": "chr_0006_wolfgd_normal_skill",
+      "chain": "chr_0006_wolfgd_combo_skill",
+      "ultimate": "chr_0006_wolfgd_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -210,10 +210,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0007_ikut_attack",
-      "tactical": "skill_chr_0007_ikut_normal_skill",
-      "chain": "skill_chr_0007_ikut_combo_skill",
-      "ultimate": "skill_chr_0007_ikut_ultimate_skill"
+      "basic": "chr_0007_ikut_attack",
+      "tactical": "chr_0007_ikut_normal_skill",
+      "chain": "chr_0007_ikut_combo_skill",
+      "ultimate": "chr_0007_ikut_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -256,10 +256,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0009_azrila_attack",
-      "tactical": "skill_chr_0009_azrila_normal_skill",
-      "chain": "skill_chr_0009_azrila_combo_skill",
-      "ultimate": "skill_chr_0009_azrila_ultimate_skill"
+      "basic": "chr_0009_azrila_attack",
+      "tactical": "chr_0009_azrila_normal_skill",
+      "chain": "chr_0009_azrila_combo_skill",
+      "ultimate": "chr_0009_azrila_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -302,10 +302,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0011_seraph_attack",
-      "tactical": "skill_chr_0011_seraph_normal_skill",
-      "chain": "skill_chr_0011_seraph_combo_skill",
-      "ultimate": "skill_chr_0011_seraph_ultimate_skill"
+      "basic": "chr_0011_seraph_attack",
+      "tactical": "chr_0011_seraph_normal_skill",
+      "chain": "chr_0011_seraph_combo_skill",
+      "ultimate": "chr_0011_seraph_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -347,10 +347,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0012_avywen_attack",
-      "tactical": "skill_chr_0012_avywen_normal_skill",
-      "chain": "skill_chr_0012_avywen_combo_skill",
-      "ultimate": "skill_chr_0012_avywen_ultimate_skill"
+      "basic": "chr_0012_avywen_attack",
+      "tactical": "chr_0012_avywen_normal_skill",
+      "chain": "chr_0012_avywen_combo_skill",
+      "ultimate": "chr_0012_avywen_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -393,10 +393,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0013_aglina_attack",
-      "tactical": "skill_chr_0013_aglina_normal_skill",
-      "chain": "skill_chr_0013_aglina_combo_skill",
-      "ultimate": "skill_chr_0013_aglina_ultimate_skill"
+      "basic": "chr_0013_aglina_attack",
+      "tactical": "chr_0013_aglina_normal_skill",
+      "chain": "chr_0013_aglina_combo_skill",
+      "ultimate": "chr_0013_aglina_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -439,10 +439,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0014_aurora_attack",
-      "tactical": "skill_chr_0014_aurora_normal_skill",
-      "chain": "skill_chr_0014_aurora_combo_skill",
-      "ultimate": "skill_chr_0014_aurora_ultimate_skill"
+      "basic": "chr_0014_aurora_attack",
+      "tactical": "chr_0014_aurora_normal_skill",
+      "chain": "chr_0014_aurora_combo_skill",
+      "ultimate": "chr_0014_aurora_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -485,10 +485,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0015_lifeng_attack",
-      "tactical": "skill_chr_0015_lifeng_normal_skill",
-      "chain": "skill_chr_0015_lifeng_combo_skill",
-      "ultimate": "skill_chr_0015_lifeng_ultimate_skill"
+      "basic": "chr_0015_lifeng_attack",
+      "tactical": "chr_0015_lifeng_normal_skill",
+      "chain": "chr_0015_lifeng_combo_skill",
+      "ultimate": "chr_0015_lifeng_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -530,10 +530,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0016_laevat_attack",
-      "tactical": "skill_chr_0016_laevat_normal_skill",
-      "chain": "skill_chr_0016_laevat_combo_skill",
-      "ultimate": "skill_chr_0016_laevat_ultimate_skill"
+      "basic": "chr_0016_laevat_attack",
+      "tactical": "chr_0016_laevat_normal_skill",
+      "chain": "chr_0016_laevat_combo_skill",
+      "ultimate": "chr_0016_laevat_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -576,10 +576,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0017_yvonne_attack",
-      "tactical": "skill_chr_0017_yvonne_normal_skill",
-      "chain": "skill_chr_0017_yvonne_combo_skill",
-      "ultimate": "skill_chr_0017_yvonne_ultimate_skill"
+      "basic": "chr_0017_yvonne_attack",
+      "tactical": "chr_0017_yvonne_normal_skill",
+      "chain": "chr_0017_yvonne_combo_skill",
+      "ultimate": "chr_0017_yvonne_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -622,10 +622,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0018_dapan_attack",
-      "tactical": "skill_chr_0018_dapan_normal_skill",
-      "chain": "skill_chr_0018_dapan_combo_skill",
-      "ultimate": "skill_chr_0018_dapan_ultimate_skill"
+      "basic": "chr_0018_dapan_attack",
+      "tactical": "chr_0018_dapan_normal_skill",
+      "chain": "chr_0018_dapan_combo_skill",
+      "ultimate": "chr_0018_dapan_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -668,10 +668,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0019_karin_attack",
-      "tactical": "skill_chr_0019_karin_normal_skill",
-      "chain": "skill_chr_0019_karin_combo_skill",
-      "ultimate": "skill_chr_0019_karin_ultimate_skill"
+      "basic": "chr_0019_karin_attack",
+      "tactical": "chr_0019_karin_normal_skill",
+      "chain": "chr_0019_karin_combo_skill",
+      "ultimate": "chr_0019_karin_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -714,10 +714,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0020_meurs_attack",
-      "tactical": "skill_chr_0020_meurs_normal_skill",
-      "chain": "skill_chr_0020_meurs_combo_skill",
-      "ultimate": "skill_chr_0020_meurs_ultimate_skill"
+      "basic": "chr_0020_meurs_attack",
+      "tactical": "chr_0020_meurs_normal_skill",
+      "chain": "chr_0020_meurs_combo_skill",
+      "ultimate": "chr_0020_meurs_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -760,10 +760,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0021_whiten_attack",
-      "tactical": "skill_chr_0021_whiten_normal_skill",
-      "chain": "skill_chr_0021_whiten_combo_skill",
-      "ultimate": "skill_chr_0021_whiten_ultimate_skill"
+      "basic": "chr_0021_whiten_attack",
+      "tactical": "chr_0021_whiten_normal_skill",
+      "chain": "chr_0021_whiten_combo_skill",
+      "ultimate": "chr_0021_whiten_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -805,10 +805,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0022_bounda_attack",
-      "tactical": "skill_chr_0022_bounda_normal_skill",
-      "chain": "skill_chr_0022_bounda_combo_skill",
-      "ultimate": "skill_chr_0022_bounda_ultimate_skill"
+      "basic": "chr_0022_bounda_attack",
+      "tactical": "chr_0022_bounda_normal_skill",
+      "chain": "chr_0022_bounda_combo_skill",
+      "ultimate": "chr_0022_bounda_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -850,10 +850,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0023_antal_attack",
-      "tactical": "skill_chr_0023_antal_normal_skill",
-      "chain": "skill_chr_0023_antal_combo_skill",
-      "ultimate": "skill_chr_0023_antal_ultimate_skill"
+      "basic": "chr_0023_antal_attack",
+      "tactical": "chr_0023_antal_normal_skill",
+      "chain": "chr_0023_antal_combo_skill",
+      "ultimate": "chr_0023_antal_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -895,10 +895,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0024_deepfin_attack",
-      "tactical": "skill_chr_0024_deepfin_normal_skill",
-      "chain": "skill_chr_0024_deepfin_combo_skill",
-      "ultimate": "skill_chr_0024_deepfin_ultimate_skill"
+      "basic": "chr_0024_deepfin_attack",
+      "tactical": "chr_0024_deepfin_normal_skill",
+      "chain": "chr_0024_deepfin_combo_skill",
+      "ultimate": "chr_0024_deepfin_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -941,10 +941,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0025_ardelia_attack",
-      "tactical": "skill_chr_0025_ardelia_normal_skill",
-      "chain": "skill_chr_0025_ardelia_combo_skill",
-      "ultimate": "skill_chr_0025_ardelia_ultimate_skill"
+      "basic": "chr_0025_ardelia_attack",
+      "tactical": "chr_0025_ardelia_normal_skill",
+      "chain": "chr_0025_ardelia_combo_skill",
+      "ultimate": "chr_0025_ardelia_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -986,10 +986,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0026_lastrite_attack",
-      "tactical": "skill_chr_0026_lastrite_normal_skill",
-      "chain": "skill_chr_0026_lastrite_combo_skill",
-      "ultimate": "skill_chr_0026_lastrite_ultimate_skill"
+      "basic": "chr_0026_lastrite_attack",
+      "tactical": "chr_0026_lastrite_normal_skill",
+      "chain": "chr_0026_lastrite_combo_skill",
+      "ultimate": "chr_0026_lastrite_ultimate_skill"
     },
     "talents": [],
     "equipment": {
@@ -1031,10 +1031,10 @@
     "level": 1,
     "potential": 1,
     "skills": {
-      "basic": "skill_chr_0029_pograni_attack",
-      "tactical": "skill_chr_0029_pograni_normal_skill",
-      "chain": "skill_chr_0029_pograni_combo_skill",
-      "ultimate": "skill_chr_0029_pograni_ultimate_skill"
+      "basic": "chr_0029_pograni_attack",
+      "tactical": "chr_0029_pograni_normal_skill",
+      "chain": "chr_0029_pograni_combo_skill",
+      "ultimate": "chr_0029_pograni_ultimate_skill"
     },
     "talents": [],
     "equipment": {

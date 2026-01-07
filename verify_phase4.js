@@ -1,7 +1,7 @@
 import { TimelineSimulator } from './src/engine/TimelineSimulator.js';
 import { CHARACTERS } from './src/data/characters.js';
 import { SKILLS } from './src/data/skills.js';
-import { BUFFS } from './src/data/buffs.js';
+import { BUFFS, getBuffDef } from './src/data/buffs.js';
 import { DamageCalculator } from './src/engine/DamageCalculator.js';
 
 // Mock specific skills/buffs for testing if needed
@@ -31,15 +31,16 @@ SKILLS['test_burn'] = {
     spCost: 30,
     duration: 1,
     nodes: [
-        { time: 0.5, type: 'status_apply', status: 'BURN', layers: 1, duration: 3 }
+        { time: 0.5, type: 'status_apply', status: 'status_burn', layers: 1, duration: 3 }
     ]
 };
-BUFFS['BURN'] = {
-    name: 'Burn',
+// 测试用临时覆盖（使用正确的 buff ID）
+BUFFS['status_burn_test'] = {
+    name: 'Burn Test',
     type: 'ANOMALY',
-    element: 'FIRE',
+    element: 'Fire',
     duration: 3,
-    maxLayers: 5
+    maxLayers: 4
 };
 
 // Add action

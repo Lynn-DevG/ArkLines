@@ -8,17 +8,17 @@ export const SkillMatrix = ({ team, selectedTool, onSelectTool }) => {
     return (
         <div className="h-80 border-b border-slate-700 bg-slate-900 p-4 flex flex-col shadow-md z-10 shrink-0">
             <h2 className="text-lg font-bold flex items-center gap-2 text-indigo-400 mb-2">
-                <Zap size={20} /> Skill Palette
+                <Zap size={20} /> 技能面板
             </h2>
 
             <div className="flex-1 flex gap-4 overflow-x-auto custom-scrollbar">
                 {/* Headers */}
                 <div className="flex flex-col justify-start w-16 text-right text-xs font-mono text-slate-400 shrink-0 pt-3">
                     <div className="h-6 mb-2"></div> {/* Spacer for Name */}
-                    <div className="h-10 mb-2 flex items-center justify-end">Ultimate</div>
-                    <div className="h-10 mb-2 flex items-center justify-end">Chain</div>
-                    <div className="h-10 mb-2 flex items-center justify-end">Tactical</div>
-                    <div className="h-10 mb-2 flex items-center justify-end">Basic</div>
+                    <div className="h-10 mb-2 flex items-center justify-end">终结技</div>
+                    <div className="h-10 mb-2 flex items-center justify-end">连携技</div>
+                    <div className="h-10 mb-2 flex items-center justify-end">战技</div>
+                    <div className="h-10 mb-2 flex items-center justify-end">普攻</div>
                 </div>
 
                 <div className="flex-1 grid grid-cols-4 gap-4 min-w-[600px]">
@@ -57,7 +57,7 @@ export const SkillMatrix = ({ team, selectedTool, onSelectTool }) => {
                                     /></div>
                                 </>
                             ) : (
-                                <div className="text-slate-600 text-xs text-center mt-10">Empty Slot</div>
+                                <div className="text-slate-600 text-xs text-center mt-10">空位</div>
                             )}
                         </div>
                     ))}

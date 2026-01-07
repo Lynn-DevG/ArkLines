@@ -51,33 +51,34 @@ export function getLevelStats(charId, level, eliteLevel = null) {
 
 /**
  * Get a specific skill value at a given level.
- * @param {string} skillId - The skill ID
- * @param {string} key - The attribute key (e.g., 'atk_scale', 'atb', 'usp', 'poise')
+ * 
+ * 查找策略：
+ * 1. 首先尝试精确匹配 skill_id + key
+ * 2. 如果提供了 index，尝试 skill_id + key + index（如 atk_scale2）
+ * 3. 如果提供了 index，尝试 skill_id + index + key（如 ..._attack2 的 atk_scale）
+ * 
+ * @param {string} skillId - The skill ID (如 chr_0003_endminf_attack2)
+ * @param {string} key - The attribute key (如 'atk_scale', 'atb', 'usp', 'poise')
  * @param {number} level - The skill level (1-12)
- * @param {number|string|null} index - Optional index for multi-stage skills (e.g., 2 for 'atk_scale2')
+ * @param {number|string|null} index - Optional index for multi-stage skills
  * @returns {number} The value, or 0 if not found
  */
 export function getSkillValue(skillId, key, level, index = null) {
-    // 1. Strip 'skill_' prefix
-    let baseId = skillId.replace(/^skill_/, '');
+    // Strip 'skill_' prefix if present
+    const baseId = skillId.replace(/^skill_/, '');
     const levelKey = `${level}级值`;
 
-    /**
-     * Try multiple lookup strategies:
-     * 1. If it's an attack, try baseId + index (e.g., ..._attack1)
-     * 2. If index > 1, try baseId + key + index (e.g., id: skill, key: atk_scale2)
-     * 3. Fallback to baseId + key
-     */
     const lookupQueue = [];
 
-    if (index) {
-        // Strategy 1: Suffix on ID (common for basic attacks)
-        lookupQueue.push({ id: `${baseId}${index}`, key: key });
-        // Strategy 2: Suffix on Key (common for multi-stage tactical/ults)
-        lookupQueue.push({ id: baseId, key: `${key}${index}` });
-    }
-    // Strategy 3: Exact match
+    // Strategy 1: Exact match (优先使用精确匹配)
     lookupQueue.push({ id: baseId, key: key });
+
+    if (index) {
+        // Strategy 2: Key suffix (如 atk_scale2)
+        lookupQueue.push({ id: baseId, key: `${key}${index}` });
+        // Strategy 3: ID suffix (如 ..._attack2 + atk_scale)
+        lookupQueue.push({ id: `${baseId}${index}`, key: key });
+    }
 
     for (const lookup of lookupQueue) {
         const charSkillData = SKILL_VALUE_INDEX[lookup.id];
@@ -85,14 +86,6 @@ export function getSkillValue(skillId, key, level, index = null) {
             const entry = charSkillData[lookup.key];
             const val = entry[levelKey];
             if (val !== undefined) return parseFloat(val);
-        }
-    }
-
-    // Fallback for 'key1' if no index provided
-    if (!index) {
-        const charSkillData = SKILL_VALUE_INDEX[baseId];
-        if (charSkillData && charSkillData[`${key}1`]) {
-            return parseFloat(charSkillData[`${key}1`][levelKey] || 0);
         }
     }
 

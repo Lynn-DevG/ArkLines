@@ -23,7 +23,7 @@ export const CharacterSelector = () => {
                 <CharacterEditor charId={editingCharId} onClose={() => setEditingCharId(null)} />
             ) : (
                 <div className="absolute inset-0 overflow-y-auto p-4 flex flex-col custom-scrollbar">
-                    <h3 className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Available Characters</h3>
+                    <h3 className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">可用角色</h3>
                     <div className="grid grid-cols-3 gap-2">
                         {CHARACTERS.map(char => {
                             const isInTeam = team.some(c => c?.id === char.id);
@@ -49,17 +49,17 @@ export const CharacterSelector = () => {
                     </div>
 
                     <div className="mt-6">
-                        <h3 className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Current Team</h3>
+                        <h3 className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">当前队伍</h3>
                         <div className="space-y-4">
                             {team.map((char, idx) => char ? (
                                 <div key={char.id} className="bg-slate-800/50 p-3 rounded border border-slate-700 relative group">
                                     <div className="flex justify-between items-center mb-2">
                                         <span className="text-xs font-bold text-white">{char.name}</span>
-                                        <span className="text-[10px] text-slate-400">LV.{char.level}</span>
+                                        <span className="text-[10px] text-slate-400">等级 {char.level}</span>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-300">
-                                        <div className="bg-slate-900 px-2 py-1 rounded">ATK: {Math.round(char.stats.baseAtk)}</div>
-                                        <div className="bg-slate-900 px-2 py-1 rounded">DEF: {Math.round(char.stats.baseDef)}</div>
+<div className="bg-slate-900 px-2 py-1 rounded">攻击: {Math.round(char.stats.baseAtk)}</div>
+                                                        <div className="bg-slate-900 px-2 py-1 rounded">防御: {Math.round(char.stats.baseDef)}</div>
                                     </div>
 
                                     {/* Edit Button */}

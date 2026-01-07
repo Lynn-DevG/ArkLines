@@ -2,7 +2,7 @@
  * Buff Manager
  * Handles Buff Application, Stacking, Expiration, and Elemental Reactions
  */
-import { BUFFS, REACTIONS } from '../data/buffs.js';
+import { BUFFS, REACTIONS, resolveBuffId, getBuffDef } from '../data/buffs.js';
 
 export class BuffManager {
     constructor() {
@@ -28,8 +28,11 @@ export class BuffManager {
 
             if (b.timeSinceLastTick >= 1.0) { // Standard 1s tick
                 b.timeSinceLastTick -= 1.0;
-                // Trigger Tick Event
-                if (['BURN', 'CORROSION'].includes(b.baseId) || b.type === 'ANOMALY') {
+                
+                // Trigger Tick Event for DoT anomalies
+                // 根据 design.md，只有燃烧(status_burn)有持续伤害效果
+                // 导电(status_conduct)、冻结(status_freeze)、腐蚀(status_corrosion)没有 DoT
+                if (b.baseId === 'status_burn') {
                     events.push({
                         type: 'BUFF_TICK',
                         buff: b,
@@ -37,14 +40,12 @@ export class BuffManager {
                     });
                 }
 
-                // Corrosion Logic: Stacks increase over time? 
-                // Design.md: "Corrosion: -10% Res per sec, stacks up to..." - actually "Each second adds 1 layer"
-                if (b.baseId === 'CORROSION') {
-                    const max = BUFFS['CORROSION']?.maxLayers || 5;
-                    if (b.stacks < max) {
-                        b.stacks++;
-                        events.push({ type: 'BUFF_STACK_INC', buff: b });
-                    }
+                // Corrosion Logic: Track time for res_shred scaling
+                // Design.md: 减抗随时间增长，10秒达到上限
+                if (b.baseId === 'status_corrosion') {
+                    // 更新 timeActive 用于减抗计算
+                    if (!b.timeActive) b.timeActive = 0;
+                    b.timeActive = Math.min(10, b.timeActive + 1); // 10秒达到上限
                 }
             }
         });
@@ -67,11 +68,15 @@ export class BuffManager {
      *  - Elemental Interaction (Trigger Anomaly, Clear Attachment)
      */
     applyBuff(targetId, buffId, sourceId, initialStacks = 1, durationOverride = null) {
-        const buffDef = BUFFS[buffId];
+        // 解析别名，获取标准化的 buff ID
+        const resolvedBuffId = resolveBuffId(buffId);
+        const buffDef = BUFFS[resolvedBuffId];
         if (!buffDef) {
-            console.error(`Buff definition not found: ${buffId}`);
+            console.warn(`未找到Buff定义: ${buffId} (解析后: ${resolvedBuffId})`);
             return;
         }
+        // 使用解析后的 ID
+        buffId = resolvedBuffId;
 
         // --- Logic: Elemental Attachments & Reactions ---
         if (buffDef.type === 'ATTACHMENT') {
@@ -102,9 +107,15 @@ export class BuffManager {
             // "如果腐蚀过程中施加新的腐蚀...持续时间刷新...继承减抗" -> Complicated.
             // For prototype, let's max stack for non-anomalies, and overwrite/refresh for anomalies.
 
-            if (buffDef.type === 'ANOMALY') {
-                // Refresh duration
-                existing.durationRemaining = durationOverride || buffDef.duration || -1;
+            if (buffDef.type === 'ANOMALY' || buffDef.type === 'PHYSICAL_ANOMALY') {
+                // Refresh duration for anomalies
+                let newDur = durationOverride || buffDef.duration || -1;
+                // Handle durations array
+                if (buffDef.durations && Array.isArray(buffDef.durations)) {
+                    const layerIndex = Math.min(Math.max(0, initialStacks - 1), buffDef.durations.length - 1);
+                    newDur = buffDef.durations[layerIndex];
+                }
+                existing.durationRemaining = newDur;
                 // Update stacks if new application is stronger?
                 if (initialStacks > existing.stacks) existing.stacks = initialStacks;
             } else {
@@ -116,13 +127,18 @@ export class BuffManager {
             return { type: 'REFRESH', buffId, stacks: existing.stacks };
         } else {
             // New Buff
-            const dur = durationOverride || buffDef.duration || -1;
+            let dur = durationOverride || buffDef.duration || -1;
 
             // Special Duration Logic for Freeze based on Stacks/Level
             let finalDur = dur;
-            if (buffId === 'status_freeze') {
-                // Design: 6/7/8/9s based on layers
-                finalDur = 5 + initialStacks;
+            if (buffId === 'status_freeze' && buffDef.durations) {
+                // Design: 6/7/8/9s based on layers (index 0-3 for layers 1-4)
+                const layerIndex = Math.min(Math.max(0, initialStacks - 1), buffDef.durations.length - 1);
+                finalDur = buffDef.durations[layerIndex];
+            } else if (buffDef.durations && Array.isArray(buffDef.durations)) {
+                // Generic duration lookup by stacks for other buffs with durations array
+                const layerIndex = Math.min(Math.max(0, initialStacks - 1), buffDef.durations.length - 1);
+                finalDur = buffDef.durations[layerIndex];
             }
 
             const newBuff = {
@@ -229,6 +245,88 @@ export class BuffManager {
 
     removeBuff(targetId, instanceId) {
         this.buffs = this.buffs.filter(b => !(b.targetId === targetId && b.instanceId === instanceId));
+    }
+
+    /**
+     * 消耗指定数量的buff层数
+     * @param {string} targetId - 目标ID
+     * @param {string} buffId - buff ID
+     * @param {number} stacks - 消耗层数
+     * @param {string} consumerId - 消耗者ID（用于记录）
+     * @returns {Object|null} 消耗结果
+     */
+    consumeBuff(targetId, buffId, stacks = 1, consumerId = null) {
+        const resolvedBuffId = resolveBuffId(buffId);
+        const buff = this.buffs.find(b => b.targetId === targetId && b.baseId === resolvedBuffId);
+        
+        if (!buff) {
+            return null;
+        }
+        
+        const consumedStacks = Math.min(stacks, buff.stacks);
+        const remainingStacks = buff.stacks - consumedStacks;
+        
+        if (remainingStacks <= 0) {
+            // 完全移除
+            this.removeBuff(targetId, buff.instanceId);
+        } else {
+            // 减少层数
+            buff.stacks = remainingStacks;
+        }
+        
+        return {
+            type: 'BUFF_CONSUMED',
+            buffId: resolvedBuffId,
+            consumedStacks,
+            remainingStacks,
+            consumerId
+        };
+    }
+
+    /**
+     * 检查目标是否拥有指定buff
+     * @param {string} targetId - 目标ID
+     * @param {string} buffId - buff ID
+     * @returns {boolean}
+     */
+    hasBuff(targetId, buffId) {
+        const resolvedBuffId = resolveBuffId(buffId);
+        return this.buffs.some(b => b.targetId === targetId && b.baseId === resolvedBuffId);
+    }
+
+    /**
+     * 获取指定buff的完整信息
+     * @param {string} targetId - 目标ID
+     * @param {string} buffId - buff ID
+     * @returns {Object|null}
+     */
+    getBuff(targetId, buffId) {
+        const resolvedBuffId = resolveBuffId(buffId);
+        return this.buffs.find(b => b.targetId === targetId && b.baseId === resolvedBuffId) || null;
+    }
+
+    /**
+     * 清除目标上的所有buff
+     * @param {string} targetId - 目标ID
+     */
+    clearAllBuffs(targetId) {
+        this.buffs = this.buffs.filter(b => b.targetId !== targetId);
+    }
+
+    /**
+     * 刷新buff持续时间
+     * @param {string} targetId - 目标ID
+     * @param {string} buffId - buff ID
+     * @param {number} newDuration - 新持续时间
+     */
+    refreshBuffDuration(targetId, buffId, newDuration) {
+        const resolvedBuffId = resolveBuffId(buffId);
+        const buff = this.buffs.find(b => b.targetId === targetId && b.baseId === resolvedBuffId);
+        
+        if (buff && newDuration > 0) {
+            buff.durationRemaining = newDuration;
+            buff.durationMax = Math.max(buff.durationMax || newDuration, newDuration);
+        }
     }
 
     /**

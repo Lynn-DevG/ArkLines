@@ -11,7 +11,7 @@ import { SKILLS } from './data/skills';
 import { Magnetism } from './engine/Magnetism';
 
 const AppContent = () => {
-    const { team, actions, addAction, removeAction, updateAction, invalidActionIds } = useSimulation();
+    const { team, actions, addAction, removeAction, updateAction, invalidActionIds, uspTimelines } = useSimulation();
     const [selectedTool, setSelectedTool] = useState(null); // { charId, skillId }
     const [dragState, setDragState] = useState(null); // { actionId, startX, initialStartTime }
     const [selectedActionId, setSelectedActionId] = useState(null);
@@ -167,7 +167,7 @@ const AppContent = () => {
                 <div className="h-full flex flex-col">
                     <div className="p-4 border-b border-slate-700">
                         <h2 className="text-lg font-bold flex items-center gap-2 text-indigo-400">
-                            <User size={20} /> Team Config
+                            <User size={20} /> 队伍配置
                         </h2>
                     </div>
                     <CharacterSelector />
@@ -190,16 +190,16 @@ const AppContent = () => {
                         {/* Toolbar */}
                         <div className="h-8 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 text-xs shrink-0">
                             <div className="flex items-center gap-4">
-                                <span className="flex items-center gap-1 text-slate-400"><Clock size={12} /> Timeline</span>
+                                <span className="flex items-center gap-1 text-slate-400"><Clock size={12} /> 时间轴</span>
                                 <div className="flex items-center gap-1">
                                     <button className="w-6 h-6 bg-slate-800 rounded hover:bg-slate-700 flex items-center justify-center" onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}>-</button>
                                     <span className="w-10 text-center text-slate-300">{Math.round(zoom * 100)}%</span>
                                     <button className="w-6 h-6 bg-slate-800 rounded hover:bg-slate-700 flex items-center justify-center" onClick={() => setZoom(Math.min(2.0, zoom + 0.1))}>+</button>
                                 </div>
                             </div>
-                            <div className="text-slate-500 font-mono">
-                                Cursor: {cursorTime.toFixed(2)}s
-                            </div>
+<div className="text-slate-500 font-mono">
+                                                光标: {cursorTime.toFixed(2)}秒
+                                            </div>
                         </div>
 
                         <div
@@ -217,7 +217,7 @@ const AppContent = () => {
                                     {Array.from({ length: 31 }).map((_, i) => (
                                         <div key={i} className="absolute top-0 bottom-0 border-l border-slate-800/50 text-[10px] text-slate-600 pl-1 pt-1"
                                             style={{ left: `${TRACK_HEADER_WIDTH + i * PX_PER_SEC}px` }}>
-                                            {i}s
+                                            {i}秒
                                         </div>
                                     ))}
                                 </div>
@@ -229,6 +229,7 @@ const AppContent = () => {
                                             key={char.id}
                                             char={char}
                                             actions={actions.filter(a => a.charId === char.id)}
+                                            uspTimeline={uspTimelines[char.id] || []}
                                             pxPerSec={PX_PER_SEC}
                                             onRemoveAction={handleRemoveAction}
                                             onActionDragStart={handleActionDragStart}
@@ -237,8 +238,8 @@ const AppContent = () => {
                                             invalidResourceActionIds={invalidActionIds}
                                         />
                                     ) : (
-                                        <div key={idx} className="min-h-[140px] border-b border-slate-800/30 bg-slate-900/20 flex items-center justify-start" style={{ paddingLeft: `${TRACK_HEADER_WIDTH}px` }}>
-                                            <span className="text-slate-800 text-xs">Empty Slot</span>
+                                        <div key={idx} className="min-h-[112px] border-b border-slate-800/30 bg-slate-900/20 flex items-center justify-start" style={{ paddingLeft: `${TRACK_HEADER_WIDTH}px` }}>
+                                            <span className="text-slate-800 text-xs">空位</span>
                                         </div>
                                     ))}
                                 </div>

@@ -2,9 +2,10 @@
  * Magnetism Engine
  * Handles snapping skills to valid lots and resolving overlaps.
  */
-import { SKILLS } from '../data/skills.js';
+import { getResolvedDuration } from './VariantResolver.js';
 
 export class Magnetism {
+
     static getSnapTime(newAction, existingActions, pxPerSec = 60, thresholdPx = 20) {
         // newAction: { startTime, duration, charId, ... }
         // Snap to: 
@@ -29,10 +30,9 @@ export class Magnetism {
         const trackActions = existingActions.filter(a => a.charId === newAction.charId && a.id !== newAction.id);
 
         trackActions.forEach(a => {
-            const skillDef = SKILLS[a.skillId];
-            if (!skillDef) return;
-
-            const endTime = a.startTime + skillDef.duration;
+            // 使用解析后的 duration（考虑变体）
+            const duration = getResolvedDuration(a, existingActions);
+            const endTime = a.startTime + duration;
             const diff = Math.abs(endTime - proposedStart);
 
             if (diff < thresholdSec && diff < minDiff) {
@@ -57,14 +57,15 @@ export class Magnetism {
         // Option C: Shift newAction to end of existing
 
         // We assume we already snapped to Start. Now check if Duration overlaps subsequent.
-        const skillDef = SKILLS[newAction.skillId];
-        const end = newAction.startTime + skillDef.duration;
+        // 使用解析后的 duration（考虑变体）
+        const newDuration = getResolvedDuration(newAction, existingActions);
+        const end = newAction.startTime + newDuration;
 
         const trackActions = existingActions.filter(a => a.charId === newAction.charId && a.id !== newAction.id);
 
         const overlaps = trackActions.filter(a => {
-            const aDef = SKILLS[a.skillId];
-            const aEnd = a.startTime + aDef.duration;
+            const aDuration = getResolvedDuration(a, existingActions);
+            const aEnd = a.startTime + aDuration;
 
             // Check intersection
             return (newAction.startTime < aEnd && end > a.startTime);
@@ -84,8 +85,8 @@ export class Magnetism {
         // Find the latest end time among conflicts
         let maxEnd = action.startTime;
         conflicts.conflicts.forEach(c => {
-            const cDef = SKILLS[c.skillId];
-            const cEnd = c.startTime + cDef.duration;
+            const cDuration = getResolvedDuration(c, existingActions);
+            const cEnd = c.startTime + cDuration;
             if (cEnd > maxEnd) maxEnd = cEnd;
         });
 

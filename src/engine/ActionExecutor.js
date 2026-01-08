@@ -236,6 +236,9 @@ export class ActionExecutor {
             // 收集增益减益修正
             const activeModifiers = this.collectActiveModifiers(sourceChar.id, targetId);
             
+            // 判断目标是否处于失衡状态（通过检查 status_stun buff）
+            const isPoiseBroken = this.context.buffManager?.getBuffStackCount(targetId, 'status_stun') > 0;
+            
             const damageContext = {
                 activeModifiers,
                 sourceChar,
@@ -244,7 +247,7 @@ export class ActionExecutor {
                 skillType,          // 技能类型
                 comboStacks,        // 连击层数
                 critMode: this.context.critMode || 'random',  // 暴击模式
-                isPoiseBroken: (target.stats?.currentPoise || 0) <= 0
+                isPoiseBroken       // 通过 buff 判断失衡状态
             };
             
             // 构建伤害节点
@@ -270,6 +273,25 @@ export class ActionExecutor {
                 const maxUsp = this.getMaxUsp(sourceChar.id);
                 this.context.resources.usp[sourceChar.id] = Math.min(maxUsp, 
                     (this.context.resources.usp[sourceChar.id] || 0) + action.usp);
+            }
+            
+            // 处理失衡值（poise）
+            if (action.poise && target.stats) {
+                target.stats.currentPoise = (target.stats.currentPoise || 0) + action.poise;
+                
+                // 检查是否达到失衡阈值
+                const maxPoise = target.stats.maxPoise || 100;
+                if (target.stats.currentPoise >= maxPoise) {
+                    // 触发失衡状态
+                    this.context.buffManager?.applyBuff(targetId, 'status_stun', sourceChar.id, 1);
+                    target.stats.currentPoise = 0;
+                    
+                    onLog?.({
+                        time: Number(currentTime.toFixed(2)),
+                        type: 'STAGGER',
+                        detail: `敌人进入失衡状态`
+                    });
+                }
             }
             
             damageResults.push({ targetId, damage });

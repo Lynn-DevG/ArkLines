@@ -325,8 +325,8 @@ export class ConditionEvaluator {
         
         switch (state) {
             case 'staggered':
-                // 失衡状态
-                return (enemy.stats?.currentPoise || 0) <= 0;
+                // 失衡状态（通过检查 status_stun buff）
+                return buffManager.getBuffStackCount(enemyId, 'status_stun') > 0;
             case 'frozen':
                 return buffManager.getBuffStackCount(enemyId, 'status_freeze') > 0;
             case 'burning':

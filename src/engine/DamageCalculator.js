@@ -1,4 +1,5 @@
 import { getSkillValue } from '../data/levelMappings.js';
+import { getWeaponAtk, getWeaponAttrBonus, WEAPONS } from '../data/weapons.js';
 
 /**
  * Damage Calculator Engine
@@ -31,6 +32,9 @@ export class DamageCalculator {
      * @param {number} context.comboStacks - 连击层数 (0-4)
      */
     static calculate(attacker, target, skillNode, context) {
+        // 获取武器次要属性加成（用于后续各乘区计算）
+        const weaponSubAttrBonus = this.getWeaponSubAttrBonus(attacker);
+        
         // 1. 基础伤害区 = 伤害倍率 * 攻击力 * 虚弱区
         const baseAtk = this.calculateAttack(attacker, context);
 
@@ -48,11 +52,12 @@ export class DamageCalculator {
 
         const baseDamage = multiplier * baseAtk * weakenMult;
 
-        // 2. 暴击区 - 支持三种模式
-        const critMult = this.calculateCrit(attacker, context);
+        // 2. 暴击区 - 支持三种模式，包含武器暴击率加成
+        const critMult = this.calculateCrit(attacker, context, weaponSubAttrBonus);
 
-        // 3. 伤害加成区 = 1 + Σ伤害加成
-        const dmgBonus = 1 + this.sumModifiers(context, 'dmg_bonus', skillNode);
+        // 3. 伤害加成区 = 1 + Σ伤害加成 + 武器元素伤害加成
+        let dmgBonusFromWeapon = this.getWeaponDmgBonus(weaponSubAttrBonus, skillNode);
+        const dmgBonus = 1 + this.sumModifiers(context, 'dmg_bonus', skillNode) + dmgBonusFromWeapon;
 
         // 4. 伤害减免区 = 1 - Σ伤害减免
         const dmgReduc = 1 - this.sumModifiers(context, 'dmg_reduc', skillNode);
@@ -95,6 +100,48 @@ export class DamageCalculator {
             * resMult
             * specialMult;
 
+        // 调试信息：打印完整伤害计算公式
+        if (context.debug) {
+            const debugInfo = {
+                '=== 伤害计算公式 ===': '',
+                '技能ID': context.skillId || 'N/A',
+                '技能等级': context.skillLevel || 1,
+                '元素类型': skillNode?.element || 'physical',
+                '--- 基础伤害区 ---': '',
+                '角色基础攻击力': attacker.stats?.baseAtk?.toFixed(2) || 0,
+                '武器攻击力': attacker.weapon?.id ? getWeaponAtk(attacker.weapon.id, attacker.weapon.level || 1) : 0,
+                '最终攻击力': baseAtk.toFixed(2),
+                '伤害倍率': (multiplier * 100).toFixed(2) + '%',
+                '虚弱区': weakenMult.toFixed(4),
+                '基础伤害': baseDamage.toFixed(2),
+                '--- 各乘区 ---': '',
+                '暴击区': critMult.toFixed(4) + (critMult > 1 ? ' (暴击)' : ''),
+                '伤害加成区': dmgBonus.toFixed(4) + (dmgBonusFromWeapon > 0 ? ` (武器+${(dmgBonusFromWeapon * 100).toFixed(1)}%)` : ''),
+                '伤害减免区': dmgReduc.toFixed(4),
+                '易伤区': vulnerability.toFixed(4),
+                '增幅区': amplification.toFixed(4),
+                '庇护区': shelter.toFixed(4),
+                '脆弱区': fragile.toFixed(4),
+                '防御区': defMult.toFixed(4),
+                '失衡易伤区': stunMult.toFixed(4) + (stunMult > 1 ? ' (失衡)' : ''),
+                '抗性区': resMult.toFixed(4),
+                '特殊加成区': specialMult.toFixed(4) + (context.comboStacks > 0 ? ` (${context.comboStacks}层连击)` : ''),
+                '--- 结果 ---': '',
+                '最终伤害': Math.floor(finalDamage),
+                '完整公式': `${baseDamage.toFixed(0)} × ${critMult.toFixed(2)} × ${dmgBonus.toFixed(2)} × ${dmgReduc.toFixed(2)} × ${vulnerability.toFixed(2)} × ${amplification.toFixed(2)} × ${shelter.toFixed(2)} × ${fragile.toFixed(2)} × ${defMult.toFixed(2)} × ${stunMult.toFixed(2)} × ${resMult.toFixed(2)} × ${specialMult.toFixed(2)} = ${Math.floor(finalDamage)}`
+            };
+            
+            console.group(`%c伤害计算 [${attacker.name || attacker.id}]`, 'color: #ff9800; font-weight: bold;');
+            Object.entries(debugInfo).forEach(([key, value]) => {
+                if (key.startsWith('---') || key.startsWith('===')) {
+                    console.log(`%c${key}`, 'color: #4caf50; font-weight: bold;');
+                } else if (value !== '') {
+                    console.log(`${key}: ${value}`);
+                }
+            });
+            console.groupEnd();
+        }
+
         return Math.floor(finalDamage);
     }
 
@@ -107,20 +154,54 @@ export class DamageCalculator {
         // 干员基础攻击力
         const charBaseAtk = attacker.stats?.baseAtk || 0;
         
-        // 武器基础攻击力
-        const weaponAtk = attacker.weapon?.baseAtk || attacker.stats?.weaponAtk || 0;
+        // 武器基础攻击力 - 动态从武器配置获取
+        let weaponAtk = 0;
+        if (attacker.weapon?.id && WEAPONS[attacker.weapon.id]) {
+            weaponAtk = getWeaponAtk(attacker.weapon.id, attacker.weapon.level || 1);
+        } else if (attacker.weapon?.baseAtk) {
+            // 兼容旧格式
+            weaponAtk = attacker.weapon.baseAtk;
+        } else if (attacker.stats?.weaponAtk) {
+            weaponAtk = attacker.stats.weaponAtk;
+        }
+        
+        // 武器属性加成 - 动态获取
+        let weaponAttrBonus = { mainAttr: null, subAttr: null };
+        if (attacker.weapon?.id && WEAPONS[attacker.weapon.id]) {
+            weaponAttrBonus = getWeaponAttrBonus(
+                attacker.weapon.id,
+                attacker.weapon.mainAttrLevel || 1,
+                attacker.weapon.subAttrLevel || 1,
+                attacker.mainAttr
+            ) || { mainAttr: null, subAttr: null };
+        }
         
         // 攻击力百分比加成 (从装备、天赋、buff等)
-        const atkPercent = this.sumModifiers(context, 'atk_percent', null);
+        let atkPercent = this.sumModifiers(context, 'atk_percent', null);
+        
+        // 添加武器的攻击力百分比加成（value已经是小数形式，如0.05表示5%）
+        if (weaponAttrBonus.subAttr?.type === 'atkPercent') {
+            atkPercent += weaponAttrBonus.subAttr.value;
+        }
         
         // 攻击力固定数值加成
         const atkFlat = this.sumModifiers(context, 'atk_flat', null);
 
-        // 能力值加成
+        // 能力值加成 - 考虑武器主属性加成
         const mainAttr = attacker.mainAttr || 'strength';
         const subAttr = attacker.subAttr || 'agility';
-        const main = attacker.stats?.[mainAttr] || 0;
-        const sub = attacker.stats?.[subAttr] || 0;
+        
+        // 基础四维属性
+        let main = attacker.stats?.[mainAttr] || 0;
+        let sub = attacker.stats?.[subAttr] || 0;
+        
+        // 添加武器主属性加成
+        if (weaponAttrBonus.mainAttr) {
+            const { type, value } = weaponAttrBonus.mainAttr;
+            if (type === mainAttr) main += value;
+            else if (type === subAttr) sub += value;
+        }
+        
         const attrBonus = (main * 0.005) + (sub * 0.002);
 
         // 完整公式
@@ -148,11 +229,81 @@ export class DamageCalculator {
     }
 
     /**
+     * 获取武器次要属性加成
+     * @param {Object} attacker - 攻击者
+     * @returns {Object} 次要属性加成对象
+     */
+    static getWeaponSubAttrBonus(attacker) {
+        if (!attacker.weapon?.id || !WEAPONS[attacker.weapon.id]) {
+            return null;
+        }
+        
+        const weaponAttrBonus = getWeaponAttrBonus(
+            attacker.weapon.id,
+            attacker.weapon.mainAttrLevel || 1,
+            attacker.weapon.subAttrLevel || 1,
+            attacker.mainAttr
+        );
+        
+        return weaponAttrBonus?.subAttr || null;
+    }
+    
+    /**
+     * 根据技能元素获取武器伤害加成
+     * @param {Object} subAttrBonus - 武器次要属性加成
+     * @param {Object} skillNode - 技能节点
+     * @returns {number} 伤害加成百分比
+     */
+    static getWeaponDmgBonus(subAttrBonus, skillNode) {
+        if (!subAttrBonus) return 0;
+        
+        const element = (skillNode?.element || '').toLowerCase();
+        const { type, value } = subAttrBonus;
+        
+        // 物理伤害加成
+        if (type === 'physicalDamage' && element === 'physical') {
+            return value; // value 已经是小数形式（如 0.12 表示 12%）
+        }
+        
+        // 法术伤害加成（对所有法术元素生效）
+        const magicElements = ['fire', 'ice', 'nature', 'electric', 'emag', 'blaze', 'cold'];
+        if (type === 'magicDamage' && magicElements.includes(element)) {
+            return value;
+        }
+        
+        // 特定元素伤害加成
+        if (type === 'fireDamage' && element === 'fire') {
+            return value;
+        }
+        if (type === 'iceDamage' && element === 'ice') {
+            return value;
+        }
+        if (type === 'electricDamage' && element === 'electric') {
+            return value;
+        }
+        if (type === 'natureDamage' && element === 'nature') {
+            return value;
+        }
+        
+        return 0;
+    }
+
+    /**
      * 计算暴击区
      * 支持三种模式: random(随机), always(固定暴击), never(固定非暴击)
+     * @param {Object} attacker - 攻击者
+     * @param {Object} context - 计算上下文
+     * @param {Object} weaponSubAttrBonus - 武器次要属性加成
      */
-    static calculateCrit(attacker, context) {
-        const critRate = (attacker.stats?.critRate || 0) + (context.critRateBonus || 0);
+    static calculateCrit(attacker, context, weaponSubAttrBonus = null) {
+        // 基础暴击率 + buff暴击率加成
+        let critRate = (attacker.stats?.critRate || 0) + (context.critRateBonus || 0);
+        
+        // 添加武器暴击率加成
+        if (weaponSubAttrBonus?.type === 'critRate') {
+            critRate += weaponSubAttrBonus.value;
+        }
+        
         const critDmg = (attacker.stats?.critDmg || 0.5) + (context.critDmgBonus || 0);
         
         const critMode = context.critMode || CRIT_MODE.RANDOM;
@@ -437,7 +588,14 @@ export class DamageCalculator {
         // 源石技艺强度区 (仅法术伤害)
         let artsStrengthMult = 1.0;
         if (isMagic) {
-            const artsStrength = context.artsStrength || context.sourceChar?.stats?.artsStrength || 0;
+            let artsStrength = context.artsStrength || context.sourceChar?.stats?.artsStrength || 0;
+            
+            // 添加武器源石技艺强度加成
+            const weaponSubAttrBonus = context.sourceChar ? this.getWeaponSubAttrBonus(context.sourceChar) : null;
+            if (weaponSubAttrBonus?.type === 'artsIntensity') {
+                artsStrength += weaponSubAttrBonus.value;
+            }
+            
             // 源石技艺强度区 = 1 + 源石技艺强度 / 100
             artsStrengthMult = 1 + artsStrength / 100;
         }

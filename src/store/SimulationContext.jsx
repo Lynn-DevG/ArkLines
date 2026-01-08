@@ -96,6 +96,9 @@ export const SimulationProvider = ({ children }) => {
     // 暴击模式: 'random'(随机)/'always'(固定暴击)/'never'(固定非暴击)
     const [critMode, setCritMode] = useState(CRIT_MODE.RANDOM);
     
+    // 调试模式: 是否在控制台打印伤害计算详情
+    const [debugMode, setDebugMode] = useState(false);
+    
     /**
      * 解析后的技能缓存
      * 结构: { [skillId]: { [skillLevel]: resolvedSkillDef } }
@@ -158,17 +161,20 @@ export const SimulationProvider = ({ children }) => {
         const activeChars = team.filter(c => c !== null);
         const sim = new TimelineSimulator(activeChars, {
             name: '训练假人',
-            stats: { baseDef: 100, baseHp: 10000000 }
+            stats: { baseDef: 100, baseHp: 10000000, maxPoise: 100, currentPoise: 100 }
         });
         setSimulator(sim);
     }, [team]);
 
-    // Run Simulation when actions or critMode change
+    // Run Simulation when actions, critMode or debugMode change
     useEffect(() => {
         if (!simulator) return;
 
         // 设置暴击模式
         simulator.setCritMode(critMode);
+        
+        // 设置调试模式
+        simulator.setDebugMode(debugMode);
 
         // Push actions to simulator
         simulator.timelineActions = actions.map(a => ({ ...a }));
@@ -190,7 +196,7 @@ export const SimulationProvider = ({ children }) => {
         const sum = result.logs.reduce((acc, log) => acc + (log.type === 'DAMAGE' || log.type === 'DOT' ? log.value : 0), 0);
         setTotalDamage(sum);
 
-    }, [actions, simulator, critMode]);
+    }, [actions, simulator, critMode, debugMode]);
 
     const addCharacter = (char) => {
         const idx = team.findIndex(c => c === null);
@@ -225,7 +231,13 @@ export const SimulationProvider = ({ children }) => {
         // Create a temporary simulator (lightweight?)
         // Ideally we keep a 'live' simulator instance or cached state, 
         // but for now, fresh instance is safest for accuracy.
-        const sim = new TimelineSimulator(team.filter(Boolean), { stats: { baseHp: 1000000 } });
+        const sim = new TimelineSimulator(team.filter(Boolean), { 
+            stats: { 
+                baseHp: 1000000,
+                maxPoise: 100,
+                currentPoise: 100
+            } 
+        });
         // We need to inject current actions
         actions.forEach(a => sim.addAction(a));
         return sim.simulateResourceStateAt(time);
@@ -255,7 +267,10 @@ export const SimulationProvider = ({ children }) => {
             resolvedActionSkills,
             // 暴击模式控制
             critMode,
-            setCritMode
+            setCritMode,
+            // 调试模式控制
+            debugMode,
+            setDebugMode
         }}>
             {children}
         </SimulationContext.Provider>

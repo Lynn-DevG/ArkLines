@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSimulation } from '../../store/SimulationContext';
-import { Activity, Terminal } from 'lucide-react';
+import { Activity, Terminal, Bug } from 'lucide-react';
 import { getBuffDef } from '../../data/buffs';
 
 // 获取buff显示名称（优先使用中文名称）
@@ -10,7 +10,7 @@ const getBuffDisplayName = (buffId) => {
 };
 
 export const StatsDashboard = () => {
-    const { totalDamage, logs } = useSimulation();
+    const { totalDamage, logs, debugMode, setDebugMode } = useSimulation();
 
     // Latest logs first
     const reversedLogs = [...logs].reverse();
@@ -29,6 +29,24 @@ export const StatsDashboard = () => {
                     <div className="text-xs text-slate-400 uppercase">总伤害</div>
                     <div className="text-2xl font-bold text-white tracking-tight">{totalDamage.toLocaleString()}</div>
                 </div>
+                
+                {/* 调试模式开关 */}
+                <button
+                    onClick={() => setDebugMode(!debugMode)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded text-xs transition-all w-full justify-center ${
+                        debugMode 
+                            ? 'bg-amber-500/20 border border-amber-500/50 text-amber-400' 
+                            : 'bg-slate-800 border border-slate-700 text-slate-500 hover:text-slate-300'
+                    }`}
+                >
+                    <Bug size={14} />
+                    <span>{debugMode ? '调试模式已开启' : '开启调试模式'}</span>
+                </button>
+                {debugMode && (
+                    <div className="text-[10px] text-amber-500/70 text-center">
+                        伤害计算详情将打印到浏览器控制台 (F12)
+                    </div>
+                )}
             </div>
 
             <div className="flex-1 overflow-hidden flex flex-col px-4 pb-4">

@@ -10,7 +10,20 @@ import { getSkillValue } from '../data/levelMappings.js';
 export class TimelineSimulator {
     constructor(characters, enemyConfig) {
         this.characters = characters; // Array of char objects
-        this.enemy = { ...enemyConfig, stats: { ...enemyConfig.stats, currentHp: enemyConfig.stats.baseHp } };
+        // 初始化敌人配置，确保关键属性有默认值
+        const defaultMaxPoise = enemyConfig.stats?.maxPoise || 100;
+        this.enemy = { 
+            ...enemyConfig, 
+            stats: { 
+                ...enemyConfig.stats, 
+                currentHp: enemyConfig.stats?.baseHp || 10000000,
+                maxPoise: defaultMaxPoise,
+                // currentPoise 表示累积的失衡值，初始为 0 表示尚未累积
+                // 当 currentPoise >= maxPoise 时触发失衡，然后重置为 0
+                // 注意：初始时不应判定为失衡，所以需要特殊处理
+                currentPoise: enemyConfig.stats?.currentPoise ?? 0
+            } 
+        };
 
         this.timelineActions = []; // Placed skills
         this.buffManager = new BuffManager();
@@ -45,6 +58,14 @@ export class TimelineSimulator {
      */
     setCritMode(mode) {
         this.critMode = mode;
+    }
+
+    /**
+     * 设置调试模式
+     * @param {boolean} enabled - 是否启用调试模式
+     */
+    setDebugMode(enabled) {
+        this.debugMode = enabled;
     }
 
     /**
@@ -470,15 +491,20 @@ export class TimelineSimulator {
             }
         }
 
+        // 判断敌人是否处于失衡状态（通过检查 status_stun buff）
+        const enemyId = this.enemy.id || 'enemy_01';
+        const isPoiseBroken = this.buffManager.getBuffStackCount(enemyId, 'status_stun') > 0;
+        
         const context = {
             activeModifiers,
             sourceChar: char,
             skillId: actionState.def?.id,  // 变体匹配后，这里会是变体的 id
             skillLevel: char.skillLevel || 1,
-            isPoiseBroken: (this.enemy.stats.currentPoise || 0) <= 0,
+            isPoiseBroken,      // 通过 buff 判断失衡状态
             skillType,          // 技能类型
             comboStacks,        // 连击层数
-            critMode: this.critMode || 'random'  // 暴击模式
+            critMode: this.critMode || 'random',  // 暴击模式
+            debug: this.debugMode || false  // 调试模式
         };
 
         // 直接使用 action 中的配置（包括 scalingKey、index 等）
@@ -514,6 +540,21 @@ export class TimelineSimulator {
         // 处理失衡值（poise）
         if (poiseGain) {
             this.enemy.stats.currentPoise = (this.enemy.stats.currentPoise || 0) + poiseGain;
+            
+            // 检查是否达到失衡阈值
+            const maxPoise = this.enemy.stats.maxPoise || 100;
+            if (this.enemy.stats.currentPoise >= maxPoise) {
+                // 触发失衡状态
+                const enemyId = this.enemy.id || 'enemy_01';
+                this.buffManager.applyBuff(enemyId, 'status_stun', char.id, 1);
+                this.enemy.stats.currentPoise = 0;
+                
+                this.logs.push({
+                    time: Number(time.toFixed(2)),
+                    type: 'STAGGER',
+                    detail: `敌人进入失衡状态`
+                });
+            }
         }
 
         // 记录历史

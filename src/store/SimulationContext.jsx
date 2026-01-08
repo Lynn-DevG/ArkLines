@@ -1,8 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { TimelineSimulator } from '../engine/TimelineSimulator';
+import { CRIT_MODE } from '../engine/DamageCalculator';
 import { CHARACTERS } from '../data/characters';
 import { SKILLS } from '../data/skills';
 import { getSkillValue } from '../data/levelMappings';
+
+// 导出暴击模式枚举供外部使用
+export { CRIT_MODE };
 
 const SimulationContext = createContext();
 
@@ -89,6 +93,9 @@ export const SimulationProvider = ({ children }) => {
 
     const [invalidActionIds, setInvalidActionIds] = useState(new Set());
     
+    // 暴击模式: 'random'(随机)/'always'(固定暴击)/'never'(固定非暴击)
+    const [critMode, setCritMode] = useState(CRIT_MODE.RANDOM);
+    
     /**
      * 解析后的技能缓存
      * 结构: { [skillId]: { [skillLevel]: resolvedSkillDef } }
@@ -156,9 +163,12 @@ export const SimulationProvider = ({ children }) => {
         setSimulator(sim);
     }, [team]);
 
-    // Run Simulation when actions change
+    // Run Simulation when actions or critMode change
     useEffect(() => {
         if (!simulator) return;
+
+        // 设置暴击模式
+        simulator.setCritMode(critMode);
 
         // Push actions to simulator
         simulator.timelineActions = actions.map(a => ({ ...a }));
@@ -180,7 +190,7 @@ export const SimulationProvider = ({ children }) => {
         const sum = result.logs.reduce((acc, log) => acc + (log.type === 'DAMAGE' || log.type === 'DOT' ? log.value : 0), 0);
         setTotalDamage(sum);
 
-    }, [actions, simulator]);
+    }, [actions, simulator, critMode]);
 
     const addCharacter = (char) => {
         const idx = team.findIndex(c => c === null);
@@ -242,7 +252,10 @@ export const SimulationProvider = ({ children }) => {
             getResolvedSkill,
             getCharSkillLevel,
             // 新增：模拟器解析的最终变体结果
-            resolvedActionSkills
+            resolvedActionSkills,
+            // 暴击模式控制
+            critMode,
+            setCritMode
         }}>
             {children}
         </SimulationContext.Provider>

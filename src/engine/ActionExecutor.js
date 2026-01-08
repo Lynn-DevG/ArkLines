@@ -205,6 +205,24 @@ export class ActionExecutor {
         let totalDamage = 0;
         const damageResults = [];
         
+        // 获取技能类型
+        const skillType = skillDef?.type;
+        
+        // 获取连击层数（仅对战技和终结技生效）
+        let comboStacks = 0;
+        if (skillType === 'SKILL' || skillType === 'ULTIMATE') {
+            comboStacks = buffManager?.getBuffStackCount('team', 'buff_combo') || 0;
+            // 战技/终结技释放时消耗连击
+            if (comboStacks > 0) {
+                buffManager?.consumeBuff('team', 'buff_combo', comboStacks);
+                onLog?.({
+                    time: Number(currentTime.toFixed(2)),
+                    type: 'COMBO_CONSUME',
+                    detail: `消耗 ${comboStacks} 层连击加成`
+                });
+            }
+        }
+        
         for (const targetId of targets) {
             const target = this.getTargetObject(targetId);
             if (!target) continue;
@@ -223,6 +241,9 @@ export class ActionExecutor {
                 sourceChar,
                 skillId: skillDef?.id,
                 skillLevel,
+                skillType,          // 技能类型
+                comboStacks,        // 连击层数
+                critMode: this.context.critMode || 'random',  // 暴击模式
                 isPoiseBroken: (target.stats?.currentPoise || 0) <= 0
             };
             

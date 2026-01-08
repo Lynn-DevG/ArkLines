@@ -40,6 +40,14 @@ export class TimelineSimulator {
     }
 
     /**
+     * 设置暴击模式
+     * @param {string} mode - 'random'(随机)/'always'(固定暴击)/'never'(固定非暴击)
+     */
+    setCritMode(mode) {
+        this.critMode = mode;
+    }
+
+    /**
      * 创建条件评估器
      */
     createConditionEvaluator(sourceCharId, currentTime) {
@@ -443,13 +451,34 @@ export class TimelineSimulator {
         }
 
         const activeModifiers = this.collectActiveModifiers(char.id, this.enemy.id || 'enemy_01');
+        
+        // 获取技能类型
+        const skillType = actionState.def?.type;
+        
+        // 获取连击层数（仅对战技和终结技生效）
+        let comboStacks = 0;
+        if (skillType === 'SKILL' || skillType === 'ULTIMATE') {
+            comboStacks = this.buffManager.getBuffStackCount('team', 'buff_combo') || 0;
+            // 战技/终结技释放时消耗连击
+            if (comboStacks > 0) {
+                this.buffManager.consumeBuff('team', 'buff_combo', comboStacks);
+                this.logs.push({
+                    time: Number(time.toFixed(2)),
+                    type: 'COMBO_CONSUME',
+                    detail: `消耗 ${comboStacks} 层连击加成`
+                });
+            }
+        }
 
         const context = {
             activeModifiers,
             sourceChar: char,
             skillId: actionState.def?.id,  // 变体匹配后，这里会是变体的 id
             skillLevel: char.skillLevel || 1,
-            isPoiseBroken: (this.enemy.stats.currentPoise || 0) <= 0
+            isPoiseBroken: (this.enemy.stats.currentPoise || 0) <= 0,
+            skillType,          // 技能类型
+            comboStacks,        // 连击层数
+            critMode: this.critMode || 'random'  // 暴击模式
         };
 
         // 直接使用 action 中的配置（包括 scalingKey、index 等）

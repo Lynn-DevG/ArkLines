@@ -100,6 +100,7 @@ export const SKILLS = {
             {
                 "id": "chr_0003_endminf_attack5",
                 "name": "毁伤序列[重击]",
+                "variantType": "heavy",
                 "condition": [{"type": "combo", "value": "heavy"}],
                 "duration": 1.2,
                 "actions": [
@@ -239,6 +240,7 @@ export const SKILLS = {
         "type": "CHAIN",
         "duration": 1.2,
         "element": "emag",
+        "condition": [{"type": "action_history", "actionType": "cast_skill", "timeWindow": 4, "target": "ally", "params": {"skillType": "BASIC", "variantType": "heavy"}}],
         "actions": [
             {
                 "type": "damage",

@@ -191,7 +191,12 @@ export class ConditionEvaluator {
      * @param {string} condition.actionType - 行为类型: 'apply_buff'|'receive_buff'|'consume_buff'|'buff_consumed'|'buff_expired'|'cast_skill'|'deal_damage'
      * @param {number} condition.timeWindow - 判断时间窗口（秒），默认4秒
      * @param {string} condition.target - 检查目标
-     * @param {Object} condition.params - 额外参数（buffId, skillType等）
+     * @param {Object} condition.params - 额外参数
+     * @param {string} condition.params.buffId - buff ID（用于 buff 相关检查）
+     * @param {string} condition.params.skillType - 技能类型（用于 cast_skill/deal_damage）
+     * @param {string} condition.params.skillId - 技能ID（用于 cast_skill）
+     * @param {string} condition.params.variantType - 变体类型（用于 cast_skill，如 'heavy' 表示重击）
+     * @param {string} condition.params.damageType - 伤害类型（用于 deal_damage）
      */
     checkActionHistory(condition) {
         const { 
@@ -257,7 +262,8 @@ export class ConditionEvaluator {
                     // 检查是否释放过特定类型技能
                     match = record.type === 'SKILL_CAST' &&
                         (!params.skillType || record.skillType === params.skillType) &&
-                        (!params.skillId || record.skillId === params.skillId);
+                        (!params.skillId || record.skillId === params.skillId) &&
+                        (!params.variantType || record.variantType === params.variantType);
                     break;
                     
                 case 'deal_damage':

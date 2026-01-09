@@ -113,32 +113,86 @@ function matchCondition(cond, context) {
 
 /**
  * 检查 action_history 条件
+ * 
+ * 统一参数格式（与 ConditionEvaluator 保持一致）：
+ * - actionType: 'cast_skill' | 'deal_damage' 等
+ * - timeWindow: 时间窗口（秒），默认4秒
+ * - target: 检查目标，默认 'self'
+ * - params: { skillType, skillId, variantType } 等额外参数
+ * 
+ * 兼容旧格式：skillId, skillType, within
  */
 function checkActionHistory(cond, action, allActions) {
-    const { skillId, skillType, within = Infinity } = cond;
+    // 统一参数格式，兼容旧格式
+    const actionType = cond.actionType || 'cast_skill';
+    const timeWindow = cond.timeWindow ?? cond.within ?? 4;
+    const target = cond.target || 'self';
+    const params = cond.params || {};
     
-    // 查找该角色之前是否在指定时间内使用过目标技能
+    // 兼容旧格式的 skillId 和 skillType
+    const skillId = params.skillId || cond.skillId;
+    const skillType = params.skillType || cond.skillType;
+    const variantType = params.variantType;
+    
+    // 仅支持 cast_skill 类型在编辑阶段检查
+    if (actionType !== 'cast_skill') {
+        return false;
+    }
+    
+    // 解析检查目标
+    const targetCharIds = resolveTargetCharIds(target, action.charId, allActions);
+    
+    // 查找是否在指定时间内使用过目标技能
     return allActions.some(a => {
-        // 必须是同一角色
-        if (a.charId !== action.charId) return false;
+        // 检查目标角色
+        if (!targetCharIds.includes(a.charId)) return false;
         
         // 必须在当前 action 之前
         if (a.startTime >= action.startTime) return false;
         
         // 检查时间窗口
-        if ((action.startTime - a.startTime) > within) return false;
+        if ((action.startTime - a.startTime) > timeWindow) return false;
+        
+        const aSkill = SKILLS[a.skillId];
+        if (!aSkill) return false;
         
         // 检查技能ID
         if (skillId && a.skillId !== skillId) return false;
         
         // 检查技能类型
-        if (skillType) {
-            const aSkill = SKILLS[a.skillId];
-            if (!aSkill || aSkill.type !== skillType) return false;
+        if (skillType && aSkill.type !== skillType) return false;
+        
+        // 检查变体类型
+        if (variantType) {
+            // 需要解析该 action 对应的变体
+            const resolvedSkill = resolveVariantForTimeline(a, allActions);
+            const matchedVariantType = resolvedSkill?.variantType;
+            if (matchedVariantType !== variantType) return false;
         }
         
         return true;
     });
+}
+
+/**
+ * 解析检查目标角色ID列表
+ */
+function resolveTargetCharIds(target, sourceCharId, allActions) {
+    // 获取所有角色ID
+    const allCharIds = [...new Set(allActions.map(a => a.charId))];
+    
+    switch (target) {
+        case 'self':
+            return [sourceCharId];
+        case 'ally':
+            // 自身或任一队友
+            return allCharIds;
+        case 'other_ally':
+            // 其它队友（不包括自身）
+            return allCharIds.filter(id => id !== sourceCharId);
+        default:
+            return allCharIds;
+    }
 }
 
 /**

@@ -15,6 +15,8 @@
  * 多个条件之间为 OR 关系（任一通过即可）
  */
 
+import { resolveTargets as resolveTargetsUtil, getTargetObject as getTargetObjectUtil } from './utils/targetResolver.js';
+
 export class ConditionEvaluator {
     /**
      * @param {Object} context - 评估上下文
@@ -290,6 +292,17 @@ export class ConditionEvaluator {
      */
     checkCombo(condition) {
         const { value } = condition;
+        
+        // 优先使用注入的 comboState（由 TimelineSimulator 在变体解析时注入）
+        if (this.context.comboState) {
+            const { step, isHeavy } = this.context.comboState;
+            if (value === 'heavy') {
+                return isHeavy === true;
+            }
+            return step === value && !isHeavy;
+        }
+        
+        // 回退到使用 comboManager.predictNext
         const comboManager = this.context.comboManager;
         const sourceCharId = this.context.sourceCharId;
         const currentTime = this.context.currentTime || 0;
@@ -353,49 +366,14 @@ export class ConditionEvaluator {
      * 解析目标类型，返回目标ID数组
      */
     resolveTargets(targetType) {
-        const { characters, enemy, sourceCharId, mainCharId } = this.context;
-        
-        switch (targetType) {
-            case 'self':
-                return sourceCharId ? [sourceCharId] : [];
-                
-            case 'ally':
-                // 自身或任一队友
-                return characters?.map(c => c.id) || [];
-                
-            case 'other_ally':
-                // 其它队友（不包括自身）
-                return characters?.filter(c => c.id !== sourceCharId).map(c => c.id) || [];
-                
-            case 'main_char':
-                return mainCharId ? [mainCharId] : [];
-                
-            case 'enemy':
-            case 'target_enemy':
-                return enemy ? [enemy.id || 'enemy_01'] : ['enemy_01'];
-                
-            case 'any':
-            default:
-                // 所有可能的目标
-                const all = characters?.map(c => c.id) || [];
-                if (enemy) all.push(enemy.id || 'enemy_01');
-                return all;
-        }
+        return resolveTargetsUtil(targetType, this.context);
     }
 
     /**
      * 根据ID获取目标对象
      */
     getTargetObject(targetId) {
-        const { characters, enemy } = this.context;
-        
-        // 检查是否是敌人
-        if (enemy && (enemy.id === targetId || targetId === 'enemy_01')) {
-            return enemy;
-        }
-        
-        // 检查是否是角色
-        return characters?.find(c => c.id === targetId);
+        return getTargetObjectUtil(targetId, this.context);
     }
 
     /**

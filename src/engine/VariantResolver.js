@@ -175,6 +175,18 @@ function checkActionHistory(cond, action, allActions) {
 }
 
 /**
+ * 检查 action_history 条件（导出供 ConstraintValidator 使用）
+ * 
+ * @param {Object} cond - 条件对象
+ * @param {Object} action - 当前 action
+ * @param {Array} allActions - 所有已放置的 actions
+ * @returns {boolean}
+ */
+export function checkActionHistoryCondition(cond, action, allActions) {
+    return checkActionHistory(cond, action, allActions);
+}
+
+/**
  * 解析检查目标角色ID列表
  */
 function resolveTargetCharIds(target, sourceCharId, allActions) {

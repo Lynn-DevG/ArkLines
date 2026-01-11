@@ -16,6 +16,8 @@
 import { DamageCalculator } from './DamageCalculator.js';
 import { ConditionEvaluator } from './ConditionEvaluator.js';
 import { getBuffDef, resolveBuffId } from '../data/buffs.js';
+import { resolveTargets, getTargetObject } from './utils/targetResolver.js';
+import { resolveValue, getMaxUsp } from './utils/paramResolver.js';
 
 export class ActionExecutor {
     /**
@@ -160,7 +162,13 @@ export class ActionExecutor {
         }
         
         // 解析目标
-        const targets = this.resolveTargets(action.target || 'enemy', sourceCharId, action.targetCount || 1);
+        const targetContext = {
+            characters: this.context.characters,
+            enemy: this.context.enemy,
+            sourceCharId,
+            mainCharId: this.context.mainCharId
+        };
+        const targets = resolveTargets(action.target || 'enemy', targetContext, action.targetCount || 1);
         
         switch (action.type) {
             case 'damage':
@@ -202,6 +210,14 @@ export class ActionExecutor {
         const { currentTime, skillDef, skillLevel, comboStep, isHeavy } = actionContext;
         const { buffManager, enemy, onLog } = this.context;
         
+        // 目标解析上下文
+        const targetContext = {
+            characters: this.context.characters,
+            enemy: this.context.enemy,
+            sourceCharId: sourceChar.id,
+            mainCharId: this.context.mainCharId
+        };
+        
         let totalDamage = 0;
         const damageResults = [];
         
@@ -224,7 +240,7 @@ export class ActionExecutor {
         }
         
         for (const targetId of targets) {
-            const target = this.getTargetObject(targetId);
+            const target = getTargetObject(targetId, targetContext);
             if (!target) continue;
             
             // 处理物理伤害的破防逻辑
@@ -265,19 +281,24 @@ export class ActionExecutor {
                 target.stats.currentHp = Math.max(0, target.stats.currentHp - damage);
             }
             
-            // 资源恢复（技力/终结技能量）
-            if (action.atb) {
-                this.context.resources.atb = Math.min(300, this.context.resources.atb + action.atb);
+            // 资源恢复（技力/终结技能量）- 支持 xxxKey 查找
+            const resolveContext = { skillId: skillDef?.id, skillLevel };
+            const atbGain = resolveValue(action, 'atb', 0, resolveContext);
+            const uspGain = resolveValue(action, 'usp', 0, resolveContext);
+            const poiseGain = resolveValue(action, 'poise', 0, resolveContext);
+            
+            if (atbGain) {
+                this.context.resources.atb = Math.min(300, this.context.resources.atb + atbGain);
             }
-            if (action.usp) {
-                const maxUsp = this.getMaxUsp(sourceChar.id);
+            if (uspGain) {
+                const maxUsp = getMaxUsp(sourceChar.id, this.context.characters);
                 this.context.resources.usp[sourceChar.id] = Math.min(maxUsp, 
-                    (this.context.resources.usp[sourceChar.id] || 0) + action.usp);
+                    (this.context.resources.usp[sourceChar.id] || 0) + uspGain);
             }
             
             // 处理失衡值（poise）
-            if (action.poise && target.stats) {
-                target.stats.currentPoise = (target.stats.currentPoise || 0) + action.poise;
+            if (poiseGain && target.stats) {
+                target.stats.currentPoise = (target.stats.currentPoise || 0) + poiseGain;
                 
                 // 检查是否达到失衡阈值
                 const maxPoise = target.stats.maxPoise || 100;
@@ -329,12 +350,24 @@ export class ActionExecutor {
      * 执行增加失衡值
      */
     executeAddStagger(action, sourceChar, targets, actionContext) {
-        const { currentTime, skillDef } = actionContext;
+        const { currentTime, skillDef, skillLevel } = actionContext;
         const { enemy, onLog } = this.context;
-        const value = action.value || action.poise || 0;
+        
+        // 支持 xxxKey 查找
+        const resolveContext = { skillId: skillDef?.id, skillLevel: skillLevel || 1 };
+        const value = resolveValue(action, 'value', 0, resolveContext) || 
+                      resolveValue(action, 'poise', 0, resolveContext);
+        
+        // 目标解析上下文
+        const targetContext = {
+            characters: this.context.characters,
+            enemy: this.context.enemy,
+            sourceCharId: sourceChar.id,
+            mainCharId: this.context.mainCharId
+        };
         
         for (const targetId of targets) {
-            const target = this.getTargetObject(targetId);
+            const target = getTargetObject(targetId, targetContext);
             if (!target || !target.stats) continue;
             
             // 增加失衡值
@@ -369,11 +402,14 @@ export class ActionExecutor {
      * 执行回复自身终结技能量
      */
     executeRecoverUspSelf(action, sourceChar, actionContext) {
-        const { currentTime } = actionContext;
+        const { currentTime, skillDef, skillLevel } = actionContext;
         const { onLog } = this.context;
-        const value = action.value || 0;
         
-        const maxUsp = this.getMaxUsp(sourceChar.id);
+        // 支持 xxxKey 查找
+        const resolveContext = { skillId: skillDef?.id, skillLevel: skillLevel || 1 };
+        const value = resolveValue(action, 'value', 0, resolveContext);
+        
+        const maxUsp = getMaxUsp(sourceChar.id, this.context.characters);
         const currentUsp = this.context.resources.usp[sourceChar.id] || 0;
         const newUsp = Math.min(maxUsp, currentUsp + value);
         this.context.resources.usp[sourceChar.id] = newUsp;
@@ -393,13 +429,16 @@ export class ActionExecutor {
      * 执行回复全队终结技能量
      */
     executeRecoverUspTeam(action, sourceChar, actionContext) {
-        const { currentTime } = actionContext;
+        const { currentTime, skillDef, skillLevel } = actionContext;
         const { characters, onLog } = this.context;
-        const value = action.value || 0;
+        
+        // 支持 xxxKey 查找
+        const resolveContext = { skillId: skillDef?.id, skillLevel: skillLevel || 1 };
+        const value = resolveValue(action, 'value', 0, resolveContext);
         
         const results = [];
         for (const char of (characters || [])) {
-            const maxUsp = this.getMaxUsp(char.id);
+            const maxUsp = getMaxUsp(char.id, this.context.characters);
             const currentUsp = this.context.resources.usp[char.id] || 0;
             const newUsp = Math.min(maxUsp, currentUsp + value);
             this.context.resources.usp[char.id] = newUsp;
@@ -421,9 +460,12 @@ export class ActionExecutor {
      * 执行回复技力
      */
     executeRecoverAtb(action, sourceChar, actionContext) {
-        const { currentTime } = actionContext;
+        const { currentTime, skillDef, skillLevel } = actionContext;
         const { onLog } = this.context;
-        const value = action.value || 0;
+        
+        // 支持 xxxKey 查找
+        const resolveContext = { skillId: skillDef?.id, skillLevel: skillLevel || 1 };
+        const value = resolveValue(action, 'value', 0, resolveContext);
         
         const currentAtb = this.context.resources.atb || 0;
         const newAtb = Math.min(300, currentAtb + value);
@@ -444,12 +486,14 @@ export class ActionExecutor {
      * 执行添加Buff
      */
     executeAddBuff(action, sourceChar, targets, actionContext) {
-        const { currentTime } = actionContext;
+        const { currentTime, skillDef, skillLevel } = actionContext;
         const { buffManager, onLog } = this.context;
         
+        // 支持 xxxKey 查找
+        const resolveContext = { skillId: skillDef?.id, skillLevel: skillLevel || 1 };
         const buffId = action.buffId || action.status;
-        const stacks = action.stacks || 1;
-        const duration = action.duration;
+        const stacks = resolveValue(action, 'stacks', 1, resolveContext);
+        const duration = resolveValue(action, 'duration', undefined, resolveContext);
         
         const results = [];
         for (const targetId of targets) {
@@ -511,11 +555,13 @@ export class ActionExecutor {
      * 执行消耗Buff
      */
     executeConsumeBuff(action, sourceChar, targets, actionContext) {
-        const { currentTime } = actionContext;
+        const { currentTime, skillDef, skillLevel } = actionContext;
         const { buffManager, onLog } = this.context;
         
+        // 支持 xxxKey 查找
+        const resolveContext = { skillId: skillDef?.id, skillLevel: skillLevel || 1 };
         const buffId = action.buffId;
-        const stacks = action.stacks || 1;
+        const stacks = resolveValue(action, 'stacks', 1, resolveContext);
         
         const results = [];
         for (const targetId of targets) {
@@ -630,68 +676,6 @@ export class ActionExecutor {
         }
         
         return activeModifiers;
-    }
-
-    /**
-     * 解析目标
-     */
-    resolveTargets(targetType, sourceCharId, count = 1) {
-        const { characters, enemy } = this.context;
-        let candidates = [];
-        
-        switch (targetType) {
-            case 'self':
-                return sourceCharId ? [sourceCharId] : [];
-                
-            case 'ally':
-                candidates = characters?.map(c => c.id) || [];
-                break;
-                
-            case 'other_ally':
-                candidates = characters?.filter(c => c.id !== sourceCharId).map(c => c.id) || [];
-                break;
-                
-            case 'main_char':
-                return this.context.mainCharId ? [this.context.mainCharId] : [];
-                
-            case 'enemy':
-            case 'target_enemy':
-                return enemy ? [enemy.id || 'enemy_01'] : ['enemy_01'];
-                
-            case 'any':
-            default:
-                candidates = characters?.map(c => c.id) || [];
-                if (enemy) candidates.push(enemy.id || 'enemy_01');
-                break;
-        }
-        
-        return candidates.slice(0, count);
-    }
-
-    /**
-     * 根据ID获取目标对象
-     */
-    getTargetObject(targetId) {
-        const { characters, enemy } = this.context;
-        
-        if (enemy && (enemy.id === targetId || targetId === 'enemy_01')) {
-            return enemy;
-        }
-        
-        return characters?.find(c => c.id === targetId);
-    }
-
-    /**
-     * 获取角色终结技能量上限
-     */
-    getMaxUsp(charId) {
-        const char = this.context.characters?.find(c => c.id === charId);
-        if (!char?.skills?.ultimate) return 100;
-        
-        // 尝试从技能定义获取
-        const { SKILLS } = require('../data/skills.js');
-        const ultSkill = SKILLS?.[char.skills.ultimate];
-        return ultSkill?.uspCost || 100;
     }
 
     /**

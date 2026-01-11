@@ -4,6 +4,7 @@ import { MainLayout } from './components/Layout/MainLayout';
 import { CharacterSelector } from './components/Config/CharacterSelector';
 import { SkillMatrix } from './components/Timeline/SkillMatrix';
 import TimelineTrackResolved from './components/Timeline/TimelineTrack';
+import { AtbTrack } from './components/Timeline/AtbTrack';
 import { StatsDashboard } from './components/Stats/StatsDashboard';
 import { ActionInspector } from './components/Stats/ActionInspector';
 import { User, Clock } from 'lucide-react';
@@ -11,7 +12,7 @@ import { SKILLS } from './data/skills';
 import { Magnetism } from './engine/Magnetism';
 
 const AppContent = () => {
-    const { team, actions, addAction, removeAction, updateAction, invalidActionIds, uspTimelines } = useSimulation();
+    const { team, actions, addAction, removeAction, updateAction, invalidActionIds, uspTimelines, atbTimeline } = useSimulation();
     const [selectedTool, setSelectedTool] = useState(null); // { charId, skillId }
     const [dragState, setDragState] = useState(null); // { actionId, startX, initialStartTime }
     const [selectedActionId, setSelectedActionId] = useState(null);
@@ -19,7 +20,7 @@ const AppContent = () => {
     const [conflictingActionIds, setConflictingActionIds] = useState(new Set());
     const timelineRef = useRef(null);
 
-    const PX_PER_SEC = 60 * zoom;
+    const PX_PER_SEC = 120 * zoom;
     const TRACK_HEADER_WIDTH = 100;
 
     const handleActionDragStart = (e, action) => {
@@ -224,6 +225,9 @@ const AppContent = () => {
 
                                 {/* Tracks */}
                                 <div className="flex flex-col pt-8 pb-4 relative z-10">
+                                    {/* 技力轴（ATB） */}
+                                    <AtbTrack atbTimeline={atbTimeline} pxPerSec={PX_PER_SEC} />
+                                    
                                     {team.map((char, idx) => char ? (
                                         <TimelineTrackResolved
                                             key={char.id}

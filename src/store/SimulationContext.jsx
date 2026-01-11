@@ -84,6 +84,7 @@ export const SimulationProvider = ({ children }) => {
     const [logs, setLogs] = useState([]);
     const [totalDamage, setTotalDamage] = useState(0);
     const [uspTimelines, setUspTimelines] = useState({}); // { charId: [{ time, energy, reason }] }
+    const [atbTimeline, setAtbTimeline] = useState([]); // [{ time, atb, reason }]
     
     // 存储模拟器解析后的每个 action 的最终技能定义
     // 结构: Map<actionId, { skillDef, comboInfo }>
@@ -188,6 +189,7 @@ export const SimulationProvider = ({ children }) => {
         const result = simulator.run(30, invalidIds); // 30s sim
         setLogs(result.logs);
         setUspTimelines(result.uspTimelines || {});
+        setAtbTimeline(result.atbTimeline || []);
         
         // 更新解析后的技能定义（供 UI 使用）
         setResolvedActionSkills(result.resolvedActionSkills || new Map());
@@ -256,6 +258,7 @@ export const SimulationProvider = ({ children }) => {
             getResourceStateAt,
             invalidActionIds,
             uspTimelines, // 每个角色的终结技能量变化时间线
+            atbTimeline, // 技力（ATB）变化时间线
             logs, // Kept from original context
             totalDamage, // Kept from original context
             addCharacter, // Kept from original context

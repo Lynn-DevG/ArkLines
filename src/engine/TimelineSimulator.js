@@ -3,9 +3,9 @@ import { BuffManager } from './BuffManager.js';
 import { ComboManager } from './ComboManager.js';
 import { ConditionEvaluator } from './ConditionEvaluator.js';
 import { ActionExecutor } from './ActionExecutor.js';
+import { ConstraintValidator } from './ConstraintValidator.js';
 import { SKILLS } from '../data/skills.js';
-import { BUFFS, getBuffDef } from '../data/buffs.js';
-import { getSkillValue } from '../data/levelMappings.js';
+import { getBuffDef } from '../data/buffs.js';
 
 export class TimelineSimulator {
     constructor(characters, enemyConfig) {
@@ -88,16 +88,26 @@ export class TimelineSimulator {
 
     /**
      * 创建行为执行器
+     * 使用 getter/setter 让 ActionExecutor 能够直接修改 TimelineSimulator 的状态
      */
     createActionExecutor() {
+        const self = this;
         return new ActionExecutor({
             buffManager: this.buffManager,
             comboManager: this.comboManager,
             characters: this.characters,
             enemy: this.enemy,
-            resources: { atb: this.atb, usp: this.usp },
+            // 使用 getter/setter 代理资源状态
+            resources: {
+                get atb() { return self.atb; },
+                set atb(v) { self.atb = v; },
+                get usp() { return self.usp; },
+                set usp(v) { self.usp = v; }
+            },
             actionHistory: this.actionHistory,
             mainCharId: this.mainCharId,
+            critMode: this.critMode,
+            debugMode: this.debugMode,
             onLog: (log) => this.logs.push(log)
         });
     }
@@ -139,6 +149,14 @@ export class TimelineSimulator {
             // 3. Cooldown
             const readyAt = tempCooldowns[action.skillId] || 0;
             if (readyAt > action.startTime + 0.01) valid = false; // tolerance
+
+            // 4. 检查技能释放条件 (如连携技的触发条件)
+            if (valid && skill.condition) {
+                const conditionResult = ConstraintValidator.checkSkillCondition(skill, action, sorted);
+                if (!conditionResult.valid) {
+                    valid = false;
+                }
+            }
 
             if (!valid) {
                 invalidIds.add(action.id);
@@ -192,6 +210,20 @@ export class TimelineSimulator {
             timeline.push({ time: Number(time.toFixed(2)), energy, reason });
         };
 
+        // 记录技力（ATB）变化历史
+        // 结构: [{ time, atb, reason }]
+        const atbTimeline = [{ time: 0, atb: 200, reason: 'initial' }];
+        
+        // 辅助函数：记录技力变化
+        const recordAtbChange = (time, reason) => {
+            const lastEntry = atbTimeline[atbTimeline.length - 1];
+            // 避免在同一时间点重复记录相同值
+            if (lastEntry && Math.abs(lastEntry.time - time) < 0.01 && lastEntry.atb === this.atb) {
+                return;
+            }
+            atbTimeline.push({ time: Number(time.toFixed(2)), atb: this.atb, reason });
+        };
+
         // Filter valid actions only for execution
         const validActions = this.timelineActions.filter(a => !invalidActionIds.has(a.id));
         const sortedActions = [...validActions].sort((a, b) => a.startTime - b.startTime);
@@ -200,7 +232,18 @@ export class TimelineSimulator {
 
         for (let t = 0; t <= duration; t += TICK) {
             // 0. Resource Recovery
+            const oldAtb = this.atb;
             this.atb = Math.min(300, this.atb + 0.8); // 8 units per second
+            // 记录 ATB 变化：每秒记录一次，或者当 ATB 达到/离开阈值（100, 200, 300）时记录
+            const roundedTime = Math.round(t * 10) / 10; // 避免浮点精度问题
+            const isWholeSecond = Math.abs(roundedTime % 1) < 0.01;
+            const crossedThreshold = 
+                Math.floor(oldAtb / 100) !== Math.floor(this.atb / 100) || // 跨越了 100 的整数倍
+                (oldAtb < 300 && this.atb >= 300); // 刚达到满值
+            
+            if ((isWholeSecond || crossedThreshold) && this.atb !== oldAtb) {
+                recordAtbChange(t, 'recovery');
+            }
 
             // 1. Buffs
             const events = this.buffManager.tick(TICK);
@@ -228,6 +271,7 @@ export class TimelineSimulator {
                     // Deduct Costs
                     if (skillDef.atbCost) {
                         this.atb -= skillDef.atbCost;
+                        recordAtbChange(t, `skill_cost_${action.skillId}`);
                         // 战技消耗技力时，全队获得终结技能量 (6.5点/100技力)
                         const uspFromAtb = (skillDef.atbCost / 100) * 6.5;
                         this.characters.forEach(c => {
@@ -254,7 +298,7 @@ export class TimelineSimulator {
                         isHeavy = pred.isHeavy;
                     }
 
-                    // Variant Resolution - 使用新的条件评估系统
+                    // Variant Resolution - 统一使用 ConditionEvaluator
                     if (skillDef.variants && Array.isArray(skillDef.variants)) {
                         const condEvaluator = this.createConditionEvaluator(action.charId, t);
                         // 注入连击状态以便条件评估
@@ -262,30 +306,9 @@ export class TimelineSimulator {
                         
                         for (const variant of skillDef.variants) {
                             if (!variant.condition) continue;
-                            let match = false;
                             
-                            // 统一条件格式：支持数组和单对象
-                            const conditions = Array.isArray(variant.condition) ? variant.condition : [variant.condition];
-                            
-                            for (const cond of conditions) {
-                                // 兼容旧的 combo 条件格式
-                                if (cond.type === 'combo') {
-                                    if (cond.value === 'heavy' && isHeavy) {
-                                        match = true;
-                                        break;
-                                    } else if (comboStep === cond.value && !isHeavy) {
-                                        match = true;
-                                        break;
-                                    }
-                                } 
-                                // 使用新条件系统评估其他条件
-                                else if (condEvaluator.evaluateSingle(cond)) {
-                                    match = true;
-                                    break;
-                                }
-                            }
-                            
-                            if (match) {
+                            // 使用 ConditionEvaluator 统一评估所有条件类型（包括 combo）
+                            if (condEvaluator.evaluate(variant.condition)) {
                                 const { condition, ...overrides } = variant;
                                 finalSkillDef = { ...finalSkillDef, ...overrides };
                                 break;
@@ -379,6 +402,9 @@ export class TimelineSimulator {
             const lastEnergy = this.usp[c.id] || 0;
             timeline.push({ time: duration, energy: lastEnergy, reason: 'end' });
         });
+        
+        // 添加技力时间轴结束点
+        atbTimeline.push({ time: duration, atb: this.atb, reason: 'end' });
 
         // Calculate Total Damage
         totalDamage = this.logs.reduce((acc, log) => {
@@ -392,6 +418,7 @@ export class TimelineSimulator {
             logs: this.logs, 
             totalDamage, 
             uspTimelines,
+            atbTimeline,
             // 返回每个 action 的最终解析结果供 UI 使用
             resolvedActionSkills: this.resolvedActionSkills
         };
@@ -409,40 +436,29 @@ export class TimelineSimulator {
             }
         }
 
+        // 委托给 ActionExecutor 执行
+        const executor = this.createActionExecutor();
+        const actionContext = {
+            sourceCharId: charId,
+            currentTime: time,
+            skillDef: actionState.def,
+            skillLevel: char.skillLevel || 1,
+            comboStep: actionState.comboStep,
+            isHeavy: actionState.isHeavy
+        };
+
         // 处理新的行为类型
         switch (node.type) {
             case 'damage':
-                this.executeDamageNode(time, char, node, actionState);
-                break;
-                
             case 'add_stagger':
-                this.executeAddStaggerNode(time, char, node, actionState);
-                break;
-                
             case 'recover_usp_self':
-                this.executeRecoverUspSelfNode(time, char, node, actionState);
-                break;
-                
             case 'recover_usp_team':
-                this.executeRecoverUspTeamNode(time, char, node, actionState);
-                break;
-                
             case 'recover_atb':
-                this.executeRecoverAtbNode(time, char, node, actionState);
-                break;
-                
             case 'add_buff':
-                this.executeAddBuffNode(time, char, node, actionState);
-                break;
-                
             case 'consume_buff':
-                this.executeConsumeBuffNode(time, char, node, actionState);
-                break;
-                
-            // 兼容旧格式
             case 'status_apply':
             case 'poise':
-                this.executeLegacyStatusNode(time, char, node, actionState);
+                executor.execute(node, actionContext);
                 break;
                 
             default:
@@ -462,349 +478,8 @@ export class TimelineSimulator {
     }
 
     /**
-     * 执行伤害节点
-     */
-    executeDamageNode(time, char, node, actionState) {
-        const element = node.element || actionState.def?.element || 'physical';
-        
-        if (element.toLowerCase() === 'physical') {
-            this.buffManager.handlePhysicalHit(this.enemy.id || 'enemy_01', char.id);
-        }
-
-        const activeModifiers = this.collectActiveModifiers(char.id, this.enemy.id || 'enemy_01');
-        
-        // 获取技能类型
-        const skillType = actionState.def?.type;
-        
-        // 获取连击层数（仅对战技和终结技生效）
-        let comboStacks = 0;
-        if (skillType === 'SKILL' || skillType === 'ULTIMATE') {
-            comboStacks = this.buffManager.getBuffStackCount('team', 'buff_combo') || 0;
-            // 战技/终结技释放时消耗连击
-            if (comboStacks > 0) {
-                this.buffManager.consumeBuff('team', 'buff_combo', comboStacks);
-                this.logs.push({
-                    time: Number(time.toFixed(2)),
-                    type: 'COMBO_CONSUME',
-                    detail: `消耗 ${comboStacks} 层连击加成`
-                });
-            }
-        }
-
-        // 判断敌人是否处于失衡状态（通过检查 status_stun buff）
-        const enemyId = this.enemy.id || 'enemy_01';
-        const isPoiseBroken = this.buffManager.getBuffStackCount(enemyId, 'status_stun') > 0;
-        
-        const context = {
-            activeModifiers,
-            sourceChar: char,
-            skillId: actionState.def?.id,  // 变体匹配后，这里会是变体的 id
-            skillLevel: char.skillLevel || 1,
-            isPoiseBroken,      // 通过 buff 判断失衡状态
-            skillType,          // 技能类型
-            comboStacks,        // 连击层数
-            critMode: this.critMode || 'random',  // 暴击模式
-            debug: this.debugMode || false  // 调试模式
-        };
-
-        // 直接使用 action 中的配置（包括 scalingKey、index 等）
-        const lookupNode = { ...node, element };
-
-        const dmg = DamageCalculator.calculate(char, this.enemy, lookupNode, context);
-
-        let logSuffix = '';
-        if (actionState.isHeavy) logSuffix = ' (重击)';
-        else if (actionState.comboStep) logSuffix = ` (连击${actionState.comboStep})`;
-
-        this.logs.push({
-            time: Number(time.toFixed(2)),
-            type: 'DAMAGE',
-            source: char.name,
-            value: dmg,
-            detail: `造成 ${dmg} 伤害 (${element})${logSuffix}`
-        });
-
-        this.enemy.stats.currentHp = Math.max(0, this.enemy.stats.currentHp - dmg);
-
-        // Resource recovery from hit (ATB/USP) - 支持 xxxKey 查找
-        const atbGain = this.resolveValue(node, 'atb', 0, context);
-        const uspGain = this.resolveValue(node, 'usp', 0, context);
-        const poiseGain = this.resolveValue(node, 'poise', 0, context);
-        
-        if (atbGain) this.atb = Math.min(300, this.atb + atbGain);
-        if (uspGain) {
-            const maxUsp = this.getMaxUsp(char.id);
-            this.usp[char.id] = Math.min(maxUsp, (this.usp[char.id] || 0) + uspGain);
-        }
-        
-        // 处理失衡值（poise）
-        if (poiseGain) {
-            this.enemy.stats.currentPoise = (this.enemy.stats.currentPoise || 0) + poiseGain;
-            
-            // 检查是否达到失衡阈值
-            const maxPoise = this.enemy.stats.maxPoise || 100;
-            if (this.enemy.stats.currentPoise >= maxPoise) {
-                // 触发失衡状态
-                const enemyId = this.enemy.id || 'enemy_01';
-                this.buffManager.applyBuff(enemyId, 'status_stun', char.id, 1);
-                this.enemy.stats.currentPoise = 0;
-                
-                this.logs.push({
-                    time: Number(time.toFixed(2)),
-                    type: 'STAGGER',
-                    detail: `敌人进入失衡状态`
-                });
-            }
-        }
-
-        // 记录历史
-        this.recordActionHistory({
-            type: 'DAMAGE_DEALT',
-            time,
-            sourceId: char.id,
-            targetId: this.enemy.id || 'enemy_01',
-            damage: dmg,
-            damageType: element,
-            skillType: actionState.def?.type,
-            skillId: actionState.def?.id
-        });
-    }
-
-    /**
-     * 执行增加失衡值节点
-     */
-    executeAddStaggerNode(time, char, node, actionState) {
-        const context = {
-            skillId: actionState.def?.id,
-            skillLevel: char.skillLevel || 1
-        };
-        
-        // 支持 xxxKey 查找
-        const value = this.resolveValue(node, 'value', 0, context) || 
-                      this.resolveValue(node, 'poise', 0, context);
-        
-        this.enemy.stats.currentPoise = (this.enemy.stats.currentPoise || 0) + value;
-        
-        const maxPoise = this.enemy.stats.maxPoise || 100;
-        if (this.enemy.stats.currentPoise >= maxPoise) {
-            this.buffManager.applyBuff(this.enemy.id || 'enemy_01', 'status_stun', char.id, 1);
-            this.enemy.stats.currentPoise = 0;
-            
-            this.logs.push({
-                time: Number(time.toFixed(2)),
-                type: 'STAGGER',
-                detail: `敌人进入失衡状态`
-            });
-        }
-        
-        this.logs.push({
-            time: Number(time.toFixed(2)),
-            type: 'STAGGER_ADD',
-            value,
-            detail: `增加 ${value} 失衡值`
-        });
-    }
-
-    /**
-     * 执行回复自身终结技能量节点
-     */
-    executeRecoverUspSelfNode(time, char, node, actionState) {
-        const context = {
-            skillId: actionState.def?.id,
-            skillLevel: char.skillLevel || 1
-        };
-        
-        const value = this.resolveValue(node, 'value', 0, context);
-        const maxUsp = this.getMaxUsp(char.id);
-        this.usp[char.id] = Math.min(maxUsp, (this.usp[char.id] || 0) + value);
-        
-        this.logs.push({
-            time: Number(time.toFixed(2)),
-            type: 'USP_GAIN',
-            source: char.name,
-            value,
-            detail: `${char.name} 回复 ${value} 终结技能量`
-        });
-    }
-
-    /**
-     * 执行回复全队终结技能量节点
-     */
-    executeRecoverUspTeamNode(time, char, node, actionState) {
-        const context = {
-            skillId: actionState.def?.id,
-            skillLevel: char.skillLevel || 1
-        };
-        
-        const value = this.resolveValue(node, 'value', 0, context);
-        
-        this.characters.forEach(c => {
-            const maxUsp = this.getMaxUsp(c.id);
-            this.usp[c.id] = Math.min(maxUsp, (this.usp[c.id] || 0) + value);
-        });
-        
-        this.logs.push({
-            time: Number(time.toFixed(2)),
-            type: 'USP_GAIN_TEAM',
-            source: char.name,
-            value,
-            detail: `全队回复 ${value} 终结技能量`
-        });
-    }
-
-    /**
-     * 执行回复技力节点
-     */
-    executeRecoverAtbNode(time, char, node, actionState) {
-        const context = {
-            skillId: actionState.def?.id,
-            skillLevel: char.skillLevel || 1
-        };
-        
-        const value = this.resolveValue(node, 'value', 0, context);
-        this.atb = Math.min(300, this.atb + value);
-        
-        this.logs.push({
-            time: Number(time.toFixed(2)),
-            type: 'ATB_GAIN',
-            source: char.name,
-            value,
-            detail: `回复 ${value} 技力`
-        });
-    }
-
-    /**
-     * 执行添加Buff节点
-     */
-    executeAddBuffNode(time, char, node, actionState) {
-        const context = {
-            skillId: actionState.def?.id,
-            skillLevel: char.skillLevel || 1
-        };
-        
-        const buffId = node.buffId || node.status;
-        const stacks = this.resolveValue(node, 'stacks', 1, context);
-        const duration = this.resolveValue(node, 'duration', undefined, context);
-        const targetId = this.resolveTargetId(node.target, char.id);
-        
-        const res = this.buffManager.applyBuff(targetId, buffId, char.id, stacks, duration);
-        
-        if (res) {
-            const buffDef = getBuffDef(buffId);
-            const buffName = buffDef?.name || buffId;
-            
-            if (!node.hideDuration) {
-                this.logs.push({
-                    time: Number(time.toFixed(2)),
-                    type: 'BUFF_APPLIED',
-                    detail: `对 ${targetId === char.id ? '自身' : '敌人'} 施加了 ${buffName}${stacks > 1 ? ` x${stacks}` : ''}`
-                });
-            }
-            
-            // 记录历史
-            this.recordActionHistory({
-                type: 'BUFF_APPLIED',
-                time,
-                sourceId: char.id,
-                targetId,
-                buffId
-            });
-            
-            // 处理反应
-            if (res.type === 'REACTION') {
-                const burstDmg = DamageCalculator.calculateReactionDamage('BURST', {
-                    sourceChar: char,
-                    level: res.level || 1
-                }, this.enemy.stats);
-
-                if (burstDmg > 0) {
-                    const anomalyName = getBuffDef(res.anomaly)?.name || res.anomaly;
-                    this.logs.push({
-                        time: Number(time.toFixed(2)),
-                        type: 'REACTION_DAMAGE',
-                        source: char.name,
-                        value: burstDmg,
-                        detail: `反应爆发 (${anomalyName})`
-                    });
-                }
-            }
-        }
-    }
-
-    /**
-     * 执行消耗Buff节点
-     */
-    executeConsumeBuffNode(time, char, node, actionState) {
-        const context = {
-            skillId: actionState.def?.id,
-            skillLevel: char.skillLevel || 1
-        };
-        
-        const buffId = node.buffId;
-        const stacks = this.resolveValue(node, 'stacks', 1, context);
-        const targetId = this.resolveTargetId(node.target, char.id);
-        
-        const result = this.buffManager.consumeBuff(targetId, buffId, stacks, char.id);
-        
-        if (result) {
-            const buffDef = getBuffDef(buffId);
-            const buffName = buffDef?.name || buffId;
-            
-            this.logs.push({
-                time: Number(time.toFixed(2)),
-                type: 'BUFF_CONSUMED',
-                detail: `消耗了 ${buffName}${result.consumedStacks > 1 ? ` x${result.consumedStacks}` : ''}`
-            });
-            
-            // 记录历史
-            this.recordActionHistory({
-                type: 'BUFF_CONSUMED',
-                time,
-                sourceId: char.id,
-                targetId,
-                buffId,
-                stacks: result.consumedStacks
-            });
-        }
-    }
-
-    /**
-     * 执行旧格式状态节点（兼容）
-     */
-    executeLegacyStatusNode(time, char, node, actionState) {
-        const statusType = node.type === 'poise' ? 'poise' : node.status;
-        const res = this.buffManager.applyBuff(this.enemy.id || 'enemy_01', statusType, char.id, node.stacks || 1);
-        
-        if (res) {
-            const statusName = statusType === 'poise' ? '失衡值' : (getBuffDef(statusType)?.name || statusType);
-            this.logs.push({
-                time: Number(time.toFixed(2)),
-                type: 'STATUS',
-                detail: `对敌人施加了 ${statusName}`
-            });
-            
-            if (res.type === 'REACTION') {
-                const burstDmg = DamageCalculator.calculateReactionDamage('BURST', {
-                    sourceChar: char,
-                    level: res.level || 1
-                }, this.enemy.stats);
-
-                if (burstDmg > 0) {
-                    const anomalyName = getBuffDef(res.anomaly)?.name || res.anomaly;
-                    this.logs.push({
-                        time: Number(time.toFixed(2)),
-                        type: 'DAMAGE',
-                        source: char.name,
-                        value: burstDmg,
-                        detail: `反应爆发 (${anomalyName})`
-                    });
-                }
-            }
-        }
-    }
-
-    /**
      * 执行旧格式异常节点（兼容 anomalies 数组中的类型）
+     * 注：此方法保留是因为 ActionExecutor 没有对应实现
      */
     executeLegacyAnomalyNode(time, char, node, actionState) {
         const targetId = this.enemy.id || 'enemy_01';
@@ -842,106 +517,6 @@ export class TimelineSimulator {
                 }
             }
         }
-    }
-
-    /**
-     * 收集当前激活的增益减益修正
-     */
-    collectActiveModifiers(sourceCharId, targetId) {
-        const activeModifiers = [];
-        const enemyBuffs = this.buffManager.getBuffsOnTarget(targetId);
-
-        enemyBuffs.forEach(b => {
-            const bDef = getBuffDef(b.baseId);
-            if (bDef && bDef.effect) {
-                if (bDef.effect === 'vulnerability_magic') {
-                    const val = (bDef.values && bDef.values[b.stacks - 1]) || 0.12;
-                    activeModifiers.push({ type: 'vulnerability', value: val, condition: { type: 'magic' } });
-                }
-                if (bDef.effect === 'vulnerability_phys') {
-                    const val = (bDef.values && bDef.values[b.stacks - 1]) || 0.11;
-                    activeModifiers.push({ type: 'vulnerability', value: val, condition: { type: 'physical' } });
-                }
-                if (bDef.effect === 'res_shred') {
-                    const levelIndex = Math.min(Math.max(0, (b.stacks || 1) - 1), 3);
-                    const timeFactor = Math.min(10, b.timeActive || 0);
-                    
-                    const initialShred = bDef.initialResShred?.[levelIndex] ?? (3.6 + 1.2 * levelIndex);
-                    const shredPerSec = bDef.resShredPerSec?.[levelIndex] ?? (0.84 + 0.28 * levelIndex);
-                    const maxShred = bDef.maxResShred?.[levelIndex] ?? (12 + 4 * levelIndex);
-                    
-                    const val = Math.min(maxShred, initialShred + shredPerSec * timeFactor);
-                    activeModifiers.push({ type: 'res_shred', value: val });
-                }
-                if (bDef.effect === 'vulnerability_stun') {
-                    activeModifiers.push({ type: 'vulnerability', value: bDef.value || 0.3, condition: { type: 'stun' } });
-                }
-            }
-        });
-
-        return activeModifiers;
-    }
-
-    /**
-     * 解析目标ID
-     */
-    resolveTargetId(targetType, sourceCharId) {
-        switch (targetType) {
-            case 'self':
-                return sourceCharId;
-            case 'enemy':
-            case 'target_enemy':
-            default:
-                return this.enemy.id || 'enemy_01';
-        }
-    }
-
-    /**
-     * 通用参数值解析函数
-     * 
-     * 如果参数配置了对应的 xxxKey，则从 JSON 中查找；否则使用配置的固定值
-     * 
-     * @param {Object} node - action 配置对象
-     * @param {string} paramName - 参数名（如 'value', 'stacks', 'duration'）
-     * @param {*} defaultValue - 默认值
-     * @param {Object} context - 上下文，包含 skillId 和 skillLevel
-     * @returns {*} 解析后的参数值
-     * 
-     * @example
-     * // 配置示例：
-     * // { "stacks": 2 }                    → 返回固定值 2
-     * // { "stacksKey": "buff_stacks" }     → 从 JSON 查找 buff_stacks
-     * // { "stacks": 2, "stacksKey": "x" }  → 优先使用 xxxKey 查找
-     */
-    resolveValue(node, paramName, defaultValue, context) {
-        const keyName = `${paramName}Key`;
-        
-        // 如果配置了 xxxKey，则从 JSON 中查找
-        if (node[keyName] && context.skillId) {
-            const value = getSkillValue(
-                context.skillId, 
-                node[keyName], 
-                context.skillLevel || 1,
-                node.index || null
-            );
-            // 如果查找到有效值，返回它；否则回退到固定值或默认值
-            if (value !== 0 || node[paramName] === undefined) {
-                return value;
-            }
-        }
-        
-        // 使用配置的固定值或默认值
-        return node[paramName] !== undefined ? node[paramName] : defaultValue;
-    }
-
-    /**
-     * 获取角色终结技能量上限
-     */
-    getMaxUsp(charId) {
-        const char = this.characters.find(c => c.id === charId);
-        if (!char?.skills?.ultimate) return 100;
-        const ultSkill = SKILLS[char.skills.ultimate];
-        return ultSkill?.uspCost || 100;
     }
 
     /**

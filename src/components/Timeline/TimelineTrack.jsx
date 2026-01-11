@@ -25,9 +25,9 @@ export const TimelineTrackResolved = ({
 }) => {
     // 分轴高度配置
     const BLOCK_HEIGHT = 24; // 时间块高度保持不变
-    const ULTIMATE_ROW_HEIGHT = 40; // 终结技分轴高度
-    const TACTICAL_CHAIN_ROW_HEIGHT = 32; // 战技+连携共轴高度
-    const BASIC_ROW_HEIGHT = 28; // 普攻分轴高度
+    const ULTIMATE_ROW_HEIGHT = 60; // 终结技分轴高度 (原40 * 1.5)
+    const TACTICAL_CHAIN_ROW_HEIGHT = 48; // 战技+连携共轴高度 (原32 * 1.5)
+    const BASIC_ROW_HEIGHT = 42; // 普攻分轴高度 (原28 * 1.5)
     
     const ROW_GAP = 2; // 分轴间距
     const TOP_PADDING = 4;

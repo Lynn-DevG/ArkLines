@@ -83,17 +83,17 @@ export const TimelineTrackResolved = ({
 
     return (
         <div 
-            className="flex-1 border-b border-slate-800/50 relative group"
+            className="flex-1 border-b border-neutral-800/50 relative group"
             style={{ minHeight: `${totalHeight}px`, height: `${totalHeight}px` }}
         >
             {/* 左侧角色名称区域 */}
             <div 
-                className="absolute left-0 top-0 bottom-0 bg-slate-900/80 z-20 flex border-r border-slate-700"
+                className="absolute left-0 top-0 bottom-0 bg-neutral-900/80 z-20 flex border-r border-neutral-700"
                 style={{ width: `${HEADER_WIDTH}px` }}
             >
                 {/* 角色名称 */}
                 <div className="flex-1 flex items-center px-2 overflow-hidden">
-                    <span className="text-[10px] font-bold text-slate-300 uppercase tracking-tighter truncate">
+                    <span className="text-[10px] font-bold text-neutral-300 uppercase tracking-tighter truncate">
                         {char.name}
                     </span>
                 </div>
@@ -143,7 +143,7 @@ export const TimelineTrackResolved = ({
                 <div className="absolute inset-0 pointer-events-none">
                     {/* 终结技分轴背景 */}
                     <div 
-                        className="absolute w-full bg-amber-900/10 border-b border-slate-700/30"
+                        className="absolute w-full bg-amber-900/10 border-b border-neutral-700/30"
                         style={{ top: `${ULTIMATE_TOP}px`, height: `${ULTIMATE_ROW_HEIGHT}px` }}
                     >
                         {/* 终结技能量填充 */}
@@ -164,7 +164,7 @@ export const TimelineTrackResolved = ({
                     
                     {/* 连携技+战技共轴背景 */}
                     <div 
-                        className="absolute w-full border-b border-slate-700/30"
+                        className="absolute w-full border-b border-neutral-700/30"
                         style={{ top: `${TACTICAL_CHAIN_TOP}px`, height: `${TACTICAL_CHAIN_ROW_HEIGHT}px` }}
                     >
                         {/* 上半部分（连携技区域） */}
@@ -179,14 +179,14 @@ export const TimelineTrackResolved = ({
                         />
                         {/* 中间分隔线 */}
                         <div 
-                            className="absolute w-full border-t border-slate-700/20"
+                            className="absolute w-full border-t border-neutral-700/20"
                             style={{ top: '50%' }}
                         />
                     </div>
                     
                     {/* 普攻分轴背景 */}
                     <div 
-                        className="absolute w-full bg-slate-800/10"
+                        className="absolute w-full bg-neutral-800/10"
                         style={{ top: `${BASIC_TOP}px`, height: `${BASIC_ROW_HEIGHT}px` }}
                     />
                 </div>

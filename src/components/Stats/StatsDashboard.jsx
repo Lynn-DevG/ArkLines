@@ -17,16 +17,16 @@ export const StatsDashboard = () => {
 
     return (
         <div className="flex flex-col h-full">
-            <div className="p-4 border-b border-slate-700 bg-slate-900/50">
-                <h2 className="text-lg font-bold flex items-center gap-2 text-indigo-400">
+            <div className="p-4 border-b border-neutral-700 bg-neutral-900/50">
+                <h2 className="text-lg font-bold flex items-center gap-2 text-neutral-300">
                     <Activity size={20} />
                     数据分析
                 </h2>
             </div>
 
             <div className="p-4 space-y-4 flex-shrink-0">
-                <div className="bg-slate-800 p-4 rounded-lg border border-slate-700">
-                    <div className="text-xs text-slate-400 uppercase">总伤害</div>
+                <div className="bg-neutral-800 p-4 rounded-lg border border-neutral-700">
+                    <div className="text-xs text-neutral-400 uppercase">总伤害</div>
                     <div className="text-2xl font-bold text-white tracking-tight">{totalDamage.toLocaleString()}</div>
                 </div>
                 
@@ -36,7 +36,7 @@ export const StatsDashboard = () => {
                     className={`flex items-center gap-2 px-3 py-2 rounded text-xs transition-all w-full justify-center ${
                         debugMode 
                             ? 'bg-amber-500/20 border border-amber-500/50 text-amber-400' 
-                            : 'bg-slate-800 border border-slate-700 text-slate-500 hover:text-slate-300'
+                            : 'bg-neutral-800 border border-neutral-700 text-neutral-500 hover:text-neutral-300'
                     }`}
                 >
                     <Bug size={14} />
@@ -50,24 +50,24 @@ export const StatsDashboard = () => {
             </div>
 
             <div className="flex-1 overflow-hidden flex flex-col px-4 pb-4">
-                <h3 className="text-xs font-bold text-slate-400 mb-2 flex items-center gap-2">
+                <h3 className="text-xs font-bold text-neutral-400 mb-2 flex items-center gap-2">
                     <Terminal size={12} /> 战斗日志
                 </h3>
-                <div className="flex-1 bg-black/50 rounded border border-slate-800 p-2 overflow-y-auto font-mono text-[10px] leading-relaxed custom-scrollbar">
-                    {reversedLogs.length === 0 && <div className="text-slate-600 italic p-2">准备模拟中...</div>}
+                <div className="flex-1 bg-black/50 rounded border border-neutral-800 p-2 overflow-y-auto font-mono text-[10px] leading-relaxed custom-scrollbar">
+                    {reversedLogs.length === 0 && <div className="text-neutral-600 italic p-2">准备模拟中...</div>}
                     {reversedLogs.map((log, i) => (
                         <div key={i} className="mb-1 border-b border-white/5 pb-1">
-                            <span className="text-slate-500">[{log.time.toFixed(1)}秒]</span>{' '}
+                            <span className="text-neutral-500">[{log.time.toFixed(1)}秒]</span>{' '}
                             {['DAMAGE', 'DOT', 'REACTION_DAMAGE'].includes(log.type) && (
                                 <>
-                                    <span className="text-indigo-400 font-bold">
+                                    <span className="text-neutral-300 font-bold">
                                         {log.type === 'DOT' ? getBuffDisplayName(log.source) : log.source}
                                     </span>
-                                    <span className="text-slate-400"> 造成了 </span>
+                                    <span className="text-neutral-400"> 造成了 </span>
                                     <span className={`font-bold ${log.type === 'REACTION_DAMAGE' ? 'text-amber-400 glow' : 'text-white'}`}>
                                         {log.value}
                                     </span>
-                                    <span className="text-slate-500"> {log.detail && `(${log.detail})`}</span>
+                                    <span className="text-neutral-500"> {log.detail && `(${log.detail})`}</span>
                                 </>
                             )}
                             {log.type === 'STATUS' && (

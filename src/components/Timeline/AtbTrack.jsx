@@ -122,12 +122,12 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
 
     return (
         <div 
-            className="flex border-b border-slate-700/50 relative"
+            className="flex border-b border-neutral-700/50 relative"
             style={{ minHeight: `${ROW_HEIGHT + TOP_PADDING * 2}px`, height: `${ROW_HEIGHT + TOP_PADDING * 2}px` }}
         >
             {/* 左侧标签 */}
             <div 
-                className="absolute left-0 top-0 bottom-0 bg-slate-900/80 z-20 flex items-center border-r border-slate-700"
+                className="absolute left-0 top-0 bottom-0 bg-neutral-900/80 z-20 flex items-center border-r border-neutral-700"
                 style={{ width: `${HEADER_WIDTH}px` }}
             >
                 <div className="flex-1 flex items-center px-2">
@@ -172,7 +172,7 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
                         return (
                             <div 
                                 key={layer}
-                                className="relative border-b border-slate-700/20 last:border-b-0"
+                                className="relative border-b border-neutral-700/20 last:border-b-0"
                                 style={{ height: `${LAYER_HEIGHT}px`, backgroundColor: `rgba(6, 182, 212, ${bgOpacity})` }}
                             >
                                 {/* 基础填充（较暗） */}

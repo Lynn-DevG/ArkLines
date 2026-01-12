@@ -342,7 +342,6 @@ export function createSkillTemplate(type = SKILL_TYPE.BASIC) {
         case SKILL_TYPE.ULTIMATE:
             template.uspCost = 100;
             template.uspReply = 0;
-            template.animationTime = 1.5;
             break;
     }
 

@@ -288,7 +288,12 @@ export class ActionExecutor {
             const poiseGain = resolveValue(action, 'poise', 0, resolveContext);
             
             if (atbGain) {
-                this.context.resources.atb = Math.min(300, this.context.resources.atb + atbGain);
+                let newAtb = this.context.resources.atb + atbGain;
+                // 修复浮点精度问题：如果非常接近 300，直接设为 300
+                if (newAtb >= 299.99 && newAtb < 300) {
+                    newAtb = 300;
+                }
+                this.context.resources.atb = Math.min(300, newAtb);
             }
             if (uspGain) {
                 const maxUsp = getMaxUsp(sourceChar.id, this.context.characters);
@@ -468,8 +473,12 @@ export class ActionExecutor {
         const value = resolveValue(action, 'value', 0, resolveContext);
         
         const currentAtb = this.context.resources.atb || 0;
-        const newAtb = Math.min(300, currentAtb + value);
-        this.context.resources.atb = newAtb;
+        let newAtb = currentAtb + value;
+        // 修复浮点精度问题：如果非常接近 300，直接设为 300
+        if (newAtb >= 299.99 && newAtb < 300) {
+            newAtb = 300;
+        }
+        this.context.resources.atb = Math.min(300, newAtb);
         
         onLog?.({
             time: Number(currentTime.toFixed(2)),

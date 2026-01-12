@@ -15,6 +15,32 @@ export const SKILL_TYPE = {
 };
 
 /**
+ * 技能类型配置（包含显示名称、颜色、图标）
+ */
+export const SKILL_TYPES = {
+    [SKILL_TYPE.BASIC]: {
+        name: '普通攻击',
+        color: 'bg-slate-600',
+        icon: 'Swords'
+    },
+    [SKILL_TYPE.TACTICAL]: {
+        name: '战技',
+        color: 'bg-blue-600',
+        icon: 'Zap'
+    },
+    [SKILL_TYPE.CHAIN]: {
+        name: '连携技',
+        color: 'bg-purple-600',
+        icon: 'Hexagon'
+    },
+    [SKILL_TYPE.ULTIMATE]: {
+        name: '终结技',
+        color: 'bg-amber-600',
+        icon: 'Sparkles'
+    }
+};
+
+/**
  * 行为类型枚举
  */
 export const ACTION_TYPE = {

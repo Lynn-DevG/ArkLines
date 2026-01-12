@@ -1,5 +1,6 @@
 import React from 'react';
-import { SKILLS, SKILL_TYPES } from '../../data/skills';
+import { SKILLS } from '../../data/skills';
+import { SKILL_TYPES } from '../../data/skillSchema';
 import { getBuffDef } from '../../data/buffs';
 import { X, Zap, Clock, Info } from 'lucide-react';
 import { useSimulation } from '../../store/SimulationContext';

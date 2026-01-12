@@ -129,13 +129,17 @@ export function VariantItem({ variant, index, onChange, onRemove }) {
                         </div>
                         <div>
                             <label className="text-xs text-neutral-500 mb-1 block">技能类型</label>
-                            <input
-                                type="text"
+                            <select
                                 value={variant.skillType || ''}
-                                onChange={(e) => updateField('skillType', e.target.value)}
+                                onChange={(e) => updateField('skillType', e.target.value || undefined)}
                                 className={inputClassName}
-                                placeholder="如: normal_skill"
-                            />
+                            >
+                                <option value="">默认</option>
+                                <option value="attack">普通攻击 (attack)</option>
+                                <option value="normal_skill">战技 (normal_skill)</option>
+                                <option value="combo">连携技 (combo)</option>
+                                <option value="ultimate">终结技 (ultimate)</option>
+                            </select>
                         </div>
                     </div>
 
@@ -186,7 +190,7 @@ export function VariantItem({ variant, index, onChange, onRemove }) {
                                     </button>
 
                                     {showAddActionMenu && (
-                                        <div className="absolute top-full left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-10 overflow-hidden">
+                                        <div className="absolute top-full left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-10 overflow-hidden max-h-48 overflow-y-auto">
                                             {Object.entries(ACTION_TYPES).map(([type, config]) => (
                                                 <button
                                                     key={type}

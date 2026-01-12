@@ -1,6 +1,7 @@
 import React from 'react';
 import { CHARACTERS } from '../../data/characters';
-import { SKILLS, SKILL_TYPES } from '../../data/skills';
+import { SKILLS } from '../../data/skills';
+import { SKILL_TYPES } from '../../data/skillSchema';
 import { Zap, Hexagon, Swords, Sparkles } from 'lucide-react';
 import { ConstraintValidator } from '../../engine/ConstraintValidator';
 

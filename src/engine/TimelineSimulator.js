@@ -6,6 +6,7 @@ import { ActionExecutor } from './ActionExecutor.js';
 import { ConstraintValidator } from './ConstraintValidator.js';
 import { SKILLS } from '../data/skills.js';
 import { getBuffDef } from '../data/buffs.js';
+import { FPS, FRAME_DURATION, secondsToFrames } from '../config/simulation.js';
 
 export class TimelineSimulator {
     constructor(characters, enemyConfig) {
@@ -175,9 +176,11 @@ export class TimelineSimulator {
 
     /**
      * Main Simulation Loop
+     * 以帧为最小单位进行模拟（每秒 FPS 帧）
      */
     run(duration, invalidActionIds = new Set()) {
-        const TICK = 0.1;
+        // 使用帧作为最小模拟单位
+        const TICK = FRAME_DURATION; // 1/FPS 秒
         this.logs = [];
         this.buffManager = new BuffManager(); // Reset
         this.comboManager = new ComboManager(); // Reset Combo State
@@ -192,36 +195,52 @@ export class TimelineSimulator {
         this.resolvedActionSkills.clear();
         
         // 记录每个角色的终结技能量变化历史
-        // 结构: { charId: [{ time, energy, reason }] }
+        // 结构: { charId: [{ time, frame, energy, reason }] }
+        // time: 秒数（用于兼容和日志显示）
+        // frame: 帧数（用于时间轴精确显示）
         const uspTimelines = {};
         this.characters.forEach(c => {
-            uspTimelines[c.id] = [{ time: 0, energy: 0, reason: 'initial' }];
+            uspTimelines[c.id] = [{ time: 0, frame: 0, energy: 0, reason: 'initial' }];
         });
 
-        // 辅助函数：记录能量变化
+        // 辅助函数：记录能量变化（以帧为单位）
         const recordUspChange = (charId, time, reason) => {
             const energy = this.usp[charId] || 0;
+            const frame = secondsToFrames(time);
             const timeline = uspTimelines[charId];
-            // 避免在同一时间点重复记录相同能量值
+            // 避免在同一帧重复记录相同能量值
             const lastEntry = timeline[timeline.length - 1];
-            if (lastEntry && Math.abs(lastEntry.time - time) < 0.01 && lastEntry.energy === energy) {
+            if (lastEntry && lastEntry.frame === frame && lastEntry.energy === energy) {
                 return;
             }
-            timeline.push({ time: Number(time.toFixed(2)), energy, reason });
+            timeline.push({ 
+                time: Number(time.toFixed(3)), 
+                frame, 
+                energy, 
+                reason 
+            });
         };
 
         // 记录技力（ATB）变化历史
-        // 结构: [{ time, atb, reason }]
-        const atbTimeline = [{ time: 0, atb: 200, reason: 'initial' }];
+        // 结构: [{ time, frame, atb, reason }]
+        const atbTimeline = [{ time: 0, frame: 0, atb: 200, reason: 'initial' }];
         
-        // 辅助函数：记录技力变化
+        // 辅助函数：记录技力变化（以帧为单位）
+        // 改进：只检查 ATB 值是否与上一条记录不同，不检查帧数
+        // 这样同一帧内的多次变化都会被记录
         const recordAtbChange = (time, reason) => {
+            const frame = secondsToFrames(time);
             const lastEntry = atbTimeline[atbTimeline.length - 1];
-            // 避免在同一时间点重复记录相同值
-            if (lastEntry && Math.abs(lastEntry.time - time) < 0.01 && lastEntry.atb === this.atb) {
+            // 只有当 ATB 值发生变化时才记录（避免重复记录相同值）
+            if (lastEntry && Math.abs(lastEntry.atb - this.atb) < 0.001) {
                 return;
             }
-            atbTimeline.push({ time: Number(time.toFixed(2)), atb: this.atb, reason });
+            atbTimeline.push({ 
+                time: Number(time.toFixed(3)), 
+                frame, 
+                atb: this.atb, 
+                reason 
+            });
         };
 
         // Filter valid actions only for execution
@@ -233,15 +252,16 @@ export class TimelineSimulator {
         for (let t = 0; t <= duration; t += TICK) {
             // 0. Resource Recovery
             const oldAtb = this.atb;
-            this.atb = Math.min(300, this.atb + 0.8); // 8 units per second
-            // 记录 ATB 变化：每秒记录一次，或者当 ATB 达到/离开阈值（100, 200, 300）时记录
-            const roundedTime = Math.round(t * 10) / 10; // 避免浮点精度问题
-            const isWholeSecond = Math.abs(roundedTime % 1) < 0.01;
-            const crossedThreshold = 
-                Math.floor(oldAtb / 100) !== Math.floor(this.atb / 100) || // 跨越了 100 的整数倍
-                (oldAtb < 300 && this.atb >= 300); // 刚达到满值
+            // ATB 恢复：8 units/秒，每帧恢复 8/FPS
+            let newAtb = this.atb + (8 / FPS);
+            // 修复浮点精度问题：如果非常接近 300，直接设为 300
+            if (newAtb >= 299.99 && newAtb < 300) {
+                newAtb = 300;
+            }
+            this.atb = Math.min(300, newAtb);
             
-            if ((isWholeSecond || crossedThreshold) && this.atb !== oldAtb) {
+            // 记录 ATB 变化：以帧为单位，每帧值变化时都记录
+            if (Math.abs(this.atb - oldAtb) > 0.001) {
                 recordAtbChange(t, 'recovery');
             }
 
@@ -285,6 +305,15 @@ export class TimelineSimulator {
                     if (skillDef.type === 'ULTIMATE') {
                         this.usp[action.charId] = 0;
                         recordUspChange(action.charId, t, 'ultimate_cost');
+                    }
+                    
+                    // 连携技的 uspGain 在技能释放时立即获得（而不是技能结束时）
+                    // 注意：战技(TACTICAL)的能量获取已经在 atbCost 消耗时处理了
+                    if (skillDef.uspGain && skillDef.type !== 'TACTICAL') {
+                        const ultSkill = SKILLS[this.characters.find(c => c.id === action.charId)?.skills?.ultimate];
+                        const maxUsp = ultSkill?.uspCost || 100;
+                        this.usp[action.charId] = Math.min(maxUsp, (this.usp[action.charId] || 0) + skillDef.uspGain);
+                        recordUspChange(action.charId, t, `skill_gain_${action.skillId}`);
                     }
 
                     // Prediction
@@ -374,7 +403,26 @@ export class TimelineSimulator {
                 while (state.nextEventIndex < state.events.length) {
                     const event = state.events[state.nextEventIndex];
                     if (relativeTime >= event.offset) {
+                        // 记录执行前的 ATB 和 USP 值，用于检测技能是否修改了资源
+                        const atbBeforeEvent = this.atb;
+                        const uspBeforeEvent = { ...this.usp };
+                        
                         this.executeNode(t, state.charId, event, state);
+                        
+                        // 如果技能事件修改了 ATB（如 damage 的 atb 字段或 recover_atb），记录变化
+                        if (Math.abs(this.atb - atbBeforeEvent) > 0.001) {
+                            recordAtbChange(t, `skill_event_${event.type}`);
+                        }
+                        
+                        // 如果技能事件修改了 USP，记录变化
+                        this.characters.forEach(c => {
+                            const oldUsp = uspBeforeEvent[c.id] || 0;
+                            const newUsp = this.usp[c.id] || 0;
+                            if (Math.abs(newUsp - oldUsp) > 0.001) {
+                                recordUspChange(c.id, t, `skill_event_${event.type}`);
+                            }
+                        });
+                        
                         state.nextEventIndex++;
                     } else {
                         break;
@@ -382,29 +430,22 @@ export class TimelineSimulator {
                 }
 
                 if (relativeTime >= skillDef.duration && state.nextEventIndex >= state.events.length) {
-                    // Skill finished, apply USP gain
-                    // 注意：战技(TACTICAL)的能量获取已经在 atbCost 消耗时处理了，不需要再通过 uspGain 添加
-                    // 这里只处理非战技的 uspGain（主要是连携技 CHAIN）
-                    if (skillDef.uspGain && skillDef.type !== 'TACTICAL') {
-                        const ultSkill = SKILLS[this.characters.find(c => c.id === state.charId)?.skills?.ultimate];
-                        const maxUsp = ultSkill?.uspCost || 100;
-                        this.usp[state.charId] = Math.min(maxUsp, (this.usp[state.charId] || 0) + skillDef.uspGain);
-                        recordUspChange(state.charId, t, `skill_gain_${skillDef.id}`);
-                    }
+                    // Skill finished - uspGain 已在技能开始时处理，这里只清理
                     delete activeSkills[actionId];
                 }
             });
         }
 
         // 添加时间轴结束点
+        const endFrame = secondsToFrames(duration);
         this.characters.forEach(c => {
             const timeline = uspTimelines[c.id];
             const lastEnergy = this.usp[c.id] || 0;
-            timeline.push({ time: duration, energy: lastEnergy, reason: 'end' });
+            timeline.push({ time: duration, frame: endFrame, energy: lastEnergy, reason: 'end' });
         });
         
         // 添加技力时间轴结束点
-        atbTimeline.push({ time: duration, atb: this.atb, reason: 'end' });
+        atbTimeline.push({ time: duration, frame: endFrame, atb: this.atb, reason: 'end' });
 
         // Calculate Total Damage
         totalDamage = this.logs.reduce((acc, log) => {

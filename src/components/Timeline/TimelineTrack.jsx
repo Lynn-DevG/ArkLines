@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
 import { TimelineBlock } from './TimelineBlock';
-import { SKILLS, SKILL_TYPES } from '../../data/skills';
+import { SKILLS } from '../../data/skills';
+import { SKILL_TYPES } from '../../data/skillSchema';
 import { ComboManager } from '../../engine/ComboManager';
+import { FPS } from '../../config/simulation';
 
 /**
  * 获取角色的终结技能量上限
@@ -46,11 +48,21 @@ export const TimelineTrackResolved = ({
     const uspCost = getCharUspCost(char);
     
     // 生成终结技能量背景填充的多边形点（阶梯状）
+    // 使用帧数进行精确定位
     const generateUspFillPath = useMemo(() => {
         if (uspTimeline.length < 2) return null;
         
         const points = [];
         const fillHeight = ULTIMATE_ROW_HEIGHT - 2; // 留一点边距
+        
+        // 辅助函数：根据事件获取 x 坐标（优先使用帧数）
+        const getX = (event) => {
+            // 如果有帧数，使用帧数计算（更精确）
+            if (event.frame !== undefined) {
+                return (event.frame / FPS) * pxPerSec;
+            }
+            return event.time * pxPerSec;
+        };
         
         // 从左下角开始
         points.push(`0,${fillHeight}`);
@@ -58,7 +70,7 @@ export const TimelineTrackResolved = ({
         // 添加能量变化点（阶梯状：先水平再垂直）
         for (let i = 0; i < uspTimeline.length; i++) {
             const event = uspTimeline[i];
-            const x = event.time * pxPerSec;
+            const x = getX(event);
             const energyRatio = event.energy / uspCost;
             const y = fillHeight - (energyRatio * fillHeight);
             
@@ -75,7 +87,8 @@ export const TimelineTrackResolved = ({
         }
         
         // 回到右下角
-        const lastX = uspTimeline[uspTimeline.length - 1].time * pxPerSec;
+        const lastEvent = uspTimeline[uspTimeline.length - 1];
+        const lastX = getX(lastEvent);
         points.push(`${lastX},${fillHeight}`);
         
         return points.join(' ');

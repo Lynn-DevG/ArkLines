@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
+import { FPS } from '../../config/simulation';
 
 /**
  * 技力（ATB）显示轴组件
  * 纵向分成三层，每层表示100点技力
  * 最大技力为300点
+ * 使用帧作为最小显示单位
  */
 export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
     const MAX_ATB = 300;
@@ -15,8 +17,18 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
     const HEADER_WIDTH = 100;
     const TOP_PADDING = 4;
     
+    // 辅助函数：根据事件获取 x 坐标（优先使用帧数）
+    const getX = (event) => {
+        // 如果有帧数，使用帧数计算（更精确）
+        if (event.frame !== undefined) {
+            return (event.frame / FPS) * pxPerSec;
+        }
+        return event.time * pxPerSec;
+    };
+    
     // 为每一层生成填充路径
     // layer: 0 = 底层(0-100), 1 = 中层(100-200), 2 = 顶层(200-300)
+    // 使用帧数进行精确定位
     const generateLayerPath = useMemo(() => {
         if (atbTimeline.length < 2) return [null, null, null];
         
@@ -35,7 +47,7 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
             // 添加能量变化点（阶梯状）
             for (let i = 0; i < atbTimeline.length; i++) {
                 const event = atbTimeline[i];
-                const x = event.time * pxPerSec;
+                const x = getX(event);
                 
                 // 计算该层的填充高度
                 // 如果 ATB 低于该层最小值，填充为0
@@ -63,7 +75,8 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
             }
             
             // 回到右下角
-            const lastX = atbTimeline[atbTimeline.length - 1].time * pxPerSec;
+            const lastEvent = atbTimeline[atbTimeline.length - 1];
+            const lastX = getX(lastEvent);
             points.push(`${lastX},${layerBottom}`);
             
             paths.push(points.join(' '));
@@ -73,11 +86,19 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
     }, [atbTimeline, pxPerSec]);
     
     // 计算每层在每个时间点是否充满，用于动态显示亮度
-    // 返回每层的"满状态"时间段列表
+    // 返回每层的"满状态"时间段列表（使用帧数进行精确定位）
     const layerFullSegments = useMemo(() => {
         if (atbTimeline.length < 2) return [[], [], []];
         
         const segments = [[], [], []]; // 三层
+        
+        // 辅助函数：获取事件的时间（秒），优先使用帧数计算
+        const getEventTime = (event) => {
+            if (event.frame !== undefined) {
+                return event.frame / FPS;
+            }
+            return event.time;
+        };
         
         for (let layer = 0; layer < LAYER_COUNT; layer++) {
             const layerMax = (layer + 1) * LAYER_VALUE;
@@ -85,21 +106,23 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
             
             for (let i = 0; i < atbTimeline.length; i++) {
                 const event = atbTimeline[i];
+                const eventTime = getEventTime(event);
                 const isFull = event.atb >= layerMax;
                 
                 if (isFull && segmentStart === null) {
                     // 开始一个满状态段
-                    segmentStart = event.time;
+                    segmentStart = eventTime;
                 } else if (!isFull && segmentStart !== null) {
                     // 结束一个满状态段
-                    segments[layer].push({ start: segmentStart, end: event.time });
+                    segments[layer].push({ start: segmentStart, end: eventTime });
                     segmentStart = null;
                 }
             }
             
             // 如果最后还在满状态，延续到时间轴结束
             if (segmentStart !== null) {
-                const lastTime = atbTimeline[atbTimeline.length - 1].time;
+                const lastEvent = atbTimeline[atbTimeline.length - 1];
+                const lastTime = getEventTime(lastEvent);
                 segments[layer].push({ start: segmentStart, end: lastTime });
             }
         }

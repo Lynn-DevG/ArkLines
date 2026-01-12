@@ -11,6 +11,7 @@ import { SkillEditorPage } from './pages/SkillEditor';
 import { User, Clock, Wand2 } from 'lucide-react';
 import { SKILLS } from './data/skills';
 import { Magnetism } from './engine/Magnetism';
+import { formatTimeWithFrames } from './config/simulation';
 
 const AppContent = ({ onOpenEditor }) => {
     const { team, actions, addAction, removeAction, updateAction, invalidActionIds, uspTimelines, atbTimeline } = useSimulation();
@@ -212,7 +213,7 @@ const AppContent = ({ onOpenEditor }) => {
                                 </div>
                             </div>
 <div className="text-neutral-500 font-mono">
-                                                光标: {cursorTime.toFixed(2)}秒
+                                                光标: {formatTimeWithFrames(cursorTime)}
                                             </div>
                         </div>
 

@@ -75,7 +75,7 @@ export function ConditionBuilder({ conditions = [], onChange, compact = false })
                 </button>
 
                 {showAddMenu && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg z-10 overflow-hidden">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg z-10 overflow-hidden max-h-64 overflow-y-auto">
                         {Object.entries(CONDITION_TYPES).map(([type, config]) => (
                             <button
                                 key={type}

@@ -21,16 +21,20 @@ function objectToCode(obj, indent = 0) {
     if (Array.isArray(obj)) {
         if (obj.length === 0) return '[]';
         
+        // 过滤掉 undefined 值
+        const filteredArr = obj.filter(item => item !== undefined);
+        if (filteredArr.length === 0) return '[]';
+        
         // 检查是否是简单数组（所有元素都是基本类型）
-        const isSimple = obj.every(item => 
+        const isSimple = filteredArr.every(item => 
             typeof item !== 'object' || item === null
         );
         
-        if (isSimple && obj.length <= 5) {
-            return '[' + obj.map(item => objectToCode(item, 0)).join(', ') + ']';
+        if (isSimple && filteredArr.length <= 5) {
+            return '[' + filteredArr.map(item => objectToCode(item, 0)).join(', ') + ']';
         }
         
-        const items = obj.map(item => innerSpaces + objectToCode(item, indent + 1));
+        const items = filteredArr.map(item => innerSpaces + objectToCode(item, indent + 1));
         return '[\n' + items.join(',\n') + '\n' + spaces + ']';
     }
 
@@ -38,7 +42,11 @@ function objectToCode(obj, indent = 0) {
         const keys = Object.keys(obj);
         if (keys.length === 0) return '{}';
         
-        const entries = keys.map(key => {
+        // 过滤掉值为 undefined 的键
+        const filteredKeys = keys.filter(key => obj[key] !== undefined);
+        if (filteredKeys.length === 0) return '{}';
+        
+        const entries = filteredKeys.map(key => {
             const value = objectToCode(obj[key], indent + 1);
             // 如果 key 是有效的标识符，不需要引号
             const safeKey = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : JSON.stringify(key);

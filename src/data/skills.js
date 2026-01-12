@@ -339,7 +339,7 @@ export const SKILLS = {
         id: "chr_0005_chen_normal_skill",
         name: "归穹宇",
         type: "TACTICAL",
-        duration: 0.8,
+        duration: 1,
         element: "physical",
         actions: [
             {

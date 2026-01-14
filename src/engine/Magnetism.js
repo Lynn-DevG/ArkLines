@@ -92,4 +92,72 @@ export class Magnetism {
 
         return maxEnd;
     }
+    
+    /**
+     * 自动解决同角色轨道上的重叠冲突
+     * - mode='push'：推挤后续技能，直到无重叠（连锁推挤）
+     * - mode='gray'：不推挤，只返回冲突的 actionId（用于置灰）
+     *
+     * @param {Object} movingAction - 需要放置/拖动的 action（已包含 startTime）
+     * @param {Array} allActions - 当前全部 actions（包含 movingAction 时也可）
+     * @param {'push'|'gray'} mode
+     * @returns {{ actions: Array, conflictInvalidIds: Set<number|string> }}
+     */
+    static autoResolvePlacement(movingAction, allActions, mode = 'push') {
+        const actions = Array.isArray(allActions) ? allActions.map(a => ({ ...a })) : [];
+        const conflictInvalidIds = new Set();
+        
+        // Upsert movingAction
+        const idx = actions.findIndex(a => a.id === movingAction.id);
+        if (idx >= 0) actions[idx] = { ...actions[idx], ...movingAction };
+        else actions.push({ ...movingAction });
+        
+        // Only resolve per-character mutual exclusion
+        const charId = movingAction.charId;
+        const track = actions.filter(a => a.charId === charId);
+        
+        // quick conflict detection helper
+        const hasConflict = () => {
+            const probe = actions.find(a => a.id === movingAction.id) || movingAction;
+            const conflicts = this.resolveConflicts(probe, actions);
+            return conflicts.hasConflict;
+        };
+        
+        if (mode === 'gray') {
+            if (hasConflict()) conflictInvalidIds.add(movingAction.id);
+            return { actions, conflictInvalidIds };
+        }
+        
+        // mode === 'push'
+        // Sort by start time, but keep stable ordering by id for equal time
+        track.sort((a, b) => (a.startTime - b.startTime) || String(a.id).localeCompare(String(b.id)));
+        
+        // Push forward to remove overlaps (single pass handles chain because we update startTime)
+        let prev = null;
+        for (const a of track) {
+            if (!prev) {
+                prev = a;
+                continue;
+            }
+            const prevEnd = prev.startTime + getResolvedDuration(prev, track);
+            const curDur = getResolvedDuration(a, track);
+            if (a.startTime < prevEnd - 1e-6) {
+                a.startTime = prevEnd;
+            }
+            prev = a;
+        }
+        
+        // Write back modified track actions into actions list
+        const byId = new Map(track.map(a => [a.id, a]));
+        const nextActions = actions.map(a => byId.get(a.id) || a);
+        
+        // If still conflict (due to duration depending on order/variants), mark as invalid instead of looping forever
+        const finalProbe = nextActions.find(a => a.id === movingAction.id) || movingAction;
+        const finalConflicts = this.resolveConflicts(finalProbe, nextActions);
+        if (finalConflicts.hasConflict) {
+            conflictInvalidIds.add(movingAction.id);
+        }
+        
+        return { actions: nextActions, conflictInvalidIds };
+    }
 }

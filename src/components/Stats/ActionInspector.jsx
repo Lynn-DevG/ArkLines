@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { SKILLS } from '../../data/skills';
 import { SKILL_TYPES } from '../../data/skillSchema';
 import { getBuffDef } from '../../data/buffs';
@@ -7,12 +7,12 @@ import { useSimulation } from '../../store/SimulationContext';
 import { resolveVariantForTimeline } from '../../engine/VariantResolver';
 
 export const ActionInspector = ({ action, onClose }) => {
-    const { actions, getResolvedSkill, getCharSkillLevel, resolvedActionSkills } = useSimulation();
+    const { actions, getResolvedSkill, getActionSkillLevel, resolvedActionSkills, logs } = useSimulation();
 
     if (!action) return null;
     
     // 获取角色的技能等级
-    const skillLevel = getCharSkillLevel(action.charId);
+    const skillLevel = getActionSkillLevel(action);
     
     // 获取原始技能定义
     const baseSkill = SKILLS[action.skillId];
@@ -31,6 +31,11 @@ export const ActionInspector = ({ action, onClose }) => {
         : skillWithLevel;
 
     const typeConfig = SKILL_TYPES[baseSkill.type];
+    
+    const actionDamage = useMemo(() => {
+        const list = (logs || []).filter(l => l && l.actionId === action.id && l.type === 'DAMAGE');
+        return list.reduce((acc, l) => acc + (l.value || 0), 0);
+    }, [logs, action.id]);
 
     return (
         <div className="flex flex-col h-full bg-neutral-900 border-l border-neutral-700">
@@ -63,6 +68,10 @@ export const ActionInspector = ({ action, onClose }) => {
                     <div className="bg-neutral-800 p-2 rounded">
                         <div className="text-neutral-400 mb-1 flex items-center gap-1"><Zap size={10} /> 技力消耗</div>
                         <div className="text-white font-mono">{skill.atbCost || 0}</div>
+                    </div>
+                    <div className="bg-neutral-800 p-2 rounded">
+                        <div className="text-neutral-400 mb-1 flex items-center gap-1"><Zap size={10} /> 本次伤害</div>
+                        <div className="text-white font-mono">{Math.round(actionDamage).toLocaleString()}</div>
                     </div>
                 </div>
 

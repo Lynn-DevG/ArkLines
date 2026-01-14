@@ -29,6 +29,7 @@ export class ActionExecutor {
      * @param {Object} context.resources - 资源状态 { atb, usp: { charId: value } }
      * @param {Array} context.actionHistory - 历史行为记录（可写入）
      * @param {Function} context.onLog - 日志回调
+     * @param {Function} [context.onBuffEvent] - buff 事件回调（用于生成 buff 区间）
      * @param {Object} context.skillLevelMappings - 技能等级映射数据
      */
     constructor(context) {
@@ -207,7 +208,7 @@ export class ActionExecutor {
      * 执行伤害行为
      */
     executeDamage(action, sourceChar, targets, actionContext) {
-        const { currentTime, skillDef, skillLevel, comboStep, isHeavy } = actionContext;
+        const { currentTime, skillDef, skillLevel, comboStep, isHeavy, actionId, skillId } = actionContext;
         const { buffManager, enemy, onLog } = this.context;
         
         // 目标解析上下文
@@ -331,6 +332,9 @@ export class ActionExecutor {
                 time: Number(currentTime.toFixed(2)),
                 type: 'DAMAGE',
                 source: sourceChar.name,
+                actionId,
+                skillId: skillId || skillDef?.id,
+                skillType: skillDef?.type,
                 value: damage,
                 detail: `造成 ${damage} 伤害 (${element})${logSuffix}`
             });
@@ -512,6 +516,32 @@ export class ActionExecutor {
             const buffDef = getBuffDef(buffId);
             const buffName = buffDef?.name || buffId;
             
+            // buff事件（用于生成 buff 区间）
+            const resolvedId = resolveBuffId(buffId);
+            const resolvedDef = getBuffDef(resolvedId);
+            let finalDuration = duration;
+            if (finalDuration === undefined || finalDuration === null) {
+                if (resolvedDef?.duration !== undefined) {
+                    finalDuration = resolvedDef.duration;
+                } else if (resolvedDef?.durations && Array.isArray(resolvedDef.durations) && resolvedDef.durations.length > 0) {
+                    const idx = Math.min(Math.max(0, (stacks || 1) - 1), resolvedDef.durations.length - 1);
+                    finalDuration = resolvedDef.durations[idx];
+                } else {
+                    // 默认无限持续
+                    finalDuration = -1;
+                }
+            }
+            const evType = result?.type === 'REFRESH' ? 'REFRESH' : 'APPLY';
+            this.context.onBuffEvent?.({
+                type: evType,
+                time: currentTime,
+                targetId,
+                sourceId: sourceChar.id,
+                buffId: resolvedId,
+                stacks,
+                duration: finalDuration
+            });
+            
             onLog?.({
                 time: Number(currentTime.toFixed(2)),
                 type: 'BUFF_APPLIED',
@@ -574,31 +604,29 @@ export class ActionExecutor {
         
         const results = [];
         for (const targetId of targets) {
-            const currentStacks = buffManager?.getBuffStackCount(targetId, buffId) || 0;
-            if (currentStacks <= 0) continue;
+            const consumeResult = buffManager?.consumeBuff(targetId, buffId, stacks, sourceChar.id);
+            if (!consumeResult) continue;
             
-            const consumeStacks = Math.min(stacks, currentStacks);
-            
-            // 获取buff实例并减少层数或移除
-            const buffs = buffManager?.getBuffsOnTarget(targetId) || [];
-            const buff = buffs.find(b => b.baseId === resolveBuffId(buffId));
-            
-            if (buff) {
-                if (consumeStacks >= buff.stacks) {
-                    buffManager?.removeBuff(targetId, buff.instanceId);
-                } else {
-                    buff.stacks -= consumeStacks;
-                }
-                
-                results.push({ targetId, consumed: consumeStacks });
+            results.push({ targetId, consumed: consumeResult.consumedStacks, remaining: consumeResult.remainingStacks });
                 
                 const buffDef = getBuffDef(buffId);
                 const buffName = buffDef?.name || buffId;
                 
+                // buff事件（用于生成 buff 区间）
+                this.context.onBuffEvent?.({
+                    type: 'CONSUME',
+                    time: currentTime,
+                    targetId,
+                    sourceId: sourceChar.id,
+                    buffId: consumeResult.buffId,
+                    consumedStacks: consumeResult.consumedStacks,
+                    remainingStacks: consumeResult.remainingStacks
+                });
+                
                 onLog?.({
                     time: Number(currentTime.toFixed(2)),
                     type: 'BUFF_CONSUMED',
-                    detail: `消耗了 ${targetId} 的 ${buffName}${consumeStacks > 1 ? ` x${consumeStacks}` : ''}`
+                    detail: `消耗了 ${targetId} 的 ${buffName}${consumeResult.consumedStacks > 1 ? ` x${consumeResult.consumedStacks}` : ''}`
                 });
                 
                 // 记录历史
@@ -607,8 +635,8 @@ export class ActionExecutor {
                     time: currentTime,
                     sourceId: sourceChar.id,
                     targetId,
-                    buffId: resolveBuffId(buffId),
-                    stacks: consumeStacks
+                    buffId: consumeResult.buffId,
+                    stacks: consumeResult.consumedStacks
                 });
                 
                 // 如果目标是角色，也记录被消耗事件
@@ -618,11 +646,10 @@ export class ActionExecutor {
                         time: currentTime,
                         consumerId: sourceChar.id,
                         targetId,
-                        buffId: resolveBuffId(buffId),
-                        stacks: consumeStacks
+                        buffId: consumeResult.buffId,
+                        stacks: consumeResult.consumedStacks
                     });
                 }
-            }
         }
         
         return { executed: true, buffId, results };

@@ -13,10 +13,10 @@ export const TimelineBlock = ({ action, pxPerSec, onRemove, onDragStart, comboIn
     // 用于区分拖拽和点击的状态
     const dragStartPos = useRef(null);
     const isDragging = useRef(false);
-    const { getResolvedSkill, getCharSkillLevel, actions, resolvedActionSkills } = useSimulation();
+    const { getResolvedSkill, getActionSkillLevel, actions, resolvedActionSkills } = useSimulation();
     
     // 获取角色的技能等级
-    const skillLevel = getCharSkillLevel(action.charId);
+    const skillLevel = getActionSkillLevel(action);
     
     // 获取原始技能定义
     const baseSkillDef = SKILLS[action.skillId];
@@ -44,7 +44,10 @@ export const TimelineBlock = ({ action, pxPerSec, onRemove, onDragStart, comboIn
     // 使用解析后的 comboInfo 显示名称
     const effectiveComboInfo = resolvedComboInfo || comboInfo;
     if (effectiveComboInfo) {
-        if (effectiveComboInfo.isHeavy) {
+        if (effectiveComboInfo.isExecution) {
+            displayName = '处决';
+            styleClass = 'bg-red-700';
+        } else if (effectiveComboInfo.isHeavy) {
             displayName = '重击';
             styleClass = 'bg-orange-600'; // Override color
         } else if (baseSkillDef.type === 'BASIC') {

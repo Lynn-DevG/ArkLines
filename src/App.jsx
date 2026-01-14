@@ -14,7 +14,7 @@ import { Magnetism } from './engine/Magnetism';
 import { formatTimeWithFrames } from './config/simulation';
 
 const AppContent = ({ onOpenEditor }) => {
-    const { team, actions, addAction, removeAction, updateAction, invalidActionIds, uspTimelines, atbTimeline } = useSimulation();
+    const { team, actions, addAction, removeAction, updateAction, replaceActions, invalidActionIds, invalidConflictActionIds, setInvalidConflictActionIds, uspTimelines, atbTimeline, buffIntervals, mainCharId, autoResolveMode, setAutoResolveMode } = useSimulation();
     const [selectedTool, setSelectedTool] = useState(null); // { charId, skillId }
     const [dragState, setDragState] = useState(null); // { actionId, startX, initialStartTime }
     const [selectedActionId, setSelectedActionId] = useState(null);
@@ -79,10 +79,32 @@ const AppContent = ({ onOpenEditor }) => {
                 const conflicts = Magnetism.resolveConflicts({ ...action, startTime: finalTime }, solidActions);
 
                 if (conflicts.hasConflict) {
-                    // Revert if still invalid
-                    updateAction(dragState.actionId, dragState.initialStartTime);
+                    if (autoResolveMode === 'push') {
+                        const { actions: nextActions } = Magnetism.autoResolvePlacement(
+                            { ...action, startTime: finalTime },
+                            actions,
+                            'push'
+                        );
+                        replaceActions(nextActions);
+                        setInvalidConflictActionIds(new Set());
+                    } else {
+                        // gray mode: keep position but mark invalid
+                        updateAction(dragState.actionId, finalTime);
+                        setInvalidConflictActionIds(prev => {
+                            const next = new Set(prev);
+                            next.add(dragState.actionId);
+                            return next;
+                        });
+                    }
                 } else {
                     updateAction(dragState.actionId, finalTime);
+                    // clear conflict invalid flag for this action if any
+                    setInvalidConflictActionIds(prev => {
+                        if (!prev.has(dragState.actionId)) return prev;
+                        const next = new Set(prev);
+                        next.delete(dragState.actionId);
+                        return next;
+                    });
                 }
             }
             setDragState(null);
@@ -93,6 +115,12 @@ const AppContent = ({ onOpenEditor }) => {
     const handleTimelineClick = (e) => {
         if (dragState) return;
         if (!selectedTool || !timelineRef.current) return;
+        
+        // 普攻仅允许主控角色放置（兜底保护，UI层也会禁用）
+        const selectedSkillType = SKILLS?.[selectedTool.skillId]?.type;
+        if (selectedSkillType === 'BASIC' && mainCharId && selectedTool.charId !== mainCharId) {
+            return;
+        }
 
         const rect = timelineRef.current.getBoundingClientRect();
         const clickX = e.clientX - rect.left + timelineRef.current.scrollLeft - TRACK_HEADER_WIDTH;
@@ -110,22 +138,39 @@ const AppContent = ({ onOpenEditor }) => {
             id: -1
         }, solidActions);
 
-        if (conflicts.hasConflict) {
-            return;
-        }
-
-        // Add Action
-        addAction({
-            id: Date.now(),
+        const newId = Date.now();
+        const newAction = {
+            id: newId,
             charId: selectedTool.charId,
             skillId: selectedTool.skillId,
             startTime: time
-        });
+        };
+        
+        if (autoResolveMode === 'push') {
+            const { actions: nextActions } = Magnetism.autoResolvePlacement(newAction, actions, 'push');
+            replaceActions(nextActions);
+            setInvalidConflictActionIds(new Set());
+        } else {
+            addAction(newAction);
+            if (conflicts.hasConflict) {
+                setInvalidConflictActionIds(prev => {
+                    const next = new Set(prev);
+                    next.add(newId);
+                    return next;
+                });
+            }
+        }
     };
 
     const handleRemoveAction = (id) => {
         removeAction(id);
         if (selectedActionId === id) setSelectedActionId(null);
+        setInvalidConflictActionIds(prev => {
+            if (!prev.has(id)) return prev;
+            const next = new Set(prev);
+            next.delete(id);
+            return next;
+        });
     };
 
     const handleActionClick = (e, action) => {
@@ -197,6 +242,7 @@ const AppContent = ({ onOpenEditor }) => {
                             if (selectedTool?.skillId === skillId) setSelectedTool(null);
                             else setSelectedTool({ charId, skillId });
                         }}
+                        mainCharId={mainCharId}
                         currentSimState={currentSimState}
                     />
 
@@ -211,6 +257,31 @@ const AppContent = ({ onOpenEditor }) => {
                                     <span className="w-10 text-center text-neutral-300">{Math.round(zoom * 100)}%</span>
                                     <button className="w-6 h-6 bg-neutral-800 rounded hover:bg-neutral-700 flex items-center justify-center" onClick={() => setZoom(Math.min(2.0, zoom + 0.1))}>+</button>
                                 </div>
+                            <div className="flex items-center gap-1 ml-2">
+                                <span className="text-neutral-500">冲突处理</span>
+                                <button
+                                    className={`px-2 py-0.5 rounded border ${
+                                        autoResolveMode === 'push'
+                                            ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-300'
+                                            : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:text-neutral-200'
+                                    }`}
+                                    onClick={() => setAutoResolveMode('push')}
+                                    title="发生重叠时自动推挤后续技能"
+                                >
+                                    推挤
+                                </button>
+                                <button
+                                    className={`px-2 py-0.5 rounded border ${
+                                        autoResolveMode === 'gray'
+                                            ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
+                                            : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:text-neutral-200'
+                                    }`}
+                                    onClick={() => setAutoResolveMode('gray')}
+                                    title="发生重叠时不推挤，仅置灰该技能"
+                                >
+                                    置灰
+                                </button>
+                            </div>
                             </div>
 <div className="text-neutral-500 font-mono">
                                                 光标: {formatTimeWithFrames(cursorTime)}
@@ -248,11 +319,12 @@ const AppContent = ({ onOpenEditor }) => {
                                             char={char}
                                             actions={actions.filter(a => a.charId === char.id)}
                                             uspTimeline={uspTimelines[char.id] || []}
+                                            buffIntervals={buffIntervals}
                                             pxPerSec={PX_PER_SEC}
                                             onRemoveAction={handleRemoveAction}
                                             onActionDragStart={handleActionDragStart}
                                             onActionClick={handleActionClick}
-                                            conflictingActionIds={conflictingActionIds}
+                                            conflictingActionIds={new Set([...conflictingActionIds, ...invalidConflictActionIds])}
                                             invalidResourceActionIds={invalidActionIds}
                                         />
                                     ) : (

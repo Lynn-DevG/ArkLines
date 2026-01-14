@@ -12,6 +12,15 @@ export class ComboManager {
     reset() {
         this.states = {};
     }
+    
+    /**
+     * 重置指定角色的连击状态
+     * @param {string} charId
+     */
+    resetForChar(charId) {
+        if (!charId) return;
+        delete this.states[charId];
+    }
 
     /**
      * Determines which combo step constitutes the "Next" attack

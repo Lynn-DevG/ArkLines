@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { CHARACTERS, getCharacterStatsWithWeapon } from '../../data/characters';
 import { useSimulation } from '../../store/SimulationContext';
-import { Plus, User, Edit2 } from 'lucide-react';
+import { Plus, User, Edit2, Crown } from 'lucide-react';
 import { CharacterEditor } from './CharacterEditor';
 import { getWeaponAtk, WEAPONS } from '../../data/weapons';
 
 export const CharacterSelector = () => {
-    const { team, addCharacter, removeCharacter } = useSimulation();
+    const { team, addCharacter, removeCharacter, mainCharId, setMainCharacter } = useSimulation();
     const [editingCharId, setEditingCharId] = useState(null);
 
     const handleToggle = (char) => {
@@ -73,7 +73,22 @@ export const CharacterSelector = () => {
                                 <div key={char.id} className="bg-neutral-800/50 p-3 rounded border border-neutral-700 relative group">
                                     <div className="flex justify-between items-center mb-2">
                                         <span className="text-xs font-bold text-white">{char.name}</span>
-                                        <span className="text-[10px] text-neutral-400">等级 {char.level}</span>
+                                        <div className="flex items-center gap-2">
+                                            {mainCharId === char.id ? (
+                                                <span className="text-[10px] text-amber-400 flex items-center gap-1">
+                                                    <Crown size={12} /> 主控
+                                                </span>
+                                            ) : (
+                                                <button
+                                                    onClick={() => setMainCharacter(char.id)}
+                                                    className="text-[10px] px-2 py-0.5 rounded bg-neutral-900/70 border border-neutral-700 text-neutral-300 hover:text-white hover:border-neutral-500"
+                                                    title="设为主控角色（仅主控可放置普攻）"
+                                                >
+                                                    设为主控
+                                                </button>
+                                            )}
+                                            <span className="text-[10px] text-neutral-400">等级 {char.level}</span>
+                                        </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2 text-[10px] text-neutral-300">
                                         <div className="bg-neutral-900 px-2 py-1 rounded">

@@ -7,6 +7,7 @@ import { ConstraintValidator } from './ConstraintValidator.js';
 import { SKILLS } from '../data/skills.js';
 import { getBuffDef } from '../data/buffs.js';
 import { FPS, FRAME_DURATION, secondsToFrames } from '../config/simulation.js';
+import { getSkillLevelForSkillId } from '../utils/skillSlots.js';
 
 export class TimelineSimulator {
     constructor(characters, enemyConfig) {
@@ -109,7 +110,13 @@ export class TimelineSimulator {
             mainCharId: this.mainCharId,
             critMode: this.critMode,
             debugMode: this.debugMode,
-            onLog: (log) => this.logs.push(log)
+            onLog: (log) => this.logs.push(log),
+            // buff事件（用于生成 buff 区间）
+            onBuffEvent: (ev) => {
+                if (!self._buffEvents) return;
+                self._buffEventSeq = (self._buffEventSeq || 0) + 1;
+                self._buffEvents.push({ ...ev, seq: self._buffEventSeq });
+            }
         });
     }
 
@@ -117,8 +124,9 @@ export class TimelineSimulator {
      * Validates all placed actions based on resource constraints.
      * Returns a Set of invalid action IDs.
      */
-    validateActions(actionsToValidate) {
-        const invalidIds = new Set();
+    validateActions(actionsToValidate, preInvalidActionIds = new Set()) {
+        // preInvalidActionIds: 外部强制无效（例如：非主控普攻、冲突置灰等）
+        const invalidIds = new Set(preInvalidActionIds);
         let tempAtb = 200; // Start ATB
         let tempUsp = {};
         this.characters.forEach(c => tempUsp[c.id] = 0);
@@ -132,6 +140,12 @@ export class TimelineSimulator {
             const dt = Math.max(0, action.startTime - lastTime);
             tempAtb = Math.min(300, tempAtb + dt * 8); // Base recovery rate
             lastTime = action.startTime;
+
+            // 外部强制无效：跳过资源消耗/冷却设置/条件检查
+            if (preInvalidActionIds?.has(action.id)) {
+                invalidIds.add(action.id);
+                return;
+            }
 
             const skill = SKILLS[action.skillId];
             if (!skill) return;
@@ -190,6 +204,10 @@ export class TimelineSimulator {
         this.characters.forEach(c => this.usp[c.id] = 0);
 
         let totalDamage = 0;
+        
+        // Buff events for interval building
+        this._buffEvents = [];
+        this._buffEventSeq = 0;
 
         // 清空之前的解析结果
         this.resolvedActionSkills.clear();
@@ -280,6 +298,20 @@ export class TimelineSimulator {
                         }
                     }
                 }
+                if (ev.type === 'EXPIRED' && ev.buffs && Array.isArray(ev.buffs)) {
+                    ev.buffs.forEach(b => {
+                        this._buffEventSeq = (this._buffEventSeq || 0) + 1;
+                        this._buffEvents.push({
+                            type: 'EXPIRE',
+                            time: t,
+                            targetId: b.targetId,
+                            sourceId: b.sourceId,
+                            buffId: b.baseId,
+                            stacks: b.stacks,
+                            seq: this._buffEventSeq
+                        });
+                    });
+                }
             });
 
             // 2. Start New Actions
@@ -320,11 +352,24 @@ export class TimelineSimulator {
                     let comboStep = 1;
                     let isHeavy = false;
                     let finalSkillDef = { ...skillDef };
+                    const actionChar = this.characters.find(c => c.id === action.charId);
+                    const skillLevelForAction = getSkillLevelForSkillId(actionChar, action.skillId, 1);
+                    
+                    // 处决：敌人处于失衡状态时，普攻自动替换为处决并清空连击
+                    const enemyId = this.enemy.id || 'enemy_01';
+                    const isExecution = (skillDef.type === 'BASIC') && (this.buffManager?.getBuffStackCount(enemyId, 'status_stun') > 0);
 
                     if (skillDef.type === 'BASIC') {
-                        const pred = this.comboManager.predictNext(action.charId, t, true);
-                        comboStep = pred.step;
-                        isHeavy = pred.isHeavy;
+                        if (isExecution) {
+                            // 清空连击记录
+                            this.comboManager.resetForChar?.(action.charId);
+                            comboStep = 0;
+                            isHeavy = false;
+                        } else {
+                            const pred = this.comboManager.predictNext(action.charId, t, true);
+                            comboStep = pred.step;
+                            isHeavy = pred.isHeavy;
+                        }
                     }
 
                     // Variant Resolution - 统一使用 ConditionEvaluator
@@ -344,11 +389,16 @@ export class TimelineSimulator {
                             }
                         }
                     }
+                    
+                    // 若无专门处决变体，使用兜底的处决显示（不改倍率/事件，保证不破坏现有技能数据）
+                    if (isExecution) {
+                        finalSkillDef = { ...finalSkillDef, name: '处决', variantType: 'execution' };
+                    }
 
                     // 存储解析后的技能定义供 UI 使用
                     this.resolvedActionSkills.set(action.id, {
                         skillDef: finalSkillDef,
-                        comboInfo: { step: comboStep, isHeavy }
+                        comboInfo: { step: comboStep, isHeavy, isExecution }
                     });
 
                     // Prepare Events (新格式 actions 或旧格式 damage_ticks + anomalies)
@@ -388,7 +438,10 @@ export class TimelineSimulator {
                         def: finalSkillDef,
                         charId: action.charId,
                         comboStep,
-                        isHeavy
+                        isHeavy,
+                        skillLevel: skillLevelForAction,
+                        actionId: action.id,
+                        skillId: action.skillId
                     };
                 }
             });
@@ -454,6 +507,9 @@ export class TimelineSimulator {
             }
             return acc;
         }, 0);
+        
+        // Build buff intervals from events
+        const buffIntervals = buildBuffIntervals(this._buffEvents, duration);
 
         return { 
             logs: this.logs, 
@@ -461,7 +517,8 @@ export class TimelineSimulator {
             uspTimelines,
             atbTimeline,
             // 返回每个 action 的最终解析结果供 UI 使用
-            resolvedActionSkills: this.resolvedActionSkills
+            resolvedActionSkills: this.resolvedActionSkills,
+            buffIntervals
         };
     }
 
@@ -483,9 +540,11 @@ export class TimelineSimulator {
             sourceCharId: charId,
             currentTime: time,
             skillDef: actionState.def,
-            skillLevel: char.skillLevel || 1,
+            skillLevel: actionState.skillLevel || char.skillLevel || 1,
             comboStep: actionState.comboStep,
-            isHeavy: actionState.isHeavy
+            isHeavy: actionState.isHeavy,
+            actionId: actionState.actionId,
+            skillId: actionState.skillId
         };
 
         // 处理新的行为类型
@@ -603,4 +662,95 @@ export class TimelineSimulator {
 
         return { atb: tempAtb, usp: tempUsp, cooldowns: tempCooldowns };
     }
+}
+
+/**
+ * 将 buff 事件折算为 buff 区间（用于时间轴展示 consume 截断/refresh 等）
+ *
+ * @param {Array} events
+ * @param {number} endTime
+ * @returns {Object} { [targetId]: { [buffId]: Array<{ start, end, stacks, sourceId, reason }> } }
+ */
+function buildBuffIntervals(events, endTime) {
+    const intervals = {};
+    const active = new Map(); // key -> { start, end, stacks, sourceId }
+    const pushInterval = (targetId, buffId, seg) => {
+        if (!intervals[targetId]) intervals[targetId] = {};
+        if (!intervals[targetId][buffId]) intervals[targetId][buffId] = [];
+        intervals[targetId][buffId].push(seg);
+    };
+    
+    const sorted = (events || [])
+        .filter(e => e && typeof e.time === 'number' && e.buffId && e.targetId)
+        .slice()
+        .sort((a, b) => (a.time - b.time) || ((a.seq || 0) - (b.seq || 0)));
+    
+    for (const ev of sorted) {
+        const key = `${ev.targetId}::${ev.buffId}`;
+        const cur = active.get(key);
+        const t = ev.time;
+        
+        if (ev.type === 'APPLY' || ev.type === 'REFRESH') {
+            if (cur && cur.start < t) {
+                pushInterval(ev.targetId, ev.buffId, {
+                    start: cur.start,
+                    end: Math.min(t, endTime),
+                    stacks: cur.stacks,
+                    sourceId: cur.sourceId,
+                    reason: 'active'
+                });
+            }
+            const dur = (ev.duration === -1 || ev.duration === undefined || ev.duration === null)
+                ? endTime - t
+                : ev.duration;
+            const segEnd = Math.min(endTime, t + Math.max(0, dur));
+            active.set(key, { start: t, end: segEnd, stacks: ev.stacks || 1, sourceId: ev.sourceId });
+        } else if (ev.type === 'CONSUME') {
+            if (!cur) continue;
+            if (cur.start < t) {
+                pushInterval(ev.targetId, ev.buffId, {
+                    start: cur.start,
+                    end: Math.min(t, endTime),
+                    stacks: cur.stacks,
+                    sourceId: cur.sourceId,
+                    reason: 'active'
+                });
+            }
+            const remaining = ev.remainingStacks ?? 0;
+            if (remaining > 0) {
+                // continue with remaining stacks until original end
+                active.set(key, { start: t, end: cur.end, stacks: remaining, sourceId: cur.sourceId });
+            } else {
+                active.delete(key);
+            }
+        } else if (ev.type === 'EXPIRE') {
+            if (!cur) continue;
+            if (cur.start < t) {
+                pushInterval(ev.targetId, ev.buffId, {
+                    start: cur.start,
+                    end: Math.min(t, endTime),
+                    stacks: cur.stacks,
+                    sourceId: cur.sourceId,
+                    reason: 'expired'
+                });
+            }
+            active.delete(key);
+        }
+    }
+    
+    // flush remaining
+    for (const [key, cur] of active.entries()) {
+        const [targetId, buffId] = key.split('::');
+        if (cur.start < endTime) {
+            pushInterval(targetId, buffId, {
+                start: cur.start,
+                end: Math.min(cur.end, endTime),
+                stacks: cur.stacks,
+                sourceId: cur.sourceId,
+                reason: 'end'
+            });
+        }
+    }
+    
+    return intervals;
 }

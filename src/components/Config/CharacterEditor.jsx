@@ -29,7 +29,18 @@ export const CharacterEditor = ({ charId, onClose }) => {
 
     useEffect(() => {
         if (char) {
-            setLocalState(JSON.parse(JSON.stringify(char)));
+            const cloned = JSON.parse(JSON.stringify(char));
+            // 初始化每槽位技能等级（兼容旧字段 skillLevel）
+            const legacyLevel = Number(cloned.skillLevel || 1);
+            const safeLegacyLevel = Number.isFinite(legacyLevel) ? legacyLevel : 1;
+            const existing = cloned.skillLevelsBySlot || {};
+            cloned.skillLevelsBySlot = {
+                basic: existing.basic ?? safeLegacyLevel,
+                tactical: existing.tactical ?? safeLegacyLevel,
+                chain: existing.chain ?? safeLegacyLevel,
+                ultimate: existing.ultimate ?? safeLegacyLevel
+            };
+            setLocalState(cloned);
         }
     }, [char]);
 
@@ -147,6 +158,16 @@ export const CharacterEditor = ({ charId, onClose }) => {
         updateCharacter(char.id, localState);
         onClose();
     };
+    
+    const handleSkillLevelChange = (slot, newLevel) => {
+        setLocalState(prev => ({
+            ...prev,
+            skillLevelsBySlot: {
+                ...(prev.skillLevelsBySlot || {}),
+                [slot]: newLevel
+            }
+        }));
+    };
 
     // 格式化属性加成显示
     const formatAttrBonus = (attr) => {
@@ -191,6 +212,41 @@ export const CharacterEditor = ({ charId, onClose }) => {
                             className="flex-1 h-2 bg-neutral-700 rounded-lg appearance-none cursor-pointer"
                         />
                         <span className="text-white font-mono w-8 text-right">{localState.level}</span>
+                    </div>
+                </div>
+                
+                {/* Skill Level Controls */}
+                <div>
+                    <label className="text-xs text-neutral-500 uppercase font-bold block mb-2">技能等级</label>
+                    <div className="space-y-2">
+                        {[
+                            { slot: 'basic', label: '普攻', skillId: localState.skills?.basic },
+                            { slot: 'tactical', label: '战技', skillId: localState.skills?.tactical },
+                            { slot: 'chain', label: '连携', skillId: localState.skills?.chain },
+                            { slot: 'ultimate', label: '终结', skillId: localState.skills?.ultimate }
+                        ].map(({ slot, label, skillId }) => {
+                            const name = SKILLS?.[skillId]?.name || skillId || '';
+                            const level = localState.skillLevelsBySlot?.[slot] ?? localState.skillLevel ?? 1;
+                            return (
+                                <div key={slot} className="bg-neutral-800/40 border border-neutral-800 rounded p-2">
+                                    <div className="flex justify-between items-center mb-1">
+                                        <div className="text-xs text-neutral-300 font-semibold">
+                                            {label}
+                                            {name ? <span className="text-neutral-500 font-normal ml-2 truncate">{name}</span> : null}
+                                        </div>
+                                        <div className="text-xs font-mono text-white">Lv.{level}</div>
+                                    </div>
+                                    <input
+                                        type="range"
+                                        min="1"
+                                        max="12"
+                                        value={level}
+                                        onChange={(e) => handleSkillLevelChange(slot, parseInt(e.target.value))}
+                                        className="w-full h-1.5 bg-neutral-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                                    />
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 

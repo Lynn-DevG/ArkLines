@@ -5,7 +5,7 @@ import { SKILL_TYPES } from '../../data/skillSchema';
 import { Zap, Hexagon, Swords, Sparkles } from 'lucide-react';
 import { ConstraintValidator } from '../../engine/ConstraintValidator';
 
-export const SkillMatrix = ({ team, selectedTool, onSelectTool }) => {
+export const SkillMatrix = ({ team, selectedTool, onSelectTool, mainCharId }) => {
     return (
         <div className="h-80 border-b border-neutral-700 bg-neutral-900 p-4 flex flex-col shadow-md z-10 shrink-0">
             <h2 className="text-lg font-bold flex items-center gap-2 text-neutral-300 mb-2">
@@ -53,6 +53,7 @@ export const SkillMatrix = ({ team, selectedTool, onSelectTool }) => {
                                         charId={char.id}
                                         skillId={char.skills.basic}
                                         isActive={selectedTool?.skillId === char.skills.basic}
+                                        disabled={mainCharId && char.id !== mainCharId}
                                         onClick={() => onSelectTool(char.id, char.skills.basic)}
                                         icon={<Swords size={14} />}
                                     /></div>
@@ -68,7 +69,7 @@ export const SkillMatrix = ({ team, selectedTool, onSelectTool }) => {
     );
 };
 
-const SkillButton = ({ charId, skillId, isActive, onClick, icon }) => {
+const SkillButton = ({ charId, skillId, isActive, onClick, icon, disabled = false }) => {
     const skill = SKILLS[skillId];
     if (!skill) return <div className="h-10 bg-transparent"></div>;
 
@@ -76,14 +77,15 @@ const SkillButton = ({ charId, skillId, isActive, onClick, icon }) => {
 
     return (
         <button
-            onClick={onClick}
+            onClick={disabled ? undefined : onClick}
+            disabled={disabled}
             className={`
                 h-10 w-full rounded flex items-center justify-center gap-2 text-xs font-bold transition-all border-l-4
-                ${isActive ? 'ring-2 ring-white scale-105 shadow-lg' : 'opacity-80 hover:opacity-100'}
+                ${disabled ? 'opacity-40 grayscale cursor-not-allowed' : (isActive ? 'ring-2 ring-white scale-105 shadow-lg' : 'opacity-80 hover:opacity-100')}
                 ${typeConfig?.color || 'bg-neutral-500'}
                 border-white/20 relative group
             `}
-            title={skill.name}
+            title={disabled ? '仅主控角色可放置普攻' : skill.name}
         >
             {icon}
             <span className="hidden xl:inline truncate">{skill.name}</span>

@@ -4,6 +4,7 @@ import { SKILLS } from '../../data/skills';
 import { SKILL_TYPES } from '../../data/skillSchema';
 import { ComboManager } from '../../engine/ComboManager';
 import { FPS } from '../../config/simulation';
+import { getBuffDef } from '../../data/buffs';
 
 /**
  * 获取角色的终结技能量上限
@@ -18,6 +19,7 @@ export const TimelineTrackResolved = ({
     char, 
     actions, 
     uspTimeline = [], // 从模拟器传入的终结技能量变化数据
+    buffIntervals = {}, // 从模拟器传入的 buff 区间数据
     pxPerSec, 
     onRemoveAction, 
     onActionDragStart, 
@@ -36,13 +38,20 @@ export const TimelineTrackResolved = ({
     const HEADER_WIDTH = 100;
     const COLOR_INDICATOR_WIDTH = 4; // 左侧颜色指示条宽度
     
-    // 计算总高度
-    const totalHeight = TOP_PADDING + ULTIMATE_ROW_HEIGHT + ROW_GAP + TACTICAL_CHAIN_ROW_HEIGHT + ROW_GAP + BASIC_ROW_HEIGHT + TOP_PADDING;
-    
     // 各分轴的顶部位置
     const ULTIMATE_TOP = TOP_PADDING;
     const TACTICAL_CHAIN_TOP = ULTIMATE_TOP + ULTIMATE_ROW_HEIGHT + ROW_GAP;
     const BASIC_TOP = TACTICAL_CHAIN_TOP + TACTICAL_CHAIN_ROW_HEIGHT + ROW_GAP;
+    
+    // Buff overlay 区域（额外增加高度，不挤压技能块）
+    const BUFF_ROW_HEIGHT = 10;
+    const BUFF_ROW_GAP = 2;
+    const BUFF_ROWS = 5;
+    const BUFF_AREA_HEIGHT = BUFF_ROWS * BUFF_ROW_HEIGHT + (BUFF_ROWS - 1) * BUFF_ROW_GAP;
+    const BUFF_TOP = BASIC_TOP + BASIC_ROW_HEIGHT + ROW_GAP;
+    
+    // 计算总高度（包含 buff overlay 区域）
+    const totalHeight = TOP_PADDING + ULTIMATE_ROW_HEIGHT + ROW_GAP + TACTICAL_CHAIN_ROW_HEIGHT + ROW_GAP + BASIC_ROW_HEIGHT + ROW_GAP + BUFF_AREA_HEIGHT + TOP_PADDING;
     
     // 获取终结技能量上限
     const uspCost = getCharUspCost(char);
@@ -202,6 +211,12 @@ export const TimelineTrackResolved = ({
                         className="absolute w-full bg-neutral-800/10"
                         style={{ top: `${BASIC_TOP}px`, height: `${BASIC_ROW_HEIGHT}px` }}
                     />
+                    
+                    {/* Buff overlay 背景 */}
+                    <div
+                        className="absolute w-full bg-neutral-950/20 border-t border-neutral-700/20"
+                        style={{ top: `${BUFF_TOP}px`, height: `${BUFF_AREA_HEIGHT}px` }}
+                    />
                 </div>
 
                 {/* 技能时间块 */}
@@ -258,6 +273,138 @@ export const TimelineTrackResolved = ({
                             </div>
                         );
                     });
+                })()}
+                
+                {/* Buff overlay：基于模拟器输出的 buffIntervals */}
+                {(() => {
+                    const enemyId = 'enemy_01';
+                    const sources = [
+                        { targetId: enemyId, label: '敌人' },
+                        { targetId: 'team', label: '全队' },
+                        { targetId: char.id, label: '自身' }
+                    ];
+                    
+                    const segs = [];
+                    sources.forEach(({ targetId, label }) => {
+                        const byBuff = buffIntervals?.[targetId];
+                        if (!byBuff) return;
+                        Object.entries(byBuff).forEach(([buffId, list]) => {
+                            if (!Array.isArray(list)) return;
+                            list.forEach(seg => {
+                                if (!seg) return;
+                                segs.push({
+                                    targetLabel: label,
+                                    targetId,
+                                    buffId,
+                                    start: seg.start,
+                                    end: seg.end,
+                                    stacks: seg.stacks || 1,
+                                    sourceId: seg.sourceId
+                                });
+                            });
+                        });
+                    });
+                    
+                    const rowOf = (buffId) => {
+                        const def = getBuffDef(buffId);
+                        switch (def?.type) {
+                            case 'ATTACHMENT':
+                                return 0;
+                            case 'ANOMALY':
+                                return 1;
+                            case 'PHYSICAL_ANOMALY':
+                            case 'DEBUFF':
+                                return 2;
+                            case 'STUN':
+                                return 3;
+                            case 'NAMED_BUFF':
+                            case 'CHARACTER_BUFF':
+                            default:
+                                return 4;
+                        }
+                    };
+                    
+                    const colorOf = (buffId) => {
+                        const def = getBuffDef(buffId);
+                        const el = String(def?.element || '').toLowerCase();
+                        if (def?.type === 'ATTACHMENT' || def?.type === 'ANOMALY') {
+                            if (el === 'fire') return 'bg-red-500/40 border-red-500/60';
+                            if (el === 'ice') return 'bg-cyan-500/40 border-cyan-500/60';
+                            if (el === 'nature') return 'bg-green-500/40 border-green-500/60';
+                            if (el === 'electric') return 'bg-purple-500/40 border-purple-500/60';
+                            return 'bg-indigo-500/40 border-indigo-500/60';
+                        }
+                        if (def?.type === 'STUN') return 'bg-amber-500/35 border-amber-500/60';
+                        if (def?.type === 'DEBUFF') return 'bg-red-500/25 border-red-500/60';
+                        if (def?.type === 'PHYSICAL_ANOMALY') return 'bg-orange-500/30 border-orange-500/60';
+                        if (def?.type === 'NAMED_BUFF') return 'bg-emerald-500/25 border-emerald-500/60';
+                        return 'bg-slate-500/25 border-slate-500/50';
+                    };
+                    
+                    // refresh 标识：同 targetId+buffId 的相邻片段若首尾相接，画 marker
+                    const markers = [];
+                    const keyToSegs = new Map();
+                    segs.forEach(s => {
+                        const k = `${s.targetId}::${s.buffId}`;
+                        if (!keyToSegs.has(k)) keyToSegs.set(k, []);
+                        keyToSegs.get(k).push(s);
+                    });
+                    keyToSegs.forEach(list => {
+                        list.sort((a, b) => a.start - b.start);
+                        for (let i = 0; i < list.length - 1; i++) {
+                            const a = list[i];
+                            const b = list[i + 1];
+                            if (Math.abs(a.end - b.start) < 1e-6) {
+                                markers.push({ buffId: a.buffId, time: a.end });
+                            }
+                        }
+                    });
+                    
+                    return (
+                        <>
+                            {segs.map((seg, idx) => {
+                                const row = rowOf(seg.buffId);
+                                const top = BUFF_TOP + row * (BUFF_ROW_HEIGHT + BUFF_ROW_GAP);
+                                const left = seg.start * pxPerSec;
+                                const width = Math.max(1, (seg.end - seg.start) * pxPerSec);
+                                const def = getBuffDef(seg.buffId);
+                                const name = def?.name || seg.buffId;
+                                return (
+                                    <div
+                                        key={`buffseg-${seg.targetId}-${seg.buffId}-${idx}`}
+                                        className={`absolute rounded-sm border ${colorOf(seg.buffId)}`}
+                                        style={{
+                                            top: `${top}px`,
+                                            left: `${left}px`,
+                                            width: `${width}px`,
+                                            height: `${BUFF_ROW_HEIGHT}px`,
+                                            pointerEvents: 'none'
+                                        }}
+                                        title={`${seg.targetLabel}：${name} x${seg.stacks} (${seg.start.toFixed(2)}s - ${seg.end.toFixed(2)}s)`}
+                                    />
+                                );
+                            })}
+                            {markers.map((m, idx) => {
+                                const row = rowOf(m.buffId);
+                                const top = BUFF_TOP + row * (BUFF_ROW_HEIGHT + BUFF_ROW_GAP);
+                                const x = m.time * pxPerSec;
+                                return (
+                                    <div
+                                        key={`buffmk-${idx}`}
+                                        className="absolute bg-white/40"
+                                        style={{
+                                            top: `${top}px`,
+                                            left: `${x}px`,
+                                            width: '1px',
+                                            height: `${BUFF_ROW_HEIGHT}px`,
+                                            pointerEvents: 'none'
+                                        }}
+                                        title="刷新/重置"
+                                    />
+                                );
+                            })}
+                        </>
+                    );
                 })()}
             </div>
         </div>

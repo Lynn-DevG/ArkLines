@@ -29,9 +29,9 @@ export const TimelineTrackResolved = ({
 }) => {
     // 分轴高度配置
     const BLOCK_HEIGHT = 24; // 时间块高度保持不变
-    const ULTIMATE_ROW_HEIGHT = 60; // 终结技分轴高度 (原40 * 1.5)
+    const ULTIMATE_ROW_HEIGHT = 48; // 终结技分轴高度 (原40 * 1.5)
     const TACTICAL_CHAIN_ROW_HEIGHT = 48; // 战技+连携共轴高度 (原32 * 1.5)
-    const BASIC_ROW_HEIGHT = 42; // 普攻分轴高度 (原28 * 1.5)
+    const BASIC_ROW_HEIGHT = 32; // 普攻分轴高度 (原28 * 1.5)
     
     const ROW_GAP = 2; // 分轴间距
     const TOP_PADDING = 4;
@@ -44,7 +44,7 @@ export const TimelineTrackResolved = ({
     const BASIC_TOP = TACTICAL_CHAIN_TOP + TACTICAL_CHAIN_ROW_HEIGHT + ROW_GAP;
     
     // Buff overlay 区域（额外增加高度，不挤压技能块）
-    const BUFF_ROW_HEIGHT = 10;
+    const BUFF_ROW_HEIGHT = 2;
     const BUFF_ROW_GAP = 2;
     const BUFF_ROWS = 5;
     const BUFF_AREA_HEIGHT = BUFF_ROWS * BUFF_ROW_HEIGHT + (BUFF_ROWS - 1) * BUFF_ROW_GAP;

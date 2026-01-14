@@ -1,94 +1,92 @@
 import React from 'react';
-import { CHARACTERS } from '../../data/characters';
 import { SKILLS } from '../../data/skills';
-import { SKILL_TYPES } from '../../data/skillSchema';
-import { Zap, Hexagon, Swords, Sparkles } from 'lucide-react';
-import { ConstraintValidator } from '../../engine/ConstraintValidator';
+import { Zap } from 'lucide-react';
+import { CharacterSkillIcons } from './SkillIcon';
 
+/**
+ * 技能面板组件
+ * 显示队伍中每个角色的技能图标
+ * 
+ * 布局：
+ * - 每个角色一行，显示角色名 + 4个技能图标（横向排列）
+ * - 技能顺序：普攻、战技、连携技、终结技
+ */
 export const SkillMatrix = ({ team, selectedTool, onSelectTool, mainCharId }) => {
+    // 获取当前选中的技能ID
+    const selectedSkillId = selectedTool?.skillId;
+
+    // 处理技能选择
+    const handleSelectSkill = (charId, skillId) => {
+        onSelectTool(charId, skillId);
+    };
+
+    // 获取技能名称用于显示
+    const getSkillName = (skillId) => {
+        const skill = SKILLS[skillId];
+        return skill?.name || '';
+    };
+
     return (
-        <div className="h-80 border-b border-neutral-700 bg-neutral-900 p-4 flex flex-col shadow-md z-10 shrink-0">
-            <h2 className="text-lg font-bold flex items-center gap-2 text-neutral-300 mb-2">
+        <div className="border-b border-neutral-700 bg-neutral-900 p-4 flex flex-col shadow-md z-10 shrink-0">
+            <h2 className="text-lg font-bold flex items-center gap-2 text-neutral-300 mb-4">
                 <Zap size={20} /> 技能面板
             </h2>
 
-            <div className="flex-1 flex gap-4 overflow-x-auto custom-scrollbar">
-                {/* Headers */}
-                <div className="flex flex-col justify-start w-16 text-right text-xs font-mono text-neutral-400 shrink-0 pt-3">
-                    <div className="h-6 mb-2"></div> {/* Spacer for Name */}
-                    <div className="h-10 mb-2 flex items-center justify-end">终结技</div>
-                    <div className="h-10 mb-2 flex items-center justify-end">连携技</div>
-                    <div className="h-10 mb-2 flex items-center justify-end">战技</div>
-                    <div className="h-10 mb-2 flex items-center justify-end">普攻</div>
+            <div className="flex flex-col gap-4">
+                {/* 技能类型标签行 - 宽度需要与图标尺寸(size)+间距(gap)匹配 */}
+                <div className="flex items-center gap-2 ml-24">
+                    <div className="w-[64px] text-center text-xs text-neutral-500">普攻</div>
+                    <div className="w-[64px] text-center text-xs text-neutral-500">战技</div>
+                    <div className="w-[64px] text-center text-xs text-neutral-500">连携技</div>
+                    <div className="w-[64px] text-center text-xs text-neutral-500">终结技</div>
                 </div>
 
-                <div className="flex-1 grid grid-cols-4 gap-4 min-w-[600px]">
-                    {team.map((char, idx) => (
-                        <div key={idx} className={`flex flex-col justify-start relative rounded-lg p-2 transition-colors ${char ? 'bg-neutral-800/30' : 'bg-neutral-800/20 border border-neutral-800 border-dashed'}`}>
-                            {char ? (
-                                <>
-                                    <div className="text-center text-xs font-bold text-neutral-300 h-6 mb-2 flex items-center justify-center">{char.name}</div>
-                                    <div className="mb-2"><SkillButton
-                                        charId={char.id}
-                                        skillId={char.skills.ultimate}
-                                        isActive={selectedTool?.skillId === char.skills.ultimate}
-                                        onClick={() => onSelectTool(char.id, char.skills.ultimate)}
-                                        icon={<Sparkles size={14} />}
-                                    /></div>
-                                    <div className="mb-2"><SkillButton
-                                        charId={char.id}
-                                        skillId={char.skills.chain}
-                                        isActive={selectedTool?.skillId === char.skills.chain}
-                                        onClick={() => onSelectTool(char.id, char.skills.chain)}
-                                        icon={<Hexagon size={14} />}
-                                    /></div>
-                                    <div className="mb-2"><SkillButton
-                                        charId={char.id}
-                                        skillId={char.skills.tactical}
-                                        isActive={selectedTool?.skillId === char.skills.tactical}
-                                        onClick={() => onSelectTool(char.id, char.skills.tactical)}
-                                        icon={<Zap size={14} />}
-                                    /></div>
-                                    <div className="mb-2"><SkillButton
-                                        charId={char.id}
-                                        skillId={char.skills.basic}
-                                        isActive={selectedTool?.skillId === char.skills.basic}
-                                        disabled={mainCharId && char.id !== mainCharId}
-                                        onClick={() => onSelectTool(char.id, char.skills.basic)}
-                                        icon={<Swords size={14} />}
-                                    /></div>
-                                </>
-                            ) : (
-                                <div className="text-neutral-600 text-xs text-center mt-10">空位</div>
-                            )}
-                        </div>
-                    ))}
-                </div>
+                {/* 角色技能行 */}
+                {team.map((char, idx) => (
+                    <div 
+                        key={idx} 
+                        className={`
+                            flex items-center gap-4 rounded-lg p-2 transition-colors
+                            ${char ? 'bg-neutral-800/30' : 'bg-neutral-800/20 border border-neutral-800 border-dashed'}
+                        `}
+                    >
+                        {char ? (
+                            <>
+                                {/* 角色名称 */}
+                                <div className="w-20 text-sm font-bold text-neutral-300 text-center shrink-0">
+                                    {char.name}
+                                </div>
+                                
+                                {/* 技能图标组 
+                                    - size: 图标整体尺寸
+                                    - iconScale: 内部图标缩放比例 (0.65 = 65%填充, 1 = 100%填充)
+                                    - gap: 图标间距
+                                */}
+                                <CharacterSkillIcons
+                                    character={char}
+                                    selectedSkillId={selectedSkillId}
+                                    onSelectSkill={handleSelectSkill}
+                                    mainCharId={mainCharId}
+                                    size={64}
+                                    iconScale={0.8}
+                                    gap={8}
+                                />
+
+                                {/* 选中技能名称显示 */}
+                                {selectedTool?.charId === char.id && selectedSkillId && (
+                                    <div className="ml-4 text-sm text-neutral-400 truncate">
+                                        {getSkillName(selectedSkillId)}
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            <div className="text-neutral-600 text-xs text-center flex-1 py-6">
+                                空位 {idx + 1}
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
         </div>
     );
 };
-
-const SkillButton = ({ charId, skillId, isActive, onClick, icon, disabled = false }) => {
-    const skill = SKILLS[skillId];
-    if (!skill) return <div className="h-10 bg-transparent"></div>;
-
-    const typeConfig = SKILL_TYPES[skill.type];
-
-    return (
-        <button
-            onClick={disabled ? undefined : onClick}
-            disabled={disabled}
-            className={`
-                h-10 w-full rounded flex items-center justify-center gap-2 text-xs font-bold transition-all border-l-4
-                ${disabled ? 'opacity-40 grayscale cursor-not-allowed' : (isActive ? 'ring-2 ring-white scale-105 shadow-lg' : 'opacity-80 hover:opacity-100')}
-                ${typeConfig?.color || 'bg-neutral-500'}
-                border-white/20 relative group
-            `}
-            title={disabled ? '仅主控角色可放置普攻' : skill.name}
-        >
-            {icon}
-            <span className="hidden xl:inline truncate">{skill.name}</span>
-        </button>
-    );
-}

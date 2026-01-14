@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { SimulationProvider, useSimulation } from './store/SimulationContext';
 import { MainLayout } from './components/Layout/MainLayout';
-import { CharacterSelector } from './components/Config/CharacterSelector';
-import { SkillMatrix } from './components/Timeline/SkillMatrix';
+import { CharacterSlot } from './components/Config/CharacterSlot';
+// UI重构：使用 CharacterSlot 替换原有的 CharacterSelector 和 SkillMatrix
 import TimelineTrackResolved from './components/Timeline/TimelineTrack';
 import { AtbTrack } from './components/Timeline/AtbTrack';
 import { StatsDashboard } from './components/Stats/StatsDashboard';
@@ -14,7 +14,7 @@ import { Magnetism } from './engine/Magnetism';
 import { formatTimeWithFrames } from './config/simulation';
 
 const AppContent = ({ onOpenEditor }) => {
-    const { team, actions, addAction, removeAction, updateAction, replaceActions, invalidActionIds, invalidConflictActionIds, setInvalidConflictActionIds, uspTimelines, atbTimeline, buffIntervals, mainCharId, autoResolveMode, setAutoResolveMode } = useSimulation();
+    const { team, setTeam, actions, addAction, removeAction, updateAction, replaceActions, invalidActionIds, invalidConflictActionIds, setInvalidConflictActionIds, uspTimelines, atbTimeline, buffIntervals, mainCharId, setMainCharacter, autoResolveMode, setAutoResolveMode } = useSimulation();
     const [selectedTool, setSelectedTool] = useState(null); // { charId, skillId }
     const [dragState, setDragState] = useState(null); // { actionId, startX, initialStartTime }
     const [selectedActionId, setSelectedActionId] = useState(null);
@@ -213,20 +213,37 @@ const AppContent = ({ onOpenEditor }) => {
         <MainLayout
             left={
                 <div className="h-full flex flex-col">
-                    <div className="p-4 border-b border-neutral-700">
-                        <h2 className="text-lg font-bold flex items-center gap-2 text-neutral-300">
-                            <User size={20} /> 队伍配置
+                    <div className="p-3 border-b border-neutral-700">
+                        <h2 className="text-sm font-bold flex items-center gap-2 text-neutral-300">
+                            <User size={16} /> 队伍配置
                         </h2>
                     </div>
-                    <CharacterSelector />
+                    {/* 角色配置槽位 */}
+                    <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
+                        {[0, 1, 2, 3].map(idx => (
+                            <CharacterSlot
+                                key={idx}
+                                slotIndex={idx}
+                                character={team[idx]}
+                                team={team}
+                                actions={actions}
+                                setTeam={setTeam}
+                                replaceActions={replaceActions}
+                                selectedTool={selectedTool}
+                                onSelectTool={(tool) => setSelectedTool(tool)}
+                                mainCharId={mainCharId}
+                                setMainCharacter={setMainCharacter}
+                            />
+                        ))}
+                    </div>
                     {/* 技能编辑器入口 */}
                     {onOpenEditor && (
-                        <div className="mt-auto p-4 border-t border-neutral-700">
+                        <div className="p-3 border-t border-neutral-700">
                             <button
                                 onClick={onOpenEditor}
-                                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 rounded text-sm text-neutral-300 transition-colors"
+                                className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-neutral-800 hover:bg-neutral-700 rounded text-xs text-neutral-300 transition-colors"
                             >
-                                <Wand2 size={16} />
+                                <Wand2 size={14} />
                                 技能数据编辑器
                             </button>
                         </div>
@@ -234,20 +251,8 @@ const AppContent = ({ onOpenEditor }) => {
                 </div>
             }
             center={
-                <>
-                    <SkillMatrix
-                        team={team}
-                        selectedTool={selectedTool}
-                        onSelectTool={(charId, skillId) => {
-                            if (selectedTool?.skillId === skillId) setSelectedTool(null);
-                            else setSelectedTool({ charId, skillId });
-                        }}
-                        mainCharId={mainCharId}
-                        currentSimState={currentSimState}
-                    />
-
-                    {/* Timeline Area */}
-                    <div className="flex-1 relative overflow-hidden flex flex-col bg-neutral-950">
+                <div className="h-full relative overflow-hidden flex flex-col bg-neutral-950">
+                    {/* Timeline Area - 占据整个中间区域 */}
                         {/* Toolbar */}
                         <div className="h-8 bg-neutral-900 border-b border-neutral-800 flex items-center justify-between px-4 text-xs shrink-0">
                             <div className="flex items-center gap-4">
@@ -309,7 +314,7 @@ const AppContent = ({ onOpenEditor }) => {
                                 </div>
 
                                 {/* Tracks */}
-                                <div className="flex flex-col pt-8 pb-4 relative z-10">
+                                <div className="flex flex-col pt-5 pb-4 relative z-10">
                                     {/* 技力轴（ATB） */}
                                     <AtbTrack atbTimeline={atbTimeline} pxPerSec={PX_PER_SEC} />
                                     
@@ -335,8 +340,7 @@ const AppContent = ({ onOpenEditor }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </>
+                </div>
             }
             right={
                 selectedActionId ? (

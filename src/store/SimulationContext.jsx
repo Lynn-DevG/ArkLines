@@ -230,7 +230,8 @@ export const SimulationProvider = ({ children }) => {
         
         const sim = new TimelineSimulator(activeChars, {
             name: '训练假人',
-            stats: { baseDef: 100, baseHp: 10000000, maxPoise: 100, currentPoise: 100 }
+            // currentPoise: 累积的失衡值，初始为 0（当达到 maxPoise 时触发失衡状态）
+            stats: { baseDef: 100, baseHp: 10000000, maxPoise: 100, currentPoise: 0 }
         });
         
         if (nextMain) sim.setMainCharacter(nextMain);
@@ -293,7 +294,9 @@ export const SimulationProvider = ({ children }) => {
         const sum = result.logs.reduce((acc, log) => acc + (log.type === 'DAMAGE' || log.type === 'DOT' ? log.value : 0), 0);
         setTotalDamage(sum);
 
-    }, [actions, simulator, critMode, debugMode, invalidConflictActionIds, invalidMainCharBasicActionIds, mainCharId]);
+    // 注意：不要将 invalidMainCharBasicActionIds 加入依赖数组，
+    // 因为它是在本 useEffect 内部计算和设置的，加入会导致无限循环。
+    }, [actions, simulator, critMode, debugMode, invalidConflictActionIds, mainCharId]);
 
     const addCharacter = (char) => {
         const idx = team.findIndex(c => c === null);
@@ -341,7 +344,7 @@ export const SimulationProvider = ({ children }) => {
             stats: { 
                 baseHp: 1000000,
                 maxPoise: 100,
-                currentPoise: 100
+                currentPoise: 0
             } 
         });
         // We need to inject current actions

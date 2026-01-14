@@ -230,7 +230,10 @@ export const TimelineTrackResolved = ({
 
                         let comboInfo = null;
                         if (skill.type === 'BASIC') {
-                            comboInfo = comboManager.predictNext(action.charId, action.startTime, true);
+                            const pred = comboManager.predictNext(action.charId, action.startTime, true);
+                            // 显式添加 isExecution: false，因为 UI 层无法准确判断处决状态
+                            // 真正的处决判断由模拟器通过 resolvedActionSkills 提供
+                            comboInfo = { ...pred, isExecution: false };
                         }
 
                         // 根据技能类型计算位置

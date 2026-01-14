@@ -202,6 +202,11 @@ export class TimelineSimulator {
 
         this.atb = 200;
         this.characters.forEach(c => this.usp[c.id] = 0);
+        
+        // 重置敌人的失衡值（每次模拟从 0 开始累积）
+        if (this.enemy?.stats) {
+            this.enemy.stats.currentPoise = 0;
+        }
 
         let totalDamage = 0;
         

@@ -364,7 +364,7 @@ export const CharacterSlot = ({
                     team={team}
                     onSelect={handleSelectCharacter}
                     onClose={() => setShowPicker(false)}
-                    position={pickerPosition}
+                    position={popupPosition}
                 />,
                 document.body
             )}

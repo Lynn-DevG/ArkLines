@@ -11,8 +11,8 @@ const CLASS_TYPE_MAP = {
     'Caster': '术师',
     'Vanguard': '先锋',
     'Defender': '重装',
-    'Support': '辅助',
-    'Assault': '突击',
+    'Supporter': '辅助',
+    'Striker': '突击',
 };
 
 /**

@@ -12,8 +12,11 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
     const LAYER_VALUE = 100; // 每层100点
     const LAYER_COUNT = 3;
     
-    const ROW_HEIGHT = 108; // 总高度 (原36 * 3)
-    const LAYER_HEIGHT = ROW_HEIGHT / LAYER_COUNT; // 每层高度
+    const LAYER_HEIGHT = 28; // 每层内容高度（不含边框）
+    const BORDER_WIDTH = 1; // 边框宽度
+    const LAYER_TOTAL_HEIGHT = LAYER_HEIGHT + BORDER_WIDTH * 2; // 每层总高度（含边框）
+    const LAYER_GAP = 2; // 层间距
+    const ROW_HEIGHT = LAYER_TOTAL_HEIGHT * LAYER_COUNT + LAYER_GAP * (LAYER_COUNT - 1); // 总高度
     const HEADER_WIDTH = 100;
     const TOP_PADDING = 4;
     
@@ -39,7 +42,7 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
             const layerMax = (layer + 1) * LAYER_VALUE; // 该层的最大值
             
             const points = [];
-            const layerBottom = LAYER_HEIGHT; // 层内的底部 Y 坐标
+            const layerBottom = LAYER_HEIGHT; // 层内的底部 Y 坐标（内容区域高度）
             
             // 从左下角开始
             points.push(`0,${layerBottom}`);
@@ -150,29 +153,38 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
         >
             {/* 左侧标签 */}
             <div 
-                className="absolute left-0 top-0 bottom-0 bg-neutral-900/80 z-20 flex items-center border-r border-neutral-700"
+                className="absolute left-0 top-0 bottom-0 bg-neutral-900/80 z-20 border-r border-neutral-700"
                 style={{ width: `${HEADER_WIDTH}px` }}
             >
-                <div className="flex-1 flex items-center px-2">
-                    <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-tighter">
+                {/* 技力文字 */}
+                <div className="absolute left-0 top-0 bottom-0 flex items-center px-2">
+                    <span className="text-[10px] font-bold uppercase tracking-tighter" style={{ color: '#ede93e' }}>
                         技力
                     </span>
                 </div>
-                {/* 右侧颜色指示条 */}
+                {/* 右侧颜色指示条 - 绝对定位确保与右侧对齐 */}
                 <div 
-                    className="flex flex-col-reverse"
-                    style={{ width: '4px', paddingTop: `${TOP_PADDING}px`, paddingBottom: `${TOP_PADDING}px` }}
+                    className="absolute right-0 flex flex-col-reverse"
+                    style={{ 
+                        width: '4px', 
+                        top: `${TOP_PADDING}px`,
+                        gap: `${LAYER_GAP}px` 
+                    }}
                 >
                     {/* 三层颜色指示（从下到上） */}
                     {[0, 1, 2].map(layer => (
                         <div 
                             key={layer}
-                            className={`transition-colors duration-200 ${
-                                finalLayerState[layer] 
-                                    ? 'bg-cyan-400' 
-                                    : 'bg-cyan-900/50'
-                            }`}
-                            style={{ height: `${LAYER_HEIGHT}px` }}
+                            className="transition-colors duration-200"
+                            style={{ 
+                                height: `${LAYER_HEIGHT}px`,
+                                backgroundColor: finalLayerState[layer] 
+                                    ? '#ede93e' 
+                                    : 'rgba(255, 255, 255, 0.25)',
+                                border: `${BORDER_WIDTH}px solid rgba(0, 0, 0, 0.8)`,
+                                borderRadius: '1px',
+                                boxSizing: 'content-box'
+                            }}
                         />
                     ))}
                 </div>
@@ -184,50 +196,56 @@ export const AtbTrack = ({ atbTimeline = [], pxPerSec }) => {
                 style={{ left: `${HEADER_WIDTH}px`, paddingTop: `${TOP_PADDING}px`, paddingBottom: `${TOP_PADDING}px` }}
             >
                 {/* 三层背景和填充（从下到上渲染，layer 0 在底部） */}
-                <div className="relative w-full h-full flex flex-col-reverse">
+                <div className="relative w-full flex flex-col-reverse" style={{ gap: `${LAYER_GAP}px` }}>
                     {[0, 1, 2].map(layer => {
                         const layerPath = generateLayerPath[layer];
                         const fullSegments = layerFullSegments[layer];
                         
-                        // 根据层级决定基础颜色深度
-                        const bgOpacity = 0.05 + layer * 0.02;
-                        
                         return (
                             <div 
                                 key={layer}
-                                className="relative border-b border-neutral-700/20 last:border-b-0"
-                                style={{ height: `${LAYER_HEIGHT}px`, backgroundColor: `rgba(6, 182, 212, ${bgOpacity})` }}
+                                className="relative"
+                                style={{ 
+                                    height: `${LAYER_HEIGHT}px`,
+                                    border: `${BORDER_WIDTH}px solid rgba(0, 0, 0, 0.8)`,
+                                    borderRadius: '2px',
+                                    boxSizing: 'content-box',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.6)'
+                                }}
                             >
-                                {/* 基础填充（较暗） */}
+                                {/* 未充满时的进度填充（白色半透明） */}
                                 {layerPath && (
                                     <svg 
-                                        className="absolute inset-0 w-full h-full overflow-visible"
+                                        className="absolute"
+                                        style={{ top: 0, left: 0, width: '100%', height: '100%' }}
+                                        viewBox={`0 0 ${30 * pxPerSec} ${LAYER_HEIGHT}`}
                                         preserveAspectRatio="none"
                                     >
                                         <polygon
                                             points={layerPath}
-                                            fill="rgba(6, 182, 212, 0.2)"
-                                            stroke="rgba(6, 182, 212, 0.3)"
-                                            strokeWidth="1"
+                                            fill="rgba(255, 255, 255, 0.5)"
+                                            stroke="none"
                                         />
                                     </svg>
                                 )}
-                                
-                                {/* 满状态高亮段（更亮） */}
+                                {/* 充满时的高亮填充（纯黄色） */}
                                 {fullSegments.map((seg, idx) => (
                                     <div
                                         key={idx}
-                                        className="absolute top-0 bottom-0 bg-cyan-400/40 border-l border-r border-cyan-400/60"
+                                        className="absolute"
                                         style={{
+                                            top: 0,
+                                            bottom: 0,
                                             left: `${seg.start * pxPerSec}px`,
-                                            width: `${(seg.end - seg.start) * pxPerSec}px`
+                                            width: `${(seg.end - seg.start) * pxPerSec}px`,
+                                            backgroundColor: '#ede93e'
                                         }}
                                     />
                                 ))}
                                 
                                 {/* 层级标签（仅在右侧显示） */}
-                                <div className="absolute right-1 top-0 bottom-0 flex items-center pointer-events-none">
-                                    <span className="text-[8px] text-cyan-600/50">
+                                <div className="absolute right-3 top-0 bottom-0 flex items-center pointer-events-none">
+                                    <span className="text-[8px]" style={{ color: 'rgba(237, 233, 62, 0.6)' }}>
                                         {(layer + 1) * LAYER_VALUE}
                                     </span>
                                 </div>

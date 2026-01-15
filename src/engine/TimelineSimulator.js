@@ -297,7 +297,8 @@ export class TimelineSimulator {
                         const dmg = DamageCalculator.calculateReactionDamage(ev.buff.baseId, { sourceChar }, this.enemy.stats);
                         if (dmg > 0) {
                             const buffName = getBuffDef(ev.buff.baseId)?.name || ev.buff.baseId;
-                            this.logs.push({ time: Number(t.toFixed(2)), type: 'DOT', source: ev.buff.baseId, value: dmg, detail: `${buffName} 持续伤害 ${dmg}` });
+                            const buffElement = getBuffDef(ev.buff.baseId)?.element;
+                            this.logs.push({ time: Number(t.toFixed(2)), type: 'DOT', source: ev.buff.baseId, value: dmg, element: buffElement, detail: `${buffName} 持续伤害 ${dmg}` });
                             totalDamage += dmg;
                             this.enemy.stats.currentHp = Math.max(0, this.enemy.stats.currentHp - dmg);
                         }
@@ -605,19 +606,44 @@ export class TimelineSimulator {
             }
             
             if (res.type === 'REACTION') {
-                const burstDmg = DamageCalculator.calculateReactionDamage('BURST', {
+                const anomalyDef = getBuffDef(res.anomaly);
+                const anomalyName = anomalyDef?.name || res.anomaly;
+                const anomalyDmg = DamageCalculator.calculateReactionDamage(res.anomaly, {
                     sourceChar: char,
                     level: res.level || 1
                 }, this.enemy.stats);
 
+                if (anomalyDmg > 0) {
+                    this.logs.push({
+                        time: Number(time.toFixed(2)),
+                        type: 'REACTION_DAMAGE',
+                        source: char.name,
+                        value: anomalyDmg,
+                        element: anomalyDef?.element,
+                        anomalyId: res.anomaly,
+                        anomalyName,
+                        reactionType: 'ANOMALY',
+                        detail: anomalyName ? `异常伤害(${anomalyName})` : '异常伤害'
+                    });
+                }
+            }
+
+            if (res.burst) {
+                const burstDmg = DamageCalculator.calculateReactionDamage('BURST', {
+                    sourceChar: char,
+                    level: res.burst.level || 1,
+                    element: res.burst.element
+                }, this.enemy.stats);
+
                 if (burstDmg > 0) {
-                    const anomalyName = getBuffDef(res.anomaly)?.name || res.anomaly;
                     this.logs.push({
                         time: Number(time.toFixed(2)),
                         type: 'REACTION_DAMAGE',
                         source: char.name,
                         value: burstDmg,
-                        detail: `反应爆发 (${anomalyName})`
+                        element: res.burst.element,
+                        reactionType: 'BURST',
+                        detail: '同属性附着爆发'
                     });
                 }
             }

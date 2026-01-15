@@ -336,6 +336,7 @@ export class ActionExecutor {
                 skillId: skillId || skillDef?.id,
                 skillType: skillDef?.type,
                 value: damage,
+                element,
                 detail: `造成 ${damage} 伤害 (${element})${logSuffix}`
             });
             
@@ -568,20 +569,48 @@ export class ActionExecutor {
                 });
             }
             
-            // 处理反应结果
+            // 处理反应结果（法术异常）
             if (result?.type === 'REACTION') {
-                const burstDmg = DamageCalculator.calculateReactionDamage('BURST', {
+                const anomalyId = result.anomaly;
+                const anomalyDef = getBuffDef(anomalyId);
+                const anomalyName = anomalyDef?.name || anomalyId;
+                const anomalyDmg = DamageCalculator.calculateReactionDamage(anomalyId, {
                     sourceChar,
                     level: result.level || 1
                 }, this.context.enemy?.stats);
                 
+                if (anomalyDmg > 0) {
+                    onLog?.({
+                        time: Number(currentTime.toFixed(2)),
+                        type: 'REACTION_DAMAGE',
+                        source: sourceChar.name,
+                        value: anomalyDmg,
+                        element: anomalyDef?.element,
+                        anomalyId,
+                        anomalyName,
+                        reactionType: 'ANOMALY',
+                        detail: anomalyName ? `异常伤害(${anomalyName})` : '异常伤害'
+                    });
+                }
+            }
+
+            // 同属性附着爆发
+            if (result?.burst) {
+                const burstDmg = DamageCalculator.calculateReactionDamage('BURST', {
+                    sourceChar,
+                    level: result.burst.level || 1,
+                    element: result.burst.element
+                }, this.context.enemy?.stats);
+
                 if (burstDmg > 0) {
                     onLog?.({
                         time: Number(currentTime.toFixed(2)),
                         type: 'REACTION_DAMAGE',
                         source: sourceChar.name,
                         value: burstDmg,
-                        detail: `反应爆发伤害 ${burstDmg}`
+                        element: result.burst.element,
+                        reactionType: 'BURST',
+                        detail: '同属性附着爆发'
                     });
                 }
             }

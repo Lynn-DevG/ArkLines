@@ -3,11 +3,40 @@ import { useSimulation } from '../../store/SimulationContext';
 import { Activity, Terminal, Bug } from 'lucide-react';
 import { getBuffDef } from '../../data/buffs';
 import { SKILLS } from '../../data/skills';
+import { getElementColor, normalizeElement } from '../../utils/skillIconUtils';
 
 // 获取buff显示名称（优先使用中文名称）
 const getBuffDisplayName = (buffId) => {
     const buffDef = getBuffDef(buffId);
     return buffDef?.name || buffId;
+};
+
+const ELEMENT_LABELS = {
+    physical: '物理',
+    blaze: '灼热',
+    cold: '寒冷',
+    nature: '自然',
+    emag: '电磁'
+};
+
+const getElementLabel = (element) => {
+    const normalized = normalizeElement(element);
+    return ELEMENT_LABELS[normalized] || normalized;
+};
+
+const resolveLogElement = (log) => {
+    if (!log) return null;
+    if (log.element) return log.element;
+    if (log.type === 'DAMAGE' && log.skillId) {
+        return SKILLS?.[log.skillId]?.element;
+    }
+    if (log.type === 'DOT' && log.source) {
+        return getBuffDef(log.source)?.element;
+    }
+    if (log.type === 'REACTION_DAMAGE' && log.anomalyId) {
+        return getBuffDef(log.anomalyId)?.element;
+    }
+    return null;
 };
 
 export const StatsDashboard = () => {
@@ -184,29 +213,71 @@ export const StatsDashboard = () => {
                 </h3>
                 <div className="flex-1 bg-black/50 rounded border border-neutral-800 p-2 overflow-y-auto font-mono text-[10px] leading-relaxed custom-scrollbar">
                     {reversedLogs.length === 0 && <div className="text-neutral-600 italic p-2">准备模拟中...</div>}
-                    {reversedLogs.map((log, i) => (
-                        <div key={i} className="mb-1 border-b border-white/5 pb-1">
-                            <span className="text-neutral-500">[{log.time.toFixed(1)}秒]</span>{' '}
-                            {['DAMAGE', 'DOT', 'REACTION_DAMAGE'].includes(log.type) && (
-                                <>
-                                    <span className="text-neutral-300 font-bold">
-                                        {log.type === 'DOT' ? getBuffDisplayName(log.source) : log.source}
-                                    </span>
-                                    <span className="text-neutral-400"> 造成了 </span>
-                                    <span className={`font-bold ${log.type === 'REACTION_DAMAGE' ? 'text-amber-400 glow' : 'text-white'}`}>
-                                        {log.value}
-                                    </span>
-                                    <span className="text-neutral-500"> {log.detail && `(${log.detail})`}</span>
-                                </>
-                            )}
-                            {log.type === 'STATUS' && (
-                                <span className="text-yellow-500">{log.detail}</span>
-                            )}
-                            {log.type === 'REACTION' && (
-                                <span className="text-red-400 font-bold glow">{log.detail}</span>
-                            )}
-                        </div>
-                    ))}
+                    {reversedLogs.map((log, i) => {
+                        const timeValue = Number(log?.time);
+                        const timeLabel = Number.isFinite(timeValue) ? timeValue.toFixed(1) : '--';
+                        const element = resolveLogElement(log);
+                        const elementLabel = element ? getElementLabel(element) : null;
+                        const elementColor = element ? getElementColor(element) : null;
+                        const isDamageLog = ['DAMAGE', 'DOT', 'REACTION_DAMAGE'].includes(log?.type);
+                        const skillName = log?.skillId ? (SKILLS?.[log.skillId]?.name || log.skillId) : null;
+                        const anomalyName = log?.anomalyName || (log?.anomalyId ? getBuffDisplayName(log.anomalyId) : null);
+                        const reactionName = log?.reactionType === 'BURST' && elementLabel
+                            ? `${elementLabel}爆发`
+                            : anomalyName;
+                        const damageValue = Math.round(log?.value || 0).toLocaleString();
+                        const infoClassName = {
+                            STATUS: 'text-yellow-500',
+                            REACTION: 'text-red-400 font-bold glow',
+                            STAGGER: 'text-amber-400',
+                            STAGGER_ADD: 'text-orange-400',
+                            COMBO_CONSUME: 'text-purple-400',
+                            BUFF_APPLIED: 'text-emerald-400',
+                            BUFF_CONSUMED: 'text-emerald-400',
+                            ATB_GAIN: 'text-sky-400',
+                            USP_GAIN: 'text-yellow-400',
+                            USP_GAIN_TEAM: 'text-yellow-400'
+                        }[log?.type] || 'text-neutral-300';
+
+                        return (
+                            <div key={i} className="mb-1 border-b border-white/5 pb-1">
+                                <span className="text-neutral-500">[{timeLabel}秒]</span>{' '}
+                                {isDamageLog && (
+                                    <>
+                                        <span className="text-neutral-300 font-bold">
+                                            {log.type === 'DOT' ? getBuffDisplayName(log.source) : (log.source || '未知')}
+                                        </span>
+                                        <span className="text-neutral-400">
+                                            {log.type === 'REACTION_DAMAGE' ? ' 触发爆发，造成 ' : ' 造成 '}
+                                        </span>
+                                        <span className={`font-bold ${log.type === 'REACTION_DAMAGE' ? 'text-amber-400 glow' : 'text-white'}`}>
+                                            {damageValue}
+                                        </span>
+                                        <span className="text-neutral-400">
+                                            {log.type === 'DOT' ? ' 持续伤害' : ' 伤害'}
+                                        </span>
+                                        {elementLabel && (
+                                            <span className="ml-1" style={{ color: elementColor }}>
+                                                [{elementLabel}]
+                                            </span>
+                                        )}
+                                        {reactionName && (
+                                            <span className="text-neutral-500 ml-1">({reactionName})</span>
+                                        )}
+                                        {skillName && log.type === 'DAMAGE' && (
+                                            <span className="text-neutral-500 ml-1">[{skillName}]</span>
+                                        )}
+                                    </>
+                                )}
+                                {!isDamageLog && log?.detail && (
+                                    <span className={infoClassName}>{log.detail}</span>
+                                )}
+                                {!isDamageLog && !log?.detail && log?.type && (
+                                    <span className="text-neutral-500">{log.type}</span>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>

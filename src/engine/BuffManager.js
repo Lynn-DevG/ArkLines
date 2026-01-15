@@ -79,6 +79,7 @@ export class BuffManager {
         buffId = resolvedBuffId;
 
         // --- Logic: Elemental Attachments & Reactions ---
+        let burstInfo = null;
         if (buffDef.type === 'ATTACHMENT') {
             const reactionResult = this.checkReaction(targetId, buffDef.element);
             if (reactionResult) {
@@ -93,6 +94,15 @@ export class BuffManager {
                 // Note: We deliberately pass 'anomalyLevel' as 'stacks' or a separate property?
                 // Buff structure uses 'stacks'. For Anomalies, 'stacks' = Level.
                 return this.applyBuff(targetId, reactionResult.anomalyId, sourceId, anomalyLevel);
+            }
+
+            const sameAttachment = this.buffs.find(b => b.targetId === targetId && b.baseId === buffId);
+            if (sameAttachment) {
+                const max = buffDef.maxLayers || 1;
+                burstInfo = {
+                    element: buffDef.element,
+                    level: Math.min(max, (sameAttachment.stacks || 0) + initialStacks)
+                };
             }
         }
 
@@ -124,7 +134,11 @@ export class BuffManager {
                 if (dur > 0) existing.durationRemaining = dur;
             }
 
-            return { type: 'REFRESH', buffId, stacks: existing.stacks };
+            const result = { type: 'REFRESH', buffId, stacks: existing.stacks };
+            if (burstInfo) {
+                result.burst = burstInfo;
+            }
+            return result;
         } else {
             // New Buff
             let dur = durationOverride || buffDef.duration || -1;
@@ -333,13 +347,14 @@ export class BuffManager {
      * Checks if applying 'newElement' causes a reaction on 'targetId'
      */
     checkReaction(targetId, newElement) {
-        // Find existing attachment on target
-        const attachment = this.buffs.find(b => b.targetId === targetId && b.type === 'ATTACHMENT');
+        // Find existing attachment on target with different element
+        const attachment = this.buffs.find(b =>
+            b.targetId === targetId &&
+            b.type === 'ATTACHMENT' &&
+            b.element !== newElement
+        );
 
         if (!attachment) return null;
-
-        // If same element -> No reaction (just stacking, handled by applyBuff)
-        if (attachment.element === newElement) return null;
 
         // Different element -> Trigger Anomaly of the NEW element type
         // (As per design: Non-Fire + Fire = Burn. The NEW element dictates the anomaly)

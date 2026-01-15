@@ -118,8 +118,10 @@ const CHAR_FOLDER_MAP = {
  */
 export function normalizeElement(element) {
     if (!element) return 'physical';
-    const normalized = ELEMENT_NAME_MAP[element];
-    return normalized || element;
+    const raw = String(element);
+    const lower = raw.toLowerCase();
+    const normalized = ELEMENT_NAME_MAP[raw] || ELEMENT_NAME_MAP[lower];
+    return normalized || lower;
 }
 
 /**

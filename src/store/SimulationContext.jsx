@@ -291,7 +291,7 @@ export const SimulationProvider = ({ children }) => {
         setResolvedActionSkills(result.resolvedActionSkills || new Map());
 
         // Sum logs
-        const sum = result.logs.reduce((acc, log) => acc + (log.type === 'DAMAGE' || log.type === 'DOT' ? log.value : 0), 0);
+        const sum = result.logs.reduce((acc, log) => acc + (['DAMAGE', 'DOT', 'REACTION_DAMAGE'].includes(log.type) ? log.value : 0), 0);
         setTotalDamage(sum);
 
     // 注意：不要将 invalidMainCharBasicActionIds 加入依赖数组，

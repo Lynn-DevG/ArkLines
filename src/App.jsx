@@ -359,8 +359,9 @@ const AppContent = ({ onOpenEditor }) => {
 export default function App() {
     const [mode, setMode] = useState('simulator');
 
-    // 检查 URL 参数决定模式
+    // 检查 URL 参数决定模式（仅开发环境允许）
     useEffect(() => {
+        if (!import.meta.env.DEV) return; // 生产环境禁用编辑器模式
         const params = new URLSearchParams(window.location.search);
         const modeParam = params.get('mode');
         if (modeParam === 'editor') {
@@ -380,15 +381,15 @@ export default function App() {
         window.history.pushState({}, '', url);
     };
 
-    // 技能编辑器模式
-    if (mode === 'editor') {
+    // 技能编辑器模式（仅开发环境）
+    if (import.meta.env.DEV && mode === 'editor') {
         return <SkillEditorPage onBack={() => switchMode('simulator')} />;
     }
 
     // 模拟器模式
     return (
         <SimulationProvider>
-            <AppContent onOpenEditor={() => switchMode('editor')} />
+            <AppContent onOpenEditor={import.meta.env.DEV ? () => switchMode('editor') : null} />
         </SimulationProvider>
     );
 }

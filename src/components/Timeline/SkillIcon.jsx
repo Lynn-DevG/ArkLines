@@ -144,7 +144,7 @@ export const SkillIcon = ({
                             style={iconImgStyle}
                             onError={(e) => {
                                 // 图标加载失败时使用默认图标
-                                e.target.src = 'dist/assets/icons/default_icon.png';
+                                e.target.src = '/assets/icons/default_icon.png';
                             }}
                         />
                     </div>

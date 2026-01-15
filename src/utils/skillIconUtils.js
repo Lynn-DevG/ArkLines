@@ -38,17 +38,17 @@ export const ELEMENT_NAME_MAP = {
  * 武器类型到普攻图标的映射
  */
 const WEAPON_ICON_MAP = {
-    'one_handed_sword': 'dist/assets/icons/icon_attack_sword.png',
-    'two_handed_sword': 'dist/assets/icons/icon_attack_claym.png',
-    'caster_unit': 'dist/assets/icons/icon_attack_funnel.png',
-    'polearm': 'dist/assets/icons/icon_attack_lance.png',
-    'handgun': 'dist/assets/icons/icon_attack_pistol.png',
+    'one_handed_sword': '/assets/icons/icon_attack_sword.png',
+    'two_handed_sword': '/assets/icons/icon_attack_claym.png',
+    'caster_unit': '/assets/icons/icon_attack_funnel.png',
+    'polearm': '/assets/icons/icon_attack_lance.png',
+    'handgun': '/assets/icons/icon_attack_pistol.png',
     // 中文武器名映射
-    '单手剑': 'dist/assets/icons/icon_attack_sword.png',
-    '双手剑': 'dist/assets/icons/icon_attack_claym.png',
-    '施术单元': 'dist/assets/icons/icon_attack_funnel.png',
-    '长柄武器': 'dist/assets/icons/icon_attack_lance.png',
-    '手铳': 'dist/assets/icons/icon_attack_pistol.png',
+    '单手剑': '/assets/icons/icon_attack_sword.png',
+    '双手剑': '/assets/icons/icon_attack_claym.png',
+    '施术单元': '/assets/icons/icon_attack_funnel.png',
+    '长柄武器': '/assets/icons/icon_attack_lance.png',
+    '手铳': '/assets/icons/icon_attack_pistol.png',
 };
 
 /**
@@ -140,7 +140,7 @@ export function getElementColor(element) {
  * @returns {string} 图标路径
  */
 export function getBasicAttackIcon(weaponType) {
-    return WEAPON_ICON_MAP[weaponType] || 'dist/assets/icons/default_icon.png';
+    return WEAPON_ICON_MAP[weaponType] || '/assets/icons/default_icon.png';
 }
 
 /**
@@ -201,10 +201,10 @@ export function getSkillIcon(charId, skillType, weaponType = null, nameEn = null
 
     const iconName = iconNameMap[skillType];
     if (!iconName) {
-        return 'dist/assets/icons/default_icon.png';
+        return '/assets/icons/default_icon.png';
     }
 
-    return `dist/assets/avatars/${folderName}/${iconName}`;
+    return `/assets/avatars/${folderName}/${iconName}`;
 }
 
 /**
@@ -237,5 +237,5 @@ export const SKILL_TYPE_CONFIG = {
  */
 export function getCharacterAvatar(charId, nameEn = null) {
     const folderName = getCharFolderName(charId, nameEn);
-    return `dist/assets/avatars/${folderName}/${folderName}.png`;
+    return `/assets/avatars/${folderName}/${folderName}.png`;
 }

@@ -188,22 +188,26 @@ export const StatsDashboard = () => {
                     </div>
                 </div>
                 
-                {/* 调试模式开关 */}
-                <button
-                    onClick={() => setDebugMode(!debugMode)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded text-xs transition-all w-full justify-center ${
-                        debugMode 
-                            ? 'bg-amber-500/20 border border-amber-500/50 text-amber-400' 
-                            : 'bg-neutral-800 border border-neutral-700 text-neutral-500 hover:text-neutral-300'
-                    }`}
-                >
-                    <Bug size={14} />
-                    <span>{debugMode ? '调试模式已开启' : '开启调试模式'}</span>
-                </button>
-                {debugMode && (
-                    <div className="text-[10px] text-amber-500/70 text-center">
-                        伤害计算详情将打印到浏览器控制台 (F12)
-                    </div>
+                {/* 调试模式开关（仅开发环境显示） */}
+                {import.meta.env.DEV && (
+                    <>
+                        <button
+                            onClick={() => setDebugMode(!debugMode)}
+                            className={`flex items-center gap-2 px-3 py-2 rounded text-xs transition-all w-full justify-center ${
+                                debugMode 
+                                    ? 'bg-amber-500/20 border border-amber-500/50 text-amber-400' 
+                                    : 'bg-neutral-800 border border-neutral-700 text-neutral-500 hover:text-neutral-300'
+                            }`}
+                        >
+                            <Bug size={14} />
+                            <span>{debugMode ? '调试模式已开启' : '开启调试模式'}</span>
+                        </button>
+                        {debugMode && (
+                            <div className="text-[10px] text-amber-500/70 text-center">
+                                伤害计算详情将打印到浏览器控制台 (F12)
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
 

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { SKILLS } from '../../data/skills';
 import { SKILL_TYPES } from '../../data/skillSchema';
 import { BUFFS, getBuffDef } from '../../data/buffs';
@@ -6,13 +6,7 @@ import { X } from 'lucide-react';
 import { useSimulation } from '../../store/SimulationContext';
 import { resolveVariantForTimeline } from '../../engine/VariantResolver';
 
-// 拖拽阈值：鼠标移动超过这个距离才算拖拽
-const DRAG_THRESHOLD = 5;
-
 export const TimelineBlock = ({ action, pxPerSec, onRemove, onDragStart, comboInfo, onActionClick, isInvalid }) => {
-    // 用于区分拖拽和点击的状态
-    const dragStartPos = useRef(null);
-    const isDragging = useRef(false);
     const { getResolvedSkill, getActionSkillLevel, actions, resolvedActionSkills } = useSimulation();
     
     // 获取角色的技能等级
@@ -69,45 +63,12 @@ export const TimelineBlock = ({ action, pxPerSec, onRemove, onDragStart, comboIn
             }}
             onMouseDown={(e) => {
                 e.stopPropagation();
-                // 记录按下位置，用于判断是否为拖拽
-                dragStartPos.current = { x: e.clientX, y: e.clientY };
-                isDragging.current = false;
-                
-                // 添加 mousemove 监听来检测是否开始拖拽
-                const handleMouseMove = (moveEvent) => {
-                    if (!dragStartPos.current) return;
-                    const dx = moveEvent.clientX - dragStartPos.current.x;
-                    const dy = moveEvent.clientY - dragStartPos.current.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance > DRAG_THRESHOLD && !isDragging.current) {
-                        isDragging.current = true;
-                        onDragStart(e, action);
-                    }
-                };
-                
-                const handleMouseUp = () => {
-                    document.removeEventListener('mousemove', handleMouseMove);
-                    document.removeEventListener('mouseup', handleMouseUp);
-                    
-                    // 延迟重置，让 onClick 能读取到正确的状态
-                    setTimeout(() => {
-                        dragStartPos.current = null;
-                    }, 0);
-                };
-                
-                document.addEventListener('mousemove', handleMouseMove);
-                document.addEventListener('mouseup', handleMouseUp);
+                // 立即开始拖拽，无需死区检测
+                onDragStart(e, action);
             }}
-            onClick={(e) => {
-                e.stopPropagation(); // 阻止冒泡到时间轴，防止触发放置逻辑
-                
-                // 如果发生了拖拽，不触发点击事件
-                if (isDragging.current) {
-                    isDragging.current = false;
-                    return;
-                }
-                
+            onDoubleClick={(e) => {
+                e.stopPropagation();
+                // 双击打开技能详情
                 if (onActionClick) onActionClick(e, action);
             }}
             title={`${skillDef.name} ${comboInfo ? '(连击 ' + comboInfo.step + ')' : ''}`}

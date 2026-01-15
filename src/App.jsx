@@ -21,11 +21,16 @@ const AppContent = ({ onOpenEditor }) => {
     const [zoom, setZoom] = useState(1);
     const [conflictingActionIds, setConflictingActionIds] = useState(new Set());
     const timelineRef = useRef(null);
+    
+    // 用于追踪"刚刚结束了拖拽"的状态，阻断 click 事件触发放置
+    const justFinishedDragRef = useRef(false);
 
     const PX_PER_SEC = 120 * zoom;
     const TRACK_HEADER_WIDTH = 100;
 
     const handleActionDragStart = (e, action) => {
+        // 标记开始拖拽，阻断本次 click 事件的放置行为
+        justFinishedDragRef.current = true;
         setDragState({
             actionId: action.id,
             startX: e.clientX,
@@ -109,11 +114,22 @@ const AppContent = ({ onOpenEditor }) => {
             }
             setDragState(null);
             setConflictingActionIds(new Set());
+            
+            // 延迟清除拖拽标记，让 click 事件能检测到
+            // click 事件在 mouseup 之后触发，所以需要异步清除
+            setTimeout(() => {
+                justFinishedDragRef.current = false;
+            }, 0);
         }
     };
 
     const handleTimelineClick = (e) => {
+        // 如果正在拖拽或刚刚结束拖拽，阻断放置行为
         if (dragState) return;
+        if (justFinishedDragRef.current) {
+            justFinishedDragRef.current = false;
+            return;
+        }
         if (!selectedTool || !timelineRef.current) return;
         
         // 普攻仅允许主控角色放置（兜底保护，UI层也会禁用）
@@ -301,6 +317,13 @@ const AppContent = ({ onOpenEditor }) => {
                             onMouseMove={handleTimelineHover}
                             onMouseUp={handleTimelineMouseUp}
                             onMouseLeave={handleTimelineMouseUp}
+                            onWheel={(e) => {
+                                // 将鼠标滚轮的纵向滚动转换为横向滚动
+                                if (timelineRef.current && e.deltaY !== 0) {
+                                    e.preventDefault();
+                                    timelineRef.current.scrollLeft += e.deltaY;
+                                }
+                            }}
                         >
                             <div style={{ width: `${30 * PX_PER_SEC + TRACK_HEADER_WIDTH}px`, minHeight: '100%' }} className="relative flex flex-col">
                                 {/* Time Grid */}

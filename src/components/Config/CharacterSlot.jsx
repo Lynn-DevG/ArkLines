@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Plus, Edit2, RefreshCw, Crown } from 'lucide-react';
 // 使用 Portal 将弹出窗口渲染到 body 层级，避免被父容器遮挡
@@ -100,8 +100,8 @@ const CharacterEditorPopup = ({ charId, onClose, position = { top: 100, left: 32
     const popupRef = useRef(null);
     const [adjustedPosition, setAdjustedPosition] = useState(position);
 
-    // 调整位置确保不超出屏幕
-    useEffect(() => {
+    // 计算并调整位置的函数
+    const adjustPosition = useCallback(() => {
         if (popupRef.current) {
             const rect = popupRef.current.getBoundingClientRect();
             const windowWidth = window.innerWidth;
@@ -125,9 +125,34 @@ const CharacterEditorPopup = ({ charId, onClose, position = { top: 100, left: 32
                 newTop = 16;
             }
             
-            setAdjustedPosition({ top: newTop, left: newLeft });
+            setAdjustedPosition(prev => {
+                if (prev.top !== newTop || prev.left !== newLeft) {
+                    return { top: newTop, left: newLeft };
+                }
+                return prev;
+            });
         }
     }, [position]);
+
+    // 初始位置调整
+    useEffect(() => {
+        adjustPosition();
+    }, [adjustPosition]);
+
+    // 监听弹出框尺寸变化，动态调整位置
+    useEffect(() => {
+        if (!popupRef.current) return;
+        
+        const resizeObserver = new ResizeObserver(() => {
+            adjustPosition();
+        });
+        
+        resizeObserver.observe(popupRef.current);
+        
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, [adjustPosition]);
 
     return (
         <>
@@ -136,24 +161,21 @@ const CharacterEditorPopup = ({ charId, onClose, position = { top: 100, left: 32
                 className="fixed inset-0 z-[9997] bg-black/20"
                 onClick={onClose}
             />
-            {/* 弹出框 */}
+            {/* 弹出框 - 高度自适应内容，最大不超过屏幕高度 */}
             <div 
                 ref={popupRef}
-                className="fixed w-80 bg-neutral-900 border border-neutral-700 rounded-lg shadow-2xl z-[9998] overflow-hidden"
+                className="fixed w-80 bg-neutral-900 border border-neutral-700 rounded-lg shadow-2xl z-[9998] overflow-hidden flex flex-col"
                 style={{ 
                     top: `${adjustedPosition.top}px`, 
                     left: `${adjustedPosition.left}px`,
-                    height: 'min(680px, calc(100vh - 32px))'
+                    maxHeight: 'calc(100vh - 32px)'
                 }}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* 内部容器 - 使用 relative 覆盖 CharacterEditor 的 absolute 定位 */}
-                <div className="relative w-full h-full">
-                    <CharacterEditor 
-                        charId={charId} 
-                        onClose={onClose} 
-                    />
-                </div>
+                <CharacterEditor 
+                    charId={charId} 
+                    onClose={onClose} 
+                />
             </div>
         </>
     );

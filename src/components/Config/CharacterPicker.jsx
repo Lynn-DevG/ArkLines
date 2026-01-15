@@ -66,7 +66,7 @@ const FilterDropdown = ({ label, value, options, onChange }) => {
             </button>
             
             {isOpen && (
-                <div className="absolute top-full left-0 mt-1 w-32 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-10 max-h-48 overflow-y-auto">
+                <div className="absolute top-full left-0 mt-1 w-32 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-10 max-h-48 overflow-y-auto custom-scrollbar">
                     {options.map(opt => (
                         <button
                             key={opt.value}
@@ -270,7 +270,7 @@ export const CharacterPicker = ({ team, onSelect, onClose, position = { top: 100
             </div>
 
             {/* 角色列表 */}
-            <div className="overflow-y-auto p-1" style={{ maxHeight: '340px' }}>
+            <div className="overflow-y-auto p-1 custom-scrollbar" style={{ maxHeight: '340px' }}>
                 {filteredCharacters.length === 0 ? (
                     <div className="p-4 text-center text-neutral-500 text-xs">
                         没有符合条件的角色

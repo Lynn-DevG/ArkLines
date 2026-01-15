@@ -2,6 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== 自定义滚动条样式 ===== */
+
+/* Webkit 浏览器 (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(115, 115, 115, 0.4);
+  border-radius: 3px;
+  transition: background-color 0.25s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ffff21;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:active {
+  background: #e6e61e;
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(115, 115, 115, 0.4) transparent;
+}
+
+.custom-scrollbar:hover {
+  scrollbar-color: #ffff21 transparent;
+}
+
+/* 全局滚动条（可选，为整个页面生效） */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(0 0% 8%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 100, 100, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 140, 140, 0.6);
+}
+
+::-webkit-scrollbar-corner {
+  background: hsl(0 0% 8%);
+}
+
 @layer base {
   :root {
     --background: 0 0% 4%;

@@ -118,9 +118,11 @@ function matchCondition(cond, context) {
  * - actionType: 'cast_skill' | 'deal_damage' 等
  * - timeWindow: 时间窗口（秒），默认4秒
  * - target: 检查目标，默认 'self'
- * - params: { skillType, skillId, variantType } 等额外参数
+ * - params: { skillType, skillId, variantType, isHeavy } 等额外参数
  * 
  * 兼容旧格式：skillId, skillType, within
+ * 
+ * 注意：deal_damage 类型会计算实际伤害时间（startTime + damage.offset）
  */
 function checkActionHistory(cond, action, allActions) {
     // 统一参数格式，兼容旧格式
@@ -133,25 +135,20 @@ function checkActionHistory(cond, action, allActions) {
     const skillId = params.skillId || cond.skillId;
     const skillType = params.skillType || cond.skillType;
     const variantType = params.variantType;
+    const isHeavy = params.isHeavy;
     
-    // 仅支持 cast_skill 类型在编辑阶段检查
-    if (actionType !== 'cast_skill') {
+    // 支持 cast_skill 和 deal_damage 类型
+    if (actionType !== 'cast_skill' && actionType !== 'deal_damage') {
         return false;
     }
     
-    // 解析检查目标
-    const targetCharIds = resolveTargetCharIds(target, action.charId, allActions);
+    // 解析检查目标（传递当前action时间用于main_char推断）
+    const targetCharIds = resolveTargetCharIds(target, action.charId, allActions, action.startTime);
     
     // 查找是否在指定时间内使用过目标技能
     return allActions.some(a => {
         // 检查目标角色
         if (!targetCharIds.includes(a.charId)) return false;
-        
-        // 必须在当前 action 之前
-        if (a.startTime >= action.startTime) return false;
-        
-        // 检查时间窗口
-        if ((action.startTime - a.startTime) > timeWindow) return false;
         
         const aSkill = SKILLS[a.skillId];
         if (!aSkill) return false;
@@ -162,13 +159,39 @@ function checkActionHistory(cond, action, allActions) {
         // 检查技能类型
         if (skillType && aSkill.type !== skillType) return false;
         
+        // 解析该 action 对应的变体（用于 variantType 和 isHeavy 检查）
+        const resolvedSkill = resolveVariantForTimeline(a, allActions);
+        
         // 检查变体类型
         if (variantType) {
-            // 需要解析该 action 对应的变体
-            const resolvedSkill = resolveVariantForTimeline(a, allActions);
             const matchedVariantType = resolvedSkill?.variantType;
             if (matchedVariantType !== variantType) return false;
         }
+        
+        // 检查是否为重击（isHeavy 参数）
+        // 重击通过 variantType === 'heavy' 来判断
+        if (isHeavy !== undefined) {
+            const isHeavyAction = resolvedSkill?.variantType === 'heavy';
+            if (isHeavy !== isHeavyAction) return false;
+        }
+        
+        // 计算事件发生的时间
+        let eventTime = a.startTime;
+        
+        if (actionType === 'deal_damage') {
+            // deal_damage: 使用第一个 damage action 的 offset 作为伤害时间
+            const actions = resolvedSkill?.actions || [];
+            const damageAction = actions.find(act => act.type === 'damage');
+            if (damageAction) {
+                eventTime = a.startTime + (damageAction.offset || 0);
+            }
+        }
+        
+        // 检查时间窗口：连携技释放时间必须在事件发生之后
+        if (action.startTime < eventTime) return false;
+        
+        // 检查时间窗口：连携技释放时间必须在事件发生后的 timeWindow 内
+        if ((action.startTime - eventTime) > timeWindow) return false;
         
         return true;
     });
@@ -188,8 +211,13 @@ export function checkActionHistoryCondition(cond, action, allActions) {
 
 /**
  * 解析检查目标角色ID列表
+ * 
+ * @param {string} target - 目标类型
+ * @param {string} sourceCharId - 来源角色ID
+ * @param {Array} allActions - 所有已放置的 actions
+ * @param {number} [beforeTime] - 可选，用于 main_char 推断时的时间点
  */
-function resolveTargetCharIds(target, sourceCharId, allActions) {
+function resolveTargetCharIds(target, sourceCharId, allActions, beforeTime = Infinity) {
     // 获取所有角色ID
     const allCharIds = [...new Set(allActions.map(a => a.charId))];
     
@@ -202,6 +230,22 @@ function resolveTargetCharIds(target, sourceCharId, allActions) {
         case 'other_ally':
             // 其它队友（不包括自身）
             return allCharIds.filter(id => id !== sourceCharId);
+        case 'main_char':
+            // 在编辑阶段，通过检查普攻来推断主控角色
+            // 找到在 beforeTime 之前最近一次普攻的角色
+            const basicActions = allActions
+                .filter(a => {
+                    const skill = SKILLS[a.skillId];
+                    return skill?.type === 'BASIC' && a.startTime < beforeTime;
+                })
+                .sort((a, b) => b.startTime - a.startTime);
+            
+            if (basicActions.length > 0) {
+                // 返回最近释放普攻的角色
+                return [basicActions[0].charId];
+            }
+            // 如果没有普攻记录，返回所有角色（乐观匹配）
+            return allCharIds;
         default:
             return allCharIds;
     }

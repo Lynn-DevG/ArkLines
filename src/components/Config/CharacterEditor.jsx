@@ -196,9 +196,9 @@ export const CharacterEditor = ({ charId, onClose }) => {
     };
 
     return (
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col bg-neutral-900 absolute inset-0 z-10">
-            {/* 标题栏 */}
-            <div className="flex items-center justify-between mb-3 border-b border-neutral-700 pb-2">
+        <div className="flex flex-col bg-neutral-900 max-h-full">
+            {/* 标题栏 - 固定在顶部 */}
+            <div className="flex items-center justify-between p-4 pb-2 border-b border-neutral-700 shrink-0">
                 <button onClick={onClose} className="text-neutral-400 hover:text-white flex items-center text-xs">
                     <ChevronLeft size={16} /> 返回
                 </button>
@@ -208,7 +208,8 @@ export const CharacterEditor = ({ charId, onClose }) => {
                 </button>
             </div>
 
-            <div className="space-y-3">
+            {/* 内容区域 - 自适应高度，超出时可滚动 */}
+            <div className="flex-1 overflow-y-auto p-4 pt-3 space-y-3 custom-scrollbar">
                 {/* ===== 第一部分：角色等级和属性 ===== */}
                 <div className="bg-neutral-800/30 rounded-lg p-3">
                     {/* 等级控制 */}
@@ -313,7 +314,7 @@ export const CharacterEditor = ({ charId, onClose }) => {
                         </button>
                         
                         {weaponDropdownOpen && (
-                            <div className="absolute top-full left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-20 max-h-40 overflow-y-auto">
+                            <div className="absolute top-full left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-20 max-h-40 overflow-y-auto custom-scrollbar">
                                 <button
                                     onClick={() => handleWeaponSelect(null)}
                                     className="w-full p-2 text-left text-xs text-neutral-500 hover:bg-neutral-700"

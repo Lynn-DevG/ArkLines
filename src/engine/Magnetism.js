@@ -3,6 +3,7 @@
  * Handles snapping skills to valid lots and resolving overlaps.
  */
 import { getResolvedDuration } from './VariantResolver.js';
+import { FPS } from '../config/simulation.js';
 
 export class Magnetism {
 
@@ -11,7 +12,7 @@ export class Magnetism {
         // Snap to: 
         // 1. End of other skills on same track (Char)
         // 2. Head of other skills (Shift logic? no, just simple snap for now)
-        // 3. Grid (0.1s?)
+        // 3. Grid (1 frame)
 
         const thresholdSec = thresholdPx / pxPerSec;
         const proposedStart = newAction.startTime;
@@ -19,8 +20,8 @@ export class Magnetism {
         let bestSnap = proposedStart;
         let minDiff = Infinity;
 
-        // 1. Grid Snap (0.1s)
-        const gridSnap = Math.round(proposedStart * 10) / 10;
+        // 1. Grid Snap (1 frame = 1/FPS seconds)
+        const gridSnap = Math.round(proposedStart * FPS) / FPS;
         if (Math.abs(gridSnap - proposedStart) < thresholdSec) {
             bestSnap = gridSnap;
             minDiff = Math.abs(gridSnap - proposedStart);
@@ -90,7 +91,8 @@ export class Magnetism {
             if (cEnd > maxEnd) maxEnd = cEnd;
         });
 
-        return maxEnd;
+        // Snap to frame boundary
+        return Math.round(maxEnd * FPS) / FPS;
     }
     
     /**
@@ -142,7 +144,8 @@ export class Magnetism {
             const prevEnd = prev.startTime + getResolvedDuration(prev, track);
             const curDur = getResolvedDuration(a, track);
             if (a.startTime < prevEnd - 1e-6) {
-                a.startTime = prevEnd;
+                // Snap pushed time to frame boundary
+                a.startTime = Math.round(prevEnd * FPS) / FPS;
             }
             prev = a;
         }

@@ -11,6 +11,7 @@ export class BuffManager {
 
     /**
      * Ticks all buffs by delta time. Returns events (expired, dots, etc).
+     * 过期事件包含详细的 buff 信息用于记录 BUFF_EXPIRED 历史
      */
     tick(deltaTime) {
         const events = [];
@@ -50,9 +51,20 @@ export class BuffManager {
             }
         });
 
-        // Filter expired
+        // Filter expired - 为每个过期的 buff 生成独立事件
         const expired = this.buffs.filter(b => b.durationRemaining <= 0 && b.durationRemaining !== -1);
         if (expired.length > 0) {
+            // 为每个过期 buff 生成 BUFF_EXPIRED 事件
+            expired.forEach(b => {
+                events.push({
+                    type: 'BUFF_EXPIRED',
+                    buffId: b.baseId,
+                    targetId: b.targetId,
+                    sourceId: b.sourceId,
+                    stacks: b.stacks  // 过期时的层数
+                });
+            });
+            // 保持旧格式兼容
             events.push({ type: 'EXPIRED', buffs: expired });
         }
 
@@ -66,6 +78,13 @@ export class BuffManager {
      * Handles Logic: 
      *  - Stacking (Add stack, refresh duration)
      *  - Elemental Interaction (Trigger Anomaly, Clear Attachment)
+     * 
+     * 返回结果包含：
+     * - type: 'APPLIED' | 'REFRESH' | 'REACTION'
+     * - wasNew: boolean - 是否为新添加（之前没有该buff）
+     * - prevStacks: number - 施加前的层数（0表示新添加）
+     * - newStacks: number - 施加后的层数
+     * - consumedBuff: Object - 反应消耗的附着信息（仅反应时）
      */
     applyBuff(targetId, buffId, sourceId, initialStacks = 1, durationOverride = null) {
         // 解析别名，获取标准化的 buff ID
@@ -83,6 +102,15 @@ export class BuffManager {
         if (buffDef.type === 'ATTACHMENT') {
             const reactionResult = this.checkReaction(targetId, buffDef.element);
             if (reactionResult) {
+                // 记录被消耗的附着信息
+                const consumedBuff = {
+                    buffId: reactionResult.consumedBuff.baseId,
+                    stacks: reactionResult.consumedBuff.stacks,
+                    targetId,
+                    sourceId,
+                    remainingStacks: 0  // 反应消耗后剩余为0
+                };
+                
                 // 1. Consume existing attachment
                 this.removeBuff(targetId, reactionResult.consumedBuff.instanceId);
 
@@ -91,9 +119,13 @@ export class BuffManager {
                 const anomalyLevel = reactionResult.consumedBuff.stacks;
 
                 // 3. Apply Anomaly
-                // Note: We deliberately pass 'anomalyLevel' as 'stacks' or a separate property?
-                // Buff structure uses 'stacks'. For Anomalies, 'stacks' = Level.
-                return this.applyBuff(targetId, reactionResult.anomalyId, sourceId, anomalyLevel);
+                const anomalyResult = this.applyBuff(targetId, reactionResult.anomalyId, sourceId, anomalyLevel);
+                
+                // 返回结果中包含被消耗的附着信息
+                return {
+                    ...anomalyResult,
+                    consumedBuff  // 用于记录消耗历史
+                };
             }
 
             const sameAttachment = this.buffs.find(b => b.targetId === targetId && b.baseId === buffId);
@@ -110,6 +142,9 @@ export class BuffManager {
         const existing = this.buffs.find(b => b.targetId === targetId && b.baseId === buffId);
 
         if (existing) {
+            // 记录施加前的层数
+            const prevStacks = existing.stacks;
+            
             // Stack logic
             const max = buffDef.maxLayers || 1;
             // For Anomalies, do we stack levels? 
@@ -134,7 +169,14 @@ export class BuffManager {
                 if (dur > 0) existing.durationRemaining = dur;
             }
 
-            const result = { type: 'REFRESH', buffId, stacks: existing.stacks };
+            const result = { 
+                type: 'REFRESH', 
+                buffId, 
+                stacks: existing.stacks,
+                wasNew: false,
+                prevStacks,
+                newStacks: existing.stacks
+            };
             if (burstInfo) {
                 result.burst = burstInfo;
             }
@@ -172,9 +214,22 @@ export class BuffManager {
 
             // Return 'reaction' event type if this WAS an anomaly application (from recursive call)
             if (buffDef.type === 'ANOMALY') {
-                return { type: 'REACTION', anomaly: buffId, level: initialStacks };
+                return { 
+                    type: 'REACTION', 
+                    anomaly: buffId, 
+                    level: initialStacks,
+                    wasNew: true,
+                    prevStacks: 0,
+                    newStacks: initialStacks
+                };
             }
-            return { type: 'APPLIED', buffId };
+            return { 
+                type: 'APPLIED', 
+                buffId,
+                wasNew: true,
+                prevStacks: 0,
+                newStacks: initialStacks
+            };
         }
     }
 
@@ -221,13 +276,14 @@ export class BuffManager {
 
     /**
      * Triggers a specific Physical Anomaly effect using existing Break stacks.
+     * 返回结果包含 consumedBreak 信息用于记录消耗历史
      */
     triggerPhysicalAnomaly(targetId, anomalyType, sourceId) {
         const breakBuff = this.buffs.find(b => b.targetId === targetId && b.baseId === 'status_break');
         if (!breakBuff) {
             // Apply Break 1 layer
-            this.applyBuff(targetId, 'status_break', sourceId, 1);
-            return { type: 'APPLIED_BREAK' };
+            const applyResult = this.applyBuff(targetId, 'status_break', sourceId, 1);
+            return { type: 'APPLIED_BREAK', applyResult };
         }
 
         const layers = breakBuff.stacks;
@@ -237,21 +293,45 @@ export class BuffManager {
         if (anomalyType === 'SLAM') {
             // Consume all
             this.removeBuff(targetId, breakBuff.instanceId);
-            result = { type: 'SLAM', consumedLayers: layers };
+            result = { 
+                type: 'SLAM', 
+                consumedLayers: layers,
+                // 消耗破防的信息，用于记录历史
+                consumedBreak: {
+                    buffId: 'status_break',
+                    targetId,
+                    sourceId,
+                    prevStacks: layers,
+                    consumedStacks: layers,
+                    remainingStacks: 0
+                }
+            };
         }
         // 2. Sunder (碎甲)
         else if (anomalyType === 'SUNDER') {
             // Consume all -> Apply Status Sunder
             this.removeBuff(targetId, breakBuff.instanceId);
             this.applyBuff(targetId, 'status_sunder', sourceId, layers); // Pass layers to determine effect value
-            result = { type: 'SUNDER', consumedLayers: layers };
+            result = { 
+                type: 'SUNDER', 
+                consumedLayers: layers,
+                // 消耗破防的信息，用于记录历史
+                consumedBreak: {
+                    buffId: 'status_break',
+                    targetId,
+                    sourceId,
+                    prevStacks: layers,
+                    consumedStacks: layers,
+                    remainingStacks: 0
+                }
+            };
         }
         // 3. Launch (击飞/倒地)
         else if (anomalyType === 'LAUNCH') {
             // Stack +1 Break
-            this.applyBuff(targetId, 'status_break', sourceId, 1);
+            const applyResult = this.applyBuff(targetId, 'status_break', sourceId, 1);
             // Return event for extra damage calc
-            result = { type: 'LAUNCH' };
+            result = { type: 'LAUNCH', applyResult };
         }
 
         return result;
@@ -267,7 +347,7 @@ export class BuffManager {
      * @param {string} buffId - buff ID
      * @param {number} stacks - 消耗层数
      * @param {string} consumerId - 消耗者ID（用于记录）
-     * @returns {Object|null} 消耗结果
+     * @returns {Object|null} 消耗结果，包含 prevStacks/remainingStacks 用于判定"消耗完"
      */
     consumeBuff(targetId, buffId, stacks = 1, consumerId = null) {
         const resolvedBuffId = resolveBuffId(buffId);
@@ -277,6 +357,7 @@ export class BuffManager {
             return null;
         }
         
+        const prevStacks = buff.stacks;  // 消耗前的层数
         const consumedStacks = Math.min(stacks, buff.stacks);
         const remainingStacks = buff.stacks - consumedStacks;
         
@@ -291,8 +372,9 @@ export class BuffManager {
         return {
             type: 'BUFF_CONSUMED',
             buffId: resolvedBuffId,
-            consumedStacks,
-            remainingStacks,
+            prevStacks,        // 消耗前层数
+            consumedStacks,    // 本次消耗的层数
+            remainingStacks,   // 消耗后剩余层数（0表示消耗完）
             consumerId
         };
     }

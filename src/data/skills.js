@@ -166,6 +166,18 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.2,
         element: "physical",
+        // 连携条件：其它角色的连携技造成伤害
+        condition: [
+            {
+                type: "action_history",
+                actionType: "deal_damage",
+                timeWindow: 4,
+                target: "other_ally",
+                params: {
+                    skillType: "CHAIN"
+                }
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -261,15 +273,16 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.2,
         element: "emag",
+        // 连携条件：主控干员对敌人重击造成伤害
         condition: [
             {
                 type: "action_history",
-                actionType: "cast_skill",
+                actionType: "deal_damage",
                 timeWindow: 4,
-                target: "ally",
+                target: "main_char",
                 params: {
                     skillType: "BASIC",
-                    variantType: "heavy"
+                    isHeavy: true
                 }
             }
         ],
@@ -368,6 +381,19 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 0.9,
         element: "physical",
+        // 连携条件：敌人进入破防状态（被施加破防且之前为0层）
+        condition: [
+            {
+                type: "action_history",
+                actionType: "apply_buff",
+                timeWindow: 4,
+                target: "enemy",
+                params: {
+                    buffId: "status_break",
+                    requireNew: true  // 之前为0层（首次进入）
+                }
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -482,6 +508,18 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.2,
         element: "blaze",
+        // 连携条件：敌人被施加法术附着时
+        condition: [
+            {
+                type: "action_history",
+                actionType: "apply_buff",
+                timeWindow: 4,
+                target: "enemy",
+                params: {
+                    buffIds: ["blaze_attach", "cold_attach", "nature_attach", "emag_attach"]
+                }
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -605,6 +643,28 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1,
         element: "emag",
+        // 连携条件：敌人进入导电状态（首次获得）或敌人的导电状态被消耗
+        condition: [
+            {
+                type: "action_history",
+                actionType: "apply_buff",
+                timeWindow: 4,
+                target: "enemy",
+                params: {
+                    buffId: "status_conduct",
+                    requireNew: true  // 首次进入导电状态
+                }
+            },
+            {
+                type: "action_history",
+                actionType: "consume_buff",
+                timeWindow: 4,
+                target: "enemy",
+                params: {
+                    buffId: "status_conduct"
+                }
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -794,6 +854,19 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.2,
         element: "cold",
+        // 连携条件：支援晶体buff层数消耗完时
+        condition: [
+            {
+                type: "action_history",
+                actionType: "consume_buff",
+                timeWindow: 4,
+                target: "enemy",
+                params: {
+                    buffId: "seraph_crystal",  // 赛希专属支援晶体 buff
+                    requireConsumedAll: true   // 消耗完（remainingStacks=0）
+                }
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -901,6 +974,23 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 2.5,
         element: "emag",
+        // 连携条件：主控重击 + 敌人有电磁附着或导电状态
+        condition: [
+            {
+                type: "action_history",
+                actionType: "deal_damage",
+                timeWindow: 4,
+                target: "main_char",
+                params: {
+                    skillType: "BASIC",
+                    isHeavy: true
+                },
+                subConditions: [
+                    { type: "buff_check", target: "enemy", buffId: "emag_attach", stacks: 1, compare: "gte" },
+                    { type: "buff_check", target: "enemy", buffId: "status_conduct", stacks: 1, compare: "gte" }
+                ]
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -1002,6 +1092,18 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 2,
         element: "nature",
+        // 连携条件：敌人被施加法术异常时
+        condition: [
+            {
+                type: "action_history",
+                actionType: "apply_buff",
+                timeWindow: 4,
+                target: "enemy",
+                params: {
+                    buffIds: ["status_burn", "status_freeze", "status_corrosion", "status_conduct", "status_shatter"]
+                }
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -1252,6 +1354,23 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 2,
         element: "physical",
+        // 连携条件：主控重击 + 敌人有物理脆弱或碎甲状态
+        condition: [
+            {
+                type: "action_history",
+                actionType: "deal_damage",
+                timeWindow: 4,
+                target: "main_char",
+                params: {
+                    skillType: "BASIC",
+                    isHeavy: true
+                },
+                subConditions: [
+                    { type: "buff_check", target: "enemy", buffId: "debuff_vulnerable_physical", stacks: 1, compare: "gte" },
+                    { type: "buff_check", target: "enemy", buffId: "status_sunder", stacks: 1, compare: "gte" }
+                ]
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -1448,6 +1567,19 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.7,
         element: "blaze",
+        // 连携条件：敌人进入燃烧或腐蚀状态（首次获得）
+        condition: [
+            {
+                type: "action_history",
+                actionType: "apply_buff",
+                timeWindow: 4,
+                target: "enemy",
+                params: {
+                    buffIds: ["status_burn", "status_corrosion"],
+                    requireNew: true  // 首次进入
+                }
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -1593,6 +1725,22 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.1,
         element: "cold",
+        // 连携条件：主控重击 + 敌人处于冻结状态
+        condition: [
+            {
+                type: "action_history",
+                actionType: "deal_damage",
+                timeWindow: 4,
+                target: "main_char",
+                params: {
+                    skillType: "BASIC",
+                    isHeavy: true
+                },
+                subConditions: [
+                    { type: "buff_check", target: "enemy", buffId: "status_freeze", stacks: 1, compare: "gte" }
+                ]
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -1694,6 +1842,16 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 2.1,
         element: "physical",
+        // 连携条件：敌人达到四层破防状态
+        condition: [
+            {
+                type: "buff_check",
+                target: "enemy",
+                buffId: "status_break",
+                stacks: 4,
+                compare: "eq"
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -1819,6 +1977,13 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.5,
         element: "blaze",
+        // 连携条件：敌人失衡
+        condition: [
+            {
+                type: "enemy_state",
+                state: "staggered"
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -1986,6 +2151,19 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.5,
         element: "cold",
+        // 连携条件：敌人进入冻结状态（首次获得）
+        condition: [
+            {
+                type: "action_history",
+                actionType: "apply_buff",
+                timeWindow: 4,
+                target: "enemy",
+                params: {
+                    buffId: "status_freeze",
+                    requireNew: true  // 首次进入冻结
+                }
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -2080,6 +2258,11 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.5,
         element: "nature",
+        // 连携条件：敌人寒冷附着或自然附着层数>=2
+        condition: [
+            { type: "buff_check", target: "enemy", buffId: "cold_attach", stacks: 2, compare: "gte" },
+            { type: "buff_check", target: "enemy", buffId: "nature_attach", stacks: 2, compare: "gte" }
+        ],
         actions: [
             {
                 type: "damage",
@@ -2168,6 +2351,40 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.5,
         element: "emag",
+        // 连携条件：敌人处于聚焦状态，且进入物理异常或法术附着状态
+        condition: [
+            {
+                type: "buff_check",
+                target: "enemy",
+                buffId: "antal_buff",  // 聚焦
+                stacks: 1,
+                compare: "gte",
+                subConditions: [
+                    // 进入物理异常（首次获得）
+                    {
+                        type: "action_history",
+                        actionType: "apply_buff",
+                        timeWindow: 4,
+                        target: "enemy",
+                        params: {
+                            buffIds: ["status_slam", "status_sunder", "status_launch", "status_knockdown"],
+                            requireNew: true
+                        }
+                    },
+                    // 进入法术附着（首次获得）
+                    {
+                        type: "action_history",
+                        actionType: "apply_buff",
+                        timeWindow: 4,
+                        target: "enemy",
+                        params: {
+                            buffIds: ["blaze_attach", "cold_attach", "nature_attach", "emag_attach"],
+                            requireNew: true
+                        }
+                    }
+                ]
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -2292,6 +2509,18 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.5,
         element: "cold",
+        // 连携条件：敌人的法术异常或源石结晶被消耗时
+        condition: [
+            {
+                type: "action_history",
+                actionType: "consume_buff",
+                timeWindow: 4,
+                target: "enemy",
+                params: {
+                    buffIds: ["status_burn", "status_freeze", "status_corrosion", "status_conduct", "status_shatter", "endmin_debuff"]
+                }
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -2393,6 +2622,22 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 1.2,
         element: "nature",
+        // 连携条件：主控重击 + 敌人不处于破防或法术附着状态
+        // 注：当前条件系统不支持完整的 NOT/AND 组合，此处简化为主控重击触发
+        // 完整实现需要扩展条件系统支持 buff_absent 类型
+        condition: [
+            {
+                type: "action_history",
+                actionType: "deal_damage",
+                timeWindow: 4,
+                target: "main_char",
+                params: {
+                    skillType: "BASIC",
+                    isHeavy: true
+                }
+                // TODO: 后续扩展支持 subConditions 的 AND 关系以及 buff_absent 判断
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -2488,6 +2733,16 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 0.8,
         element: "cold",
+        // 连携条件：敌人寒冷附着层数>=3
+        condition: [
+            {
+                type: "buff_check",
+                target: "enemy",
+                buffId: "cold_attach",
+                stacks: 3,
+                compare: "gte"
+            }
+        ],
         actions: [
             {
                 type: "damage",
@@ -2718,6 +2973,19 @@ export const SKILLS = {
         type: "CHAIN",
         duration: 2.7,
         element: "physical",
+        // 连携条件：敌人被猛击或碎甲消耗破防层数后
+        condition: [
+            {
+                type: "action_history",
+                actionType: "consume_buff",
+                timeWindow: 4,
+                target: "enemy",
+                params: {
+                    buffId: "status_break"
+                    // 猛击/碎甲消耗破防会在 triggerPhysicalAnomaly 中记录 consumedBreak
+                }
+            }
+        ],
         actions: [
             {
                 type: "damage",

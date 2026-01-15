@@ -340,7 +340,7 @@ export class ActionExecutor {
                 detail: `造成 ${damage} 伤害 (${element})${logSuffix}`
             });
             
-            // 记录历史
+            // 记录历史（包含重击信息用于连携条件判定）
             this.recordHistory({
                 type: 'DAMAGE_DEALT',
                 time: currentTime,
@@ -349,7 +349,9 @@ export class ActionExecutor {
                 damage,
                 damageType: element,
                 skillType: skillDef?.type,
-                skillId: skillDef?.id
+                skillId: skillDef?.id,
+                variantType: actionContext.variantType,  // 变体类型（如 'heavy'）
+                isHeavy: isHeavy || false                // 是否为重击
             });
         }
         
@@ -549,13 +551,16 @@ export class ActionExecutor {
                 detail: `对 ${targetId} 施加了 ${buffName}${stacks > 1 ? ` x${stacks}` : ''}`
             });
             
-            // 记录历史
+            // 记录历史（包含 prevStacks/wasNew 用于"进入状态"判定）
             this.recordHistory({
                 type: 'BUFF_APPLIED',
                 time: currentTime,
                 sourceId: sourceChar.id,
                 targetId,
-                buffId: resolveBuffId(buffId)
+                buffId: resolveBuffId(buffId),
+                prevStacks: result?.prevStacks ?? 0,      // 施加前层数
+                newStacks: result?.newStacks ?? stacks,   // 施加后层数
+                wasNew: result?.wasNew ?? true            // 是否为新添加（之前0层）
             });
             
             // 如果目标是角色，也记录接收事件
@@ -565,7 +570,26 @@ export class ActionExecutor {
                     time: currentTime,
                     sourceId: sourceChar.id,
                     targetId,
-                    buffId: resolveBuffId(buffId)
+                    buffId: resolveBuffId(buffId),
+                    prevStacks: result?.prevStacks ?? 0,
+                    newStacks: result?.newStacks ?? stacks,
+                    wasNew: result?.wasNew ?? true
+                });
+            }
+            
+            // 如果反应消耗了附着，也记录消耗历史
+            if (result?.consumedBuff) {
+                const consumed = result.consumedBuff;
+                this.recordHistory({
+                    type: 'BUFF_CONSUMED',
+                    time: currentTime,
+                    sourceId: sourceChar.id,
+                    targetId: consumed.targetId,
+                    buffId: consumed.buffId,
+                    prevStacks: consumed.stacks,
+                    consumedStacks: consumed.stacks,
+                    remainingStacks: 0,  // 反应消耗完毕
+                    consumeReason: 'reaction'  // 标记为反应消耗
                 });
             }
             
@@ -658,14 +682,16 @@ export class ActionExecutor {
                     detail: `消耗了 ${targetId} 的 ${buffName}${consumeResult.consumedStacks > 1 ? ` x${consumeResult.consumedStacks}` : ''}`
                 });
                 
-                // 记录历史
+                // 记录历史（包含 prevStacks/remainingStacks 用于"消耗完"判定）
                 this.recordHistory({
                     type: 'BUFF_CONSUMED',
                     time: currentTime,
                     sourceId: sourceChar.id,
                     targetId,
                     buffId: consumeResult.buffId,
-                    stacks: consumeResult.consumedStacks
+                    prevStacks: consumeResult.prevStacks,           // 消耗前层数
+                    consumedStacks: consumeResult.consumedStacks,   // 本次消耗层数
+                    remainingStacks: consumeResult.remainingStacks  // 消耗后剩余（0表示消耗完）
                 });
                 
                 // 如果目标是角色，也记录被消耗事件
@@ -676,7 +702,9 @@ export class ActionExecutor {
                         consumerId: sourceChar.id,
                         targetId,
                         buffId: consumeResult.buffId,
-                        stacks: consumeResult.consumedStacks
+                        prevStacks: consumeResult.prevStacks,
+                        consumedStacks: consumeResult.consumedStacks,
+                        remainingStacks: consumeResult.remainingStacks
                     });
                 }
         }

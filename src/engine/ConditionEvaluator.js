@@ -195,9 +195,13 @@ export class ConditionEvaluator {
      * @param {string} condition.target - 检查目标
      * @param {Object} condition.params - 额外参数
      * @param {string} condition.params.buffId - buff ID（用于 buff 相关检查）
+     * @param {string|string[]} condition.params.buffIds - 多个 buff ID（OR关系，任一匹配即可）
+     * @param {boolean} condition.params.requireNew - 是否要求"进入状态"（prevStacks=0，首次获得）
+     * @param {boolean} condition.params.requireConsumedAll - 是否要求"消耗完"（remainingStacks=0）
      * @param {string} condition.params.skillType - 技能类型（用于 cast_skill/deal_damage）
      * @param {string} condition.params.skillId - 技能ID（用于 cast_skill）
-     * @param {string} condition.params.variantType - 变体类型（用于 cast_skill，如 'heavy' 表示重击）
+     * @param {string} condition.params.variantType - 变体类型（用于 cast_skill/deal_damage，如 'heavy' 表示重击）
+     * @param {boolean} condition.params.isHeavy - 是否为重击（用于 deal_damage）
      * @param {string} condition.params.damageType - 伤害类型（用于 deal_damage）
      */
     checkActionHistory(condition) {
@@ -215,6 +219,11 @@ export class ConditionEvaluator {
         const windowStart = currentTime - timeWindow;
         const targets = this.resolveTargets(target);
         
+        // 支持多个 buffId（OR关系）
+        const buffIds = params.buffIds 
+            ? (Array.isArray(params.buffIds) ? params.buffIds : [params.buffIds])
+            : (params.buffId ? [params.buffId] : []);
+        
         // 筛选时间窗口内的历史记录
         const relevantHistory = history.filter(record => 
             record.time >= windowStart && 
@@ -228,36 +237,58 @@ export class ConditionEvaluator {
             switch (actionType) {
                 case 'apply_buff':
                     // 检查是否施加过特定buff
+                    // 支持 requireNew: true 判定"进入状态"（prevStacks=0）
                     match = record.type === 'BUFF_APPLIED' &&
-                        record.buffId === params.buffId &&
+                        (buffIds.length === 0 || buffIds.includes(record.buffId)) &&
                         (!params.buffTarget || record.targetId === params.buffTarget);
+                    
+                    // 如果要求"进入状态"，需检查 prevStacks=0
+                    if (match && params.requireNew) {
+                        match = record.prevStacks === 0 || record.wasNew === true;
+                    }
                     break;
                     
                 case 'receive_buff':
                     // 检查是否获得过特定buff
                     match = record.type === 'BUFF_RECEIVED' &&
-                        record.buffId === params.buffId &&
+                        (buffIds.length === 0 || buffIds.includes(record.buffId)) &&
                         (!params.buffSource || record.sourceId === params.buffSource);
+                    
+                    // 如果要求"进入状态"，需检查 prevStacks=0
+                    if (match && params.requireNew) {
+                        match = record.prevStacks === 0 || record.wasNew === true;
+                    }
                     break;
                     
                 case 'consume_buff':
                     // 检查是否消耗过特定buff
+                    // 支持 requireConsumedAll: true 判定"消耗完"（remainingStacks=0）
                     match = record.type === 'BUFF_CONSUMED' &&
-                        record.buffId === params.buffId &&
+                        (buffIds.length === 0 || buffIds.includes(record.buffId)) &&
                         (!params.consumeTarget || record.targetId === params.consumeTarget);
+                    
+                    // 如果要求"消耗完"，需检查 remainingStacks=0
+                    if (match && params.requireConsumedAll) {
+                        match = record.remainingStacks === 0;
+                    }
                     break;
                     
                 case 'buff_consumed':
                     // 检查是否被消耗过特定buff
                     match = record.type === 'BUFF_WAS_CONSUMED' &&
-                        record.buffId === params.buffId &&
+                        (buffIds.length === 0 || buffIds.includes(record.buffId)) &&
                         (!params.consumer || record.consumerId === params.consumer);
+                    
+                    // 如果要求"消耗完"，需检查 remainingStacks=0
+                    if (match && params.requireConsumedAll) {
+                        match = record.remainingStacks === 0;
+                    }
                     break;
                     
                 case 'buff_expired':
                     // 检查buff是否自然结束
                     match = record.type === 'BUFF_EXPIRED' &&
-                        record.buffId === params.buffId;
+                        (buffIds.length === 0 || buffIds.includes(record.buffId));
                     break;
                     
                 case 'cast_skill':
@@ -266,13 +297,29 @@ export class ConditionEvaluator {
                         (!params.skillType || record.skillType === params.skillType) &&
                         (!params.skillId || record.skillId === params.skillId) &&
                         (!params.variantType || record.variantType === params.variantType);
+                    
+                    // 支持 isHeavy 判断
+                    if (match && params.isHeavy !== undefined) {
+                        match = record.isHeavy === params.isHeavy;
+                    }
                     break;
                     
                 case 'deal_damage':
                     // 检查是否用特定类型技能造成过伤害
+                    // 支持 variantType 和 isHeavy 判断重击
                     match = record.type === 'DAMAGE_DEALT' &&
                         (!params.skillType || record.skillType === params.skillType) &&
                         (!params.damageType || record.damageType === params.damageType);
+                    
+                    // 支持 variantType 判断（如 'heavy'）
+                    if (match && params.variantType) {
+                        match = record.variantType === params.variantType;
+                    }
+                    
+                    // 支持 isHeavy 判断
+                    if (match && params.isHeavy !== undefined) {
+                        match = record.isHeavy === params.isHeavy;
+                    }
                     break;
                     
                 default:

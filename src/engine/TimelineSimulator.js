@@ -304,6 +304,18 @@ export class TimelineSimulator {
                         }
                     }
                 }
+                // 处理 BUFF_EXPIRED 事件（单个 buff 过期）
+                if (ev.type === 'BUFF_EXPIRED') {
+                    // 记录到 actionHistory 用于条件判定
+                    this.actionHistory.push({
+                        type: 'BUFF_EXPIRED',
+                        time: t,
+                        buffId: ev.buffId,
+                        targetId: ev.targetId,
+                        sourceId: ev.sourceId,
+                        stacks: ev.stacks
+                    });
+                }
                 if (ev.type === 'EXPIRED' && ev.buffs && Array.isArray(ev.buffs)) {
                     ev.buffs.forEach(b => {
                         this._buffEventSeq = (this._buffEventSeq || 0) + 1;
@@ -447,8 +459,22 @@ export class TimelineSimulator {
                         isHeavy,
                         skillLevel: skillLevelForAction,
                         actionId: action.id,
-                        skillId: action.skillId
+                        skillId: action.skillId,
+                        variantType: finalSkillDef.variantType  // 变体类型（如 'heavy', 'execution'）
                     };
+                    
+                    // 记录 SKILL_CAST 历史事件（用于连携条件判定）
+                    this.actionHistory.push({
+                        type: 'SKILL_CAST',
+                        time: t,
+                        sourceId: action.charId,
+                        skillId: action.skillId,
+                        skillType: finalSkillDef.type,
+                        variantType: finalSkillDef.variantType || (isHeavy ? 'heavy' : undefined),
+                        isHeavy: isHeavy,
+                        comboStep: comboStep,
+                        isExecution: isExecution
+                    });
                 }
             });
 
@@ -549,6 +575,7 @@ export class TimelineSimulator {
             skillLevel: actionState.skillLevel || char.skillLevel || 1,
             comboStep: actionState.comboStep,
             isHeavy: actionState.isHeavy,
+            variantType: actionState.variantType,  // 变体类型（如 'heavy'）
             actionId: actionState.actionId,
             skillId: actionState.skillId
         };

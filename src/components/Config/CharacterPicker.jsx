@@ -58,7 +58,7 @@ const FilterDropdown = ({ label, value, options, onChange }) => {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-1 px-2 py-1 bg-neutral-800 border border-neutral-700 rounded text-xs text-neutral-300 hover:border-neutral-500 transition-colors"
+                className="flex items-center gap-1 px-2 py-1 bg-neutral-800 border border-neutral-700 rounded text-xs text-neutral-300 hover:border-[#ffff21] transition-colors"
             >
                 <span className="text-neutral-500">{label}:</span>
                 <span>{selectedLabel}</span>
@@ -74,7 +74,7 @@ const FilterDropdown = ({ label, value, options, onChange }) => {
                                 onChange(opt.value);
                                 setIsOpen(false);
                             }}
-                            className={`w-full px-3 py-1.5 text-left text-xs hover:bg-neutral-700 transition-colors ${
+                            className={`w-full px-3 py-1.5 text-left text-xs hover:ring-2 hover:ring-[#ffff21] hover:ring-inset transition-all ${
                                 value === opt.value ? 'bg-neutral-700 text-white' : 'text-neutral-300'
                             }`}
                         >
@@ -98,10 +98,10 @@ const CharacterItem = ({ char, isInTeam, onSelect }) => {
         <button
             onClick={() => !isInTeam && onSelect(char)}
             disabled={isInTeam}
-            className={`w-full flex items-center gap-2 p-2 rounded transition-colors ${
+            className={`w-full flex items-center gap-2 p-2 rounded transition-all ${
                 isInTeam 
                     ? 'opacity-40 cursor-not-allowed bg-neutral-800/30' 
-                    : 'hover:bg-neutral-700/50 cursor-pointer'
+                    : 'hover:ring-2 hover:ring-[#ffff21] hover:ring-inset cursor-pointer'
             }`}
         >
             {/* 头像 */}
@@ -241,7 +241,7 @@ export const CharacterPicker = ({ team, onSelect, onClose, position = { top: 100
                 <span className="text-sm font-medium text-neutral-200">选择角色</span>
                 <button
                     onClick={onClose}
-                    className="p-1 text-neutral-500 hover:text-white transition-colors"
+                    className="p-1 text-neutral-500 hover:text-[#ffff21] transition-colors"
                 >
                     <X size={16} />
                 </button>

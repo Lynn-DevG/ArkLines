@@ -67,7 +67,7 @@ export function ConditionBuilder({ conditions = [], onChange, compact = false })
             <div className="relative">
                 <button
                     onClick={() => setShowAddMenu(!showAddMenu)}
-                    className={`w-full flex items-center justify-center gap-2 border border-dashed border-neutral-700 hover:border-neutral-600 rounded text-neutral-400 hover:text-neutral-300 transition-colors
+                    className={`w-full flex items-center justify-center gap-2 border border-dashed border-neutral-700 hover:border-[#ffff21] rounded text-neutral-400 hover:text-[#ffff21] transition-colors
                         ${compact ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-sm'}`}
                 >
                     <Plus size={compact ? 12 : 16} />
@@ -80,7 +80,7 @@ export function ConditionBuilder({ conditions = [], onChange, compact = false })
                             <button
                                 key={type}
                                 onClick={() => addCondition(type)}
-                                className={`w-full flex items-center gap-3 hover:bg-neutral-700 text-left
+                                className={`w-full flex items-center gap-3 hover:ring-2 hover:ring-[#ffff21] hover:ring-inset text-left transition-all
                                     ${compact ? 'px-3 py-2 text-xs' : 'px-4 py-2.5 text-sm'}`}
                             >
                                 <div className={`w-2.5 h-2.5 rounded ${config.color}`} />

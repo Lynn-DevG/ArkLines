@@ -53,7 +53,7 @@ export function BuffSelector({ value, onChange }) {
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between gap-2 bg-neutral-900 border border-neutral-700 rounded px-2 py-1 text-sm text-white hover:border-neutral-600 focus:outline-none focus:border-neutral-500"
+                className="w-full flex items-center justify-between gap-2 bg-neutral-900 border border-neutral-700 rounded px-2 py-1 text-sm text-white hover:border-[#ffff21] focus:outline-none focus:border-neutral-500 transition-colors"
             >
                 {selectedBuff ? (
                     <span className="truncate">{selectedBuff.name}</span>
@@ -99,7 +99,7 @@ export function BuffSelector({ value, onChange }) {
                                     onChange('');
                                     setIsOpen(false);
                                 }}
-                                className="w-full px-3 py-2 text-left text-xs text-neutral-500 hover:bg-neutral-700"
+                                className="w-full px-3 py-2 text-left text-xs text-neutral-500 hover:ring-2 hover:ring-[#ffff21] hover:ring-inset transition-all"
                             >
                                 清除选择
                             </button>
@@ -111,7 +111,7 @@ export function BuffSelector({ value, onChange }) {
                                         onChange(search);
                                         setIsOpen(false);
                                     }}
-                                    className="w-full px-3 py-2 text-left text-xs text-neutral-300 hover:bg-neutral-700 border-b border-neutral-700"
+                                    className="w-full px-3 py-2 text-left text-xs text-neutral-300 hover:ring-2 hover:ring-[#ffff21] hover:ring-inset border-b border-neutral-700 transition-all"
                                 >
                                     使用自定义 ID: {search}
                                 </button>
@@ -134,7 +134,7 @@ export function BuffSelector({ value, onChange }) {
                                                     onChange(buff.id);
                                                     setIsOpen(false);
                                                 }}
-                                                className={`w-full px-3 py-1.5 text-left text-xs hover:bg-neutral-700 flex items-center justify-between
+                                                className={`w-full px-3 py-1.5 text-left text-xs hover:ring-2 hover:ring-[#ffff21] hover:ring-inset flex items-center justify-between transition-all
                                                     ${value === buff.id ? 'bg-neutral-600/20 text-neutral-300' : 'text-white'}`}
                                             >
                                                 <span>{buff.name}</span>

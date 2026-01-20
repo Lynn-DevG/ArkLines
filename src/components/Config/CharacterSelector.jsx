@@ -34,7 +34,7 @@ export const CharacterSelector = () => {
                                     onClick={() => handleToggle(char)}
                                     className={`relative flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${isInTeam
                                         ? 'bg-neutral-600/20 border-neutral-500 ring-1 ring-neutral-500'
-                                        : 'bg-neutral-700 border-neutral-600 hover:border-neutral-400 hover:bg-neutral-700/80'
+                                        : 'bg-neutral-700 border-neutral-600 hover:ring-2 hover:ring-[#ffff21]'
                                         }`}
                                 >
                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-neutral-800 border border-neutral-600 font-bold text-lg mb-1`}>
@@ -81,7 +81,7 @@ export const CharacterSelector = () => {
                                             ) : (
                                                 <button
                                                     onClick={() => setMainCharacter(char.id)}
-                                                    className="text-[10px] px-2 py-0.5 rounded bg-neutral-900/70 border border-neutral-700 text-neutral-300 hover:text-white hover:border-neutral-500"
+                                                    className="text-[10px] px-2 py-0.5 rounded bg-neutral-900/70 border border-neutral-700 text-neutral-300 hover:text-[#ffff21] hover:border-[#ffff21] transition-colors"
                                                     title="设为主控角色（仅主控可放置普攻）"
                                                 >
                                                     设为主控
@@ -101,7 +101,7 @@ export const CharacterSelector = () => {
                                     {/* Edit Button */}
                                     <button
                                         onClick={() => setEditingCharId(char.id)}
-                                        className="absolute top-2 right-2 p-1 text-neutral-500 hover:text-white bg-neutral-800 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                                        className="absolute top-2 right-2 p-1 text-neutral-500 hover:text-[#ffff21] bg-neutral-800 rounded opacity-0 group-hover:opacity-100 transition-all"
                                     >
                                         <Edit2 size={12} />
                                     </button>

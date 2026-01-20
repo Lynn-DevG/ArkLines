@@ -199,11 +199,11 @@ export const CharacterEditor = ({ charId, onClose }) => {
         <div className="flex flex-col bg-neutral-900 max-h-full">
             {/* 标题栏 - 固定在顶部 */}
             <div className="flex items-center justify-between p-4 pb-2 border-b border-neutral-700 shrink-0">
-                <button onClick={onClose} className="text-neutral-400 hover:text-white flex items-center text-xs">
+                <button onClick={onClose} className="text-neutral-400 hover:text-[#ffff21] flex items-center text-xs transition-colors">
                     <ChevronLeft size={16} /> 返回
                 </button>
                 <div className="text-sm font-bold text-white">{localState.name}</div>
-                <button onClick={handleSave} className="text-neutral-300 hover:text-white flex items-center text-xs gap-1">
+                <button onClick={handleSave} className="text-neutral-300 hover:text-[#ffff21] flex items-center text-xs gap-1 transition-colors">
                     <Save size={14} /> 保存
                 </button>
             </div>
@@ -317,7 +317,7 @@ export const CharacterEditor = ({ charId, onClose }) => {
                             <div className="absolute top-full left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-20 max-h-40 overflow-y-auto custom-scrollbar">
                                 <button
                                     onClick={() => handleWeaponSelect(null)}
-                                    className="w-full p-2 text-left text-xs text-neutral-500 hover:bg-neutral-700"
+                                    className="w-full p-2 text-left text-xs text-neutral-500 hover:ring-2 hover:ring-[#ffff21] hover:ring-inset transition-all"
                                 >
                                     卸下武器
                                 </button>
@@ -325,7 +325,7 @@ export const CharacterEditor = ({ charId, onClose }) => {
                                     <button
                                         key={weapon.id}
                                         onClick={() => handleWeaponSelect(weapon.id)}
-                                        className={`w-full p-2 text-left text-xs hover:bg-neutral-700 
+                                        className={`w-full p-2 text-left text-xs hover:ring-2 hover:ring-[#ffff21] hover:ring-inset transition-all
                                             ${localState.weapon?.id === weapon.id ? 'bg-neutral-700' : ''}`}
                                     >
                                         <span className={RARITY_COLORS[weapon.rarity]}>

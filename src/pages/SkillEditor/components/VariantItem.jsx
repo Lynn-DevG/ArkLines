@@ -57,7 +57,7 @@ export function VariantItem({ variant, index, onChange, onRemove }) {
 
                 <button
                     onClick={onRemove}
-                    className="p-1 hover:bg-red-900/50 rounded text-red-400"
+                    className="p-1 hover:bg-red-500 hover:text-white rounded text-red-400 transition-colors"
                     title="删除"
                 >
                     <Trash2 size={14} />
@@ -157,7 +157,7 @@ export function VariantItem({ variant, index, onChange, onRemove }) {
                     <div>
                         <button
                             onClick={() => setShowActionsEditor(!showActionsEditor)}
-                            className="flex items-center gap-2 text-xs text-neutral-400 hover:text-neutral-300"
+                            className="flex items-center gap-2 text-xs text-neutral-400 hover:text-[#ffff21] transition-colors"
                         >
                             {showActionsEditor ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                             变体行为
@@ -183,7 +183,7 @@ export function VariantItem({ variant, index, onChange, onRemove }) {
                                 <div className="relative">
                                     <button
                                         onClick={() => setShowAddActionMenu(!showAddActionMenu)}
-                                        className="w-full flex items-center justify-center gap-2 px-3 py-1.5 border border-dashed border-neutral-700 hover:border-neutral-600 rounded text-xs text-neutral-400 hover:text-neutral-300 transition-colors"
+                                        className="w-full flex items-center justify-center gap-2 px-3 py-1.5 border border-dashed border-neutral-700 hover:border-[#ffff21] rounded text-xs text-neutral-400 hover:text-[#ffff21] transition-colors"
                                     >
                                         <Plus size={12} />
                                         添加行为
@@ -195,7 +195,7 @@ export function VariantItem({ variant, index, onChange, onRemove }) {
                                                 <button
                                                     key={type}
                                                     onClick={() => addAction(type)}
-                                                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-neutral-700 text-xs text-left"
+                                                    className="w-full flex items-center gap-2 px-3 py-2 hover:ring-2 hover:ring-[#ffff21] hover:ring-inset text-xs text-left transition-all"
                                                 >
                                                     <div className={`w-2 h-2 rounded ${config.color}`} />
                                                     {config.label}

@@ -30,7 +30,7 @@ function FormSection({ title, defaultOpen = true, children, badge }) {
         <div className="border border-neutral-800 rounded-lg overflow-hidden">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center gap-2 px-4 py-3 bg-neutral-800/50 hover:bg-neutral-800 text-sm font-medium text-left"
+                className="w-full flex items-center gap-2 px-4 py-3 bg-neutral-800/50 hover:bg-[#ffff21] hover:text-black text-sm font-medium text-left transition-colors"
             >
                 {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
                 <span>{title}</span>

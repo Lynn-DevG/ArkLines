@@ -111,6 +111,47 @@ export const SimulationProvider = ({ children }) => {
     // 调试模式: 是否在控制台打印伤害计算详情
     const [debugMode, setDebugMode] = useState(false);
     
+    // 开发者模式解锁状态：通过密码验证或 DEV 环境自动解锁
+    const [devModeUnlocked, setDevModeUnlocked] = useState(() => {
+        // DEV 环境自动解锁
+        if (import.meta.env.DEV) return true;
+        // 检查 localStorage 中的解锁状态
+        try {
+            return localStorage.getItem('arklines_dev_unlocked') === 'true';
+        } catch {
+            return false;
+        }
+    });
+    
+    // 解锁开发者模式的函数
+    const unlockDevMode = (password) => {
+        const correctPassword = 'ActiveEndministratorMode';
+        if (password === correctPassword) {
+            setDevModeUnlocked(true);
+            try {
+                localStorage.setItem('arklines_dev_unlocked', 'true');
+            } catch {
+                // localStorage 不可用时忽略
+            }
+            // 触发自定义事件，通知 App 组件
+            window.dispatchEvent(new CustomEvent('arklines_devmode_change', { detail: { unlocked: true } }));
+            return true;
+        }
+        return false;
+    };
+    
+    // 锁定开发者模式
+    const lockDevMode = () => {
+        if (import.meta.env.DEV) return; // DEV 环境不允许锁定
+        setDevModeUnlocked(false);
+        setDebugMode(false);
+        try {
+            localStorage.removeItem('arklines_dev_unlocked');
+        } catch {
+            // localStorage 不可用时忽略
+        }
+    };
+    
     // 自动吸附冲突处理模式：push=推挤，gray=置灰不推挤
     const [autoResolveMode, setAutoResolveMode] = useState('push');
     
@@ -396,7 +437,11 @@ export const SimulationProvider = ({ children }) => {
             setCritMode,
             // 调试模式控制
             debugMode,
-            setDebugMode
+            setDebugMode,
+            // 开发者模式解锁状态
+            devModeUnlocked,
+            unlockDevMode,
+            lockDevMode
         }}>
             {children}
         </SimulationContext.Provider>

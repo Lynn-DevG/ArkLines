@@ -1,9 +1,96 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSimulation } from '../../store/SimulationContext';
-import { Activity, Terminal, Bug } from 'lucide-react';
+import { Activity, Terminal, Bug, Settings, X, Lock, Unlock } from 'lucide-react';
 import { getBuffDef } from '../../data/buffs';
 import { SKILLS } from '../../data/skills';
 import { getElementColor, normalizeElement } from '../../utils/skillIconUtils';
+
+// 开发者模式密码验证浮窗
+const DevModeModal = ({ isOpen, onClose, onUnlock }) => {
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    if (!isOpen) return null;
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const success = onUnlock(password);
+        if (success) {
+            setPassword('');
+            setError('');
+            onClose();
+        } else {
+            setError('密码错误，请重试');
+        }
+    };
+
+    const handleClose = () => {
+        setPassword('');
+        setError('');
+        onClose();
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+            {/* 背景遮罩 + 模糊效果 */}
+            <div 
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                onClick={handleClose}
+            />
+            
+            {/* 浮窗内容 */}
+            <div className="relative bg-neutral-900 border border-neutral-700 rounded-lg shadow-2xl w-80 p-6">
+                {/* 关闭按钮 */}
+                <button
+                    onClick={handleClose}
+                    className="absolute top-3 right-3 text-neutral-500 hover:text-[#ffff21] transition-colors"
+                >
+                    <X size={18} />
+                </button>
+                
+                {/* 标题 */}
+                <div className="flex items-center gap-2 mb-4">
+                    <Lock size={20} className="text-amber-500" />
+                    <h3 className="text-lg font-bold text-neutral-200">开发者模式</h3>
+                </div>
+                
+                {/* 表单 */}
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label className="block text-xs text-neutral-400 mb-2">
+                            请输入调试模式密码
+                        </label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                setError('');
+                            }}
+                            placeholder="输入密码..."
+                            className="w-full px-3 py-2 bg-neutral-800 border border-neutral-600 rounded text-neutral-200 text-sm placeholder-neutral-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30"
+                            autoFocus
+                        />
+                        {error && (
+                            <p className="mt-2 text-xs text-red-400">{error}</p>
+                        )}
+                    </div>
+                    
+                    <button
+                        type="submit"
+                        className="w-full py-2 bg-amber-500/20 hover:bg-[#ffff21] border border-amber-500/50 hover:border-white text-amber-400 hover:text-black rounded text-sm font-medium transition-colors"
+                    >
+                        确认解锁
+                    </button>
+                </form>
+                
+                <p className="mt-4 text-[10px] text-neutral-500 text-center">
+                    解锁后可访问调试功能和数据编辑器
+                </p>
+            </div>
+        </div>
+    );
+};
 
 // 获取buff显示名称（优先使用中文名称）
 const getBuffDisplayName = (buffId) => {
@@ -40,7 +127,8 @@ const resolveLogElement = (log) => {
 };
 
 export const StatsDashboard = () => {
-    const { totalDamage, logs, actions, team, invalidActionIds, invalidConflictActionIds, debugMode, setDebugMode } = useSimulation();
+    const { totalDamage, logs, actions, team, invalidActionIds, invalidConflictActionIds, debugMode, setDebugMode, devModeUnlocked, unlockDevMode, lockDevMode } = useSimulation();
+    const [showDevModal, setShowDevModal] = useState(false);
 
     // Latest logs first
     const reversedLogs = [...logs].reverse();
@@ -111,11 +199,39 @@ export const StatsDashboard = () => {
     return (
         <div className="flex flex-col h-full">
             <div className="p-4 border-b border-neutral-700 bg-neutral-900/50">
-                <h2 className="text-lg font-bold flex items-center gap-2 text-neutral-300">
-                    <Activity size={20} />
-                    数据分析
-                </h2>
+                <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-bold flex items-center gap-2 text-neutral-300">
+                        <Activity size={20} />
+                        数据分析
+                    </h2>
+                    {/* 开发者模式入口按钮 */}
+                    <button
+                        onClick={() => {
+                            if (devModeUnlocked) {
+                                // 已解锁，显示锁定确认或直接切换调试模式
+                                // 这里我们让它作为快捷开关调试模式
+                            } else {
+                                setShowDevModal(true);
+                            }
+                        }}
+                        className={`p-1.5 rounded transition-all ${
+                            devModeUnlocked
+                                ? 'text-amber-400 hover:bg-[#ffff21] hover:text-black'
+                                : 'text-neutral-500 hover:text-[#ffff21]'
+                        }`}
+                        title={devModeUnlocked ? '开发者模式已解锁' : '解锁开发者模式'}
+                    >
+                        {devModeUnlocked ? <Unlock size={16} /> : <Settings size={16} />}
+                    </button>
+                </div>
             </div>
+            
+            {/* 开发者模式密码验证浮窗 */}
+            <DevModeModal
+                isOpen={showDevModal}
+                onClose={() => setShowDevModal(false)}
+                onUnlock={unlockDevMode}
+            />
 
             <div className="p-4 space-y-4 flex-shrink-0">
                 <div className="grid grid-cols-2 gap-3">
@@ -188,15 +304,15 @@ export const StatsDashboard = () => {
                     </div>
                 </div>
                 
-                {/* 调试模式开关（仅开发环境显示） */}
-                {import.meta.env.DEV && (
+                {/* 调试模式开关（开发者模式解锁后显示） */}
+                {devModeUnlocked && (
                     <>
                         <button
                             onClick={() => setDebugMode(!debugMode)}
                             className={`flex items-center gap-2 px-3 py-2 rounded text-xs transition-all w-full justify-center ${
                                 debugMode 
                                     ? 'bg-amber-500/20 border border-amber-500/50 text-amber-400' 
-                                    : 'bg-neutral-800 border border-neutral-700 text-neutral-500 hover:text-neutral-300'
+                                    : 'bg-neutral-800 border border-neutral-700 text-neutral-500 hover:text-[#ffff21] hover:border-[#ffff21]'
                             }`}
                         >
                             <Bug size={14} />
@@ -206,6 +322,16 @@ export const StatsDashboard = () => {
                             <div className="text-[10px] text-amber-500/70 text-center">
                                 伤害计算详情将打印到浏览器控制台 (F12)
                             </div>
+                        )}
+                        {/* 退出开发者模式（非 DEV 环境可用） */}
+                        {!import.meta.env.DEV && (
+                            <button
+                                onClick={lockDevMode}
+                                className="flex items-center gap-2 px-3 py-1.5 rounded text-[10px] transition-all w-full justify-center bg-neutral-800/50 border border-neutral-700/50 text-neutral-500 hover:text-[#ffff21] hover:border-[#ffff21]"
+                            >
+                                <Lock size={12} />
+                                <span>退出开发者模式</span>
+                            </button>
                         )}
                     </>
                 )}

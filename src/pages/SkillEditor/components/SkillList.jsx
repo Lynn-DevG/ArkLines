@@ -94,7 +94,7 @@ export function SkillList() {
                         className={`px-2 py-1 text-xs rounded transition-colors
                             ${filter.type === 'all' 
                                 ? 'bg-neutral-600 text-white' 
-                                : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}`}
+                                : 'bg-neutral-800 text-neutral-400 hover:bg-[#ffff21] hover:text-black'}`}
                     >
                         全部
                     </button>
@@ -105,7 +105,7 @@ export function SkillList() {
                             className={`px-2 py-1 text-xs rounded transition-colors
                                 ${filter.type === type 
                                     ? 'bg-neutral-600 text-white' 
-                                    : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}`}
+                                    : 'bg-neutral-800 text-neutral-400 hover:bg-[#ffff21] hover:text-black'}`}
                         >
                             {config.label}
                         </button>
@@ -117,7 +117,7 @@ export function SkillList() {
             <div className="p-3 border-b border-neutral-800 relative">
                 <button
                     onClick={() => setShowNewSkillMenu(!showNewSkillMenu)}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-neutral-600 hover:bg-neutral-500 rounded text-sm font-medium transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-neutral-600 hover:bg-[#ffff21] hover:text-black rounded text-sm font-medium transition-colors"
                 >
                     <Plus size={16} />
                     新建技能
@@ -134,7 +134,7 @@ export function SkillList() {
                                         createSkill(type);
                                         setShowNewSkillMenu(false);
                                     }}
-                                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-neutral-700 text-sm text-left"
+                                    className="w-full flex items-center gap-2 px-3 py-2 hover:ring-2 hover:ring-[#ffff21] hover:ring-inset text-sm text-left transition-all"
                                 >
                                     <Icon size={14} className={config.color} />
                                     {config.label}
@@ -158,7 +158,7 @@ export function SkillList() {
                             {/* 角色分组头 */}
                             <button
                                 onClick={() => toggleChar(charKey)}
-                                className="w-full flex items-center gap-2 px-3 py-2 hover:bg-neutral-800/50 text-sm font-medium text-neutral-300"
+                                className="w-full flex items-center gap-2 px-3 py-2 hover:ring-2 hover:ring-[#ffff21] hover:ring-inset text-sm font-medium text-neutral-300 transition-all"
                             >
                                 {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                                 <span>{formatCharName(charKey)}</span>
@@ -201,10 +201,10 @@ function SkillListItem({ skill, isSelected, onSelect, onDuplicate, onDelete }) {
 
     return (
         <div
-            className={`group relative mx-2 mb-0.5 rounded transition-colors cursor-pointer
+            className={`group relative mx-2 mb-0.5 rounded transition-all cursor-pointer
                 ${isSelected 
                     ? 'bg-neutral-600/20 border border-neutral-500/50' 
-                    : 'hover:bg-neutral-800/50 border border-transparent'}`}
+                    : 'hover:ring-2 hover:ring-[#ffff21] border border-transparent'}`}
             onClick={onSelect}
             onMouseEnter={() => setShowActions(true)}
             onMouseLeave={() => setShowActions(false)}
@@ -224,10 +224,10 @@ function SkillListItem({ skill, isSelected, onSelect, onDuplicate, onDelete }) {
                                                 e.stopPropagation();
                                                 onDuplicate();
                                             }}
-                                            className="p-1 hover:bg-neutral-700 rounded"
+                                            className="p-1 hover:bg-[#ffff21] hover:text-black rounded transition-colors"
                                             title="复制"
                                         >
-                                            <Copy size={12} className="text-neutral-400" />
+                                            <Copy size={12} className="text-neutral-400 hover:text-black" />
                         </button>
                         <button
                             onClick={(e) => {
@@ -236,10 +236,10 @@ function SkillListItem({ skill, isSelected, onSelect, onDuplicate, onDelete }) {
                                     onDelete();
                                 }
                             }}
-                            className="p-1 hover:bg-red-900/50 rounded"
+                            className="p-1 hover:bg-red-500 hover:text-white rounded transition-colors"
                             title="删除"
                         >
-                            <Trash2 size={12} className="text-red-400" />
+                            <Trash2 size={12} className="text-red-400 hover:text-white" />
                         </button>
                     </div>
                 )}

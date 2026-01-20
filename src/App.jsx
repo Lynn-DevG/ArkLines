@@ -13,7 +13,7 @@ import { SKILLS } from './data/skills';
 import { Magnetism } from './engine/Magnetism';
 import { formatTimeWithFrames } from './config/simulation';
 
-const AppContent = ({ onOpenEditor }) => {
+const AppContent = ({ onOpenEditor, devModeUnlocked }) => {
     const { team, setTeam, actions, addAction, removeAction, updateAction, replaceActions, invalidActionIds, invalidConflictActionIds, setInvalidConflictActionIds, uspTimelines, atbTimeline, buffIntervals, mainCharId, setMainCharacter, autoResolveMode, setAutoResolveMode } = useSimulation();
     const [selectedTool, setSelectedTool] = useState(null); // { charId, skillId }
     const [dragState, setDragState] = useState(null); // { actionId, startX, initialStartTime }
@@ -257,7 +257,7 @@ const AppContent = ({ onOpenEditor }) => {
                         <div className="p-3 border-t border-neutral-700">
                             <button
                                 onClick={onOpenEditor}
-                                className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-neutral-800 hover:bg-neutral-700 rounded text-xs text-neutral-300 transition-colors"
+                                className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-neutral-800 hover:bg-[#ffff21] hover:text-black rounded text-xs text-neutral-300 transition-colors"
                             >
                                 <Wand2 size={14} />
                                 技能数据编辑器
@@ -274,17 +274,17 @@ const AppContent = ({ onOpenEditor }) => {
                             <div className="flex items-center gap-4">
                                 <span className="flex items-center gap-1 text-neutral-400"><Clock size={12} /> 时间轴</span>
                                 <div className="flex items-center gap-1">
-                                    <button className="w-6 h-6 bg-neutral-800 rounded hover:bg-neutral-700 flex items-center justify-center" onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}>-</button>
+                                    <button className="w-6 h-6 bg-neutral-800 rounded hover:bg-[#ffff21] hover:text-black flex items-center justify-center transition-colors" onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}>-</button>
                                     <span className="w-10 text-center text-neutral-300">{Math.round(zoom * 100)}%</span>
-                                    <button className="w-6 h-6 bg-neutral-800 rounded hover:bg-neutral-700 flex items-center justify-center" onClick={() => setZoom(Math.min(2.0, zoom + 0.1))}>+</button>
+                                    <button className="w-6 h-6 bg-neutral-800 rounded hover:bg-[#ffff21] hover:text-black flex items-center justify-center transition-colors" onClick={() => setZoom(Math.min(2.0, zoom + 0.1))}>+</button>
                                 </div>
                             <div className="flex items-center gap-1 ml-2">
                                 <span className="text-neutral-500">冲突处理</span>
                                 <button
-                                    className={`px-2 py-0.5 rounded border ${
+                                    className={`px-2 py-0.5 rounded border transition-colors ${
                                         autoResolveMode === 'push'
                                             ? 'bg-indigo-500/20 border-indigo-500/50 text-indigo-300'
-                                            : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:text-neutral-200'
+                                            : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:text-[#ffff21] hover:border-[#ffff21]'
                                     }`}
                                     onClick={() => setAutoResolveMode('push')}
                                     title="发生重叠时自动推挤后续技能"
@@ -292,10 +292,10 @@ const AppContent = ({ onOpenEditor }) => {
                                     推挤
                                 </button>
                                 <button
-                                    className={`px-2 py-0.5 rounded border ${
+                                    className={`px-2 py-0.5 rounded border transition-colors ${
                                         autoResolveMode === 'gray'
                                             ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
-                                            : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:text-neutral-200'
+                                            : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:text-[#ffff21] hover:border-[#ffff21]'
                                     }`}
                                     onClick={() => setAutoResolveMode('gray')}
                                     title="发生重叠时不推挤，仅置灰该技能"
@@ -381,15 +381,34 @@ const AppContent = ({ onOpenEditor }) => {
 
 export default function App() {
     const [mode, setMode] = useState('simulator');
+    
+    // 开发者模式解锁状态（与 SimulationContext 同步）
+    const [devModeUnlocked, setDevModeUnlocked] = useState(() => {
+        if (import.meta.env.DEV) return true;
+        try {
+            return localStorage.getItem('arklines_dev_unlocked') === 'true';
+        } catch {
+            return false;
+        }
+    });
 
-    // 检查 URL 参数决定模式（仅开发环境允许）
+    // 检查 URL 参数决定模式（需要 devModeUnlocked 或 DEV 环境）
     useEffect(() => {
-        if (!import.meta.env.DEV) return; // 生产环境禁用编辑器模式
+        if (!import.meta.env.DEV && !devModeUnlocked) return; // 未解锁则禁用编辑器模式
         const params = new URLSearchParams(window.location.search);
         const modeParam = params.get('mode');
         if (modeParam === 'editor') {
             setMode('editor');
         }
+    }, [devModeUnlocked]);
+    
+    // 监听开发者模式解锁事件
+    useEffect(() => {
+        const handleDevModeChange = (e) => {
+            setDevModeUnlocked(e.detail?.unlocked ?? false);
+        };
+        window.addEventListener('arklines_devmode_change', handleDevModeChange);
+        return () => window.removeEventListener('arklines_devmode_change', handleDevModeChange);
     }, []);
 
     // 切换模式时更新 URL
@@ -404,15 +423,18 @@ export default function App() {
         window.history.pushState({}, '', url);
     };
 
-    // 技能编辑器模式（仅开发环境）
-    if (import.meta.env.DEV && mode === 'editor') {
+    // 技能编辑器模式（开发者模式解锁后可用）
+    if ((import.meta.env.DEV || devModeUnlocked) && mode === 'editor') {
         return <SkillEditorPage onBack={() => switchMode('simulator')} />;
     }
 
     // 模拟器模式
     return (
         <SimulationProvider>
-            <AppContent onOpenEditor={import.meta.env.DEV ? () => switchMode('editor') : null} />
+            <AppContent 
+                onOpenEditor={(import.meta.env.DEV || devModeUnlocked) ? () => switchMode('editor') : null}
+                devModeUnlocked={devModeUnlocked}
+            />
         </SimulationProvider>
     );
 }

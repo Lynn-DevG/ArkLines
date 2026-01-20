@@ -54,7 +54,7 @@ export function ActionItem({ action, index, onChange, onRemove }) {
 
                 <button
                     onClick={onRemove}
-                    className="p-1 hover:bg-red-900/50 rounded text-red-400"
+                    className="p-1 hover:bg-red-500 hover:text-white rounded text-red-400 transition-colors"
                     title="删除"
                 >
                     <Trash2 size={14} />
@@ -228,7 +228,7 @@ export function ActionItem({ action, index, onChange, onRemove }) {
                     <div className="border-t border-neutral-700/50 pt-3">
                         <button
                             onClick={() => setShowCondition(!showCondition)}
-                            className="text-xs text-neutral-400 hover:text-neutral-300 flex items-center gap-1"
+                            className="text-xs text-neutral-400 hover:text-[#ffff21] flex items-center gap-1 transition-colors"
                         >
                             {showCondition ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                             行为生效条件

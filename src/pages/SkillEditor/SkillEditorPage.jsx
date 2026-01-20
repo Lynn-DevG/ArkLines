@@ -28,7 +28,7 @@ export function SkillEditorPage({ onBack }) {
                         {onBack && (
                             <button
                                 onClick={onBack}
-                                className="flex items-center gap-1 text-neutral-400 hover:text-white text-sm"
+                                className="flex items-center gap-1 text-neutral-400 hover:text-[#ffff21] text-sm transition-colors"
                             >
                                 <ArrowLeft size={16} />
                                 返回模拟器
@@ -54,7 +54,7 @@ export function SkillEditorPage({ onBack }) {
                             disabled={editor.saveStatus.saving || !editor.isDirty}
                             className={`px-4 py-1.5 rounded text-sm font-medium transition-colors
                                 ${editor.isDirty 
-                                    ? 'bg-neutral-600 hover:bg-neutral-500 text-white' 
+                                    ? 'bg-neutral-600 hover:bg-[#ffff21] hover:text-black text-white' 
                                     : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'}`}
                         >
                             {editor.saveStatus.saving ? '保存中...' : '保存到文件'}

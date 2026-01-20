@@ -74,7 +74,7 @@ export function PreviewPanel() {
                         className={`px-2 py-1 text-xs rounded transition-colors
                             ${!showAllSkills 
                                 ? 'bg-neutral-600 text-white' 
-                                : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}`}
+                                : 'bg-neutral-800 text-neutral-400 hover:bg-[#ffff21] hover:text-black'}`}
                     >
                         当前技能
                     </button>
@@ -83,7 +83,7 @@ export function PreviewPanel() {
                         className={`px-2 py-1 text-xs rounded transition-colors
                             ${showAllSkills 
                                 ? 'bg-neutral-600 text-white' 
-                                : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}`}
+                                : 'bg-neutral-800 text-neutral-400 hover:bg-[#ffff21] hover:text-black'}`}
                     >
                         全部数据
                     </button>
@@ -155,7 +155,7 @@ export function PreviewPanel() {
                 <button
                     onClick={handleCopy}
                     disabled={!jsonPreview}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-neutral-800 hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed rounded text-sm transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-neutral-800 hover:bg-[#ffff21] hover:text-black disabled:opacity-50 disabled:cursor-not-allowed rounded text-sm transition-colors"
                 >
                     {copied ? (
                         <>
@@ -176,7 +176,7 @@ export function PreviewPanel() {
                     disabled={saveStatus.saving || !isDirty}
                     className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded text-sm font-medium transition-colors
                         ${isDirty 
-                            ? 'bg-neutral-600 hover:bg-neutral-500 text-white' 
+                            ? 'bg-neutral-600 hover:bg-[#ffff21] hover:text-black text-white' 
                             : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'}`}
                 >
                     <Save size={14} />
@@ -191,7 +191,7 @@ export function PreviewPanel() {
                                 resetToOriginal();
                             }
                         }}
-                        className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-neutral-800 hover:bg-red-900/50 rounded text-sm text-neutral-400 hover:text-red-400 transition-colors"
+                        className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-neutral-800 hover:bg-red-500 rounded text-sm text-neutral-400 hover:text-white transition-colors"
                     >
                         <RotateCcw size={14} />
                         重置为原始数据

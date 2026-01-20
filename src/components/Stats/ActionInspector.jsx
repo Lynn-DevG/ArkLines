@@ -43,7 +43,7 @@ export const ActionInspector = ({ action, onClose }) => {
                 <h2 className="text-lg font-bold flex items-center gap-2 text-neutral-300">
                     <Info size={20} /> 技能详情
                 </h2>
-                <button onClick={onClose} className="text-neutral-400 hover:text-white">
+                <button onClick={onClose} className="text-neutral-400 hover:text-[#ffff21] transition-colors">
                     <X size={16} />
                 </button>
             </div>

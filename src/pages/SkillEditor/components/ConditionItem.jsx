@@ -90,7 +90,7 @@ export function ConditionItem({ condition, index, onChange, onRemove, compact = 
                 </div>
                 <button
                     onClick={onRemove}
-                    className="p-1 hover:bg-red-900/50 rounded text-red-400"
+                    className="p-1 hover:bg-red-500 hover:text-white rounded text-red-400 transition-colors"
                     title="删除"
                 >
                     <Trash2 size={compact ? 12 : 14} />

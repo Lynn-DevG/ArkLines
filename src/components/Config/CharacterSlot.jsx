@@ -243,7 +243,7 @@ export const CharacterSlot = ({
                     onClick={() => setShowPicker(true)}
                     className="w-full h-24 border-2 border-dashed border-neutral-700 rounded-lg bg-neutral-900/30 
                                flex flex-col items-center justify-center text-neutral-500 
-                               hover:border-neutral-500 hover:text-neutral-400 hover:bg-neutral-800/30 transition-all"
+                               hover:border-[#ffff21] hover:text-[#ffff21] transition-all"
                 >
                     <Plus size={24} className="mb-1" />
                     <span className="text-xs">点击添加角色</span>
@@ -309,7 +309,7 @@ export const CharacterSlot = ({
                                 <button
                                     onClick={() => setMainCharacter(character.id)}
                                     className="text-[10px] px-1.5 py-0.5 rounded bg-neutral-900/70 border border-neutral-700 
-                                               text-neutral-400 hover:text-white hover:border-neutral-500 transition-colors"
+                                               text-neutral-400 hover:text-[#ffff21] hover:border-[#ffff21] transition-colors"
                                     title="设为主控角色（仅主控可放置普攻）"
                                 >
                                     设为主控
@@ -323,14 +323,14 @@ export const CharacterSlot = ({
                     <div className="flex items-center gap-1">
                         <button
                             onClick={() => setShowEditor(true)}
-                            className="p-1.5 text-neutral-500 hover:text-white bg-neutral-900/50 rounded transition-colors"
+                            className="p-1.5 text-neutral-500 hover:text-[#ffff21] bg-neutral-900/50 rounded transition-colors"
                             title="编辑角色"
                         >
                             <Edit2 size={14} />
                         </button>
                         <button
                             onClick={() => setShowPicker(true)}
-                            className="p-1.5 text-neutral-500 hover:text-white bg-neutral-900/50 rounded transition-colors"
+                            className="p-1.5 text-neutral-500 hover:text-[#ffff21] bg-neutral-900/50 rounded transition-colors"
                             title="更换角色"
                         >
                             <RefreshCw size={14} />

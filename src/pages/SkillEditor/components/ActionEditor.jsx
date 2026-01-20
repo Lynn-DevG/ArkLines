@@ -74,7 +74,7 @@ export function ActionEditor() {
             <div className="relative">
                 <button
                     onClick={() => setShowAddMenu(!showAddMenu)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-neutral-700 hover:border-neutral-600 rounded-lg text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-neutral-700 hover:border-[#ffff21] rounded-lg text-sm text-neutral-400 hover:text-[#ffff21] transition-colors"
                 >
                     <Plus size={16} />
                     添加行为
@@ -89,7 +89,7 @@ export function ActionEditor() {
                                     addAction(type);
                                     setShowAddMenu(false);
                                 }}
-                                className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-neutral-700 text-sm text-left"
+                                className="w-full flex items-center gap-3 px-4 py-2.5 hover:ring-2 hover:ring-[#ffff21] hover:ring-inset text-sm text-left transition-all"
                             >
                                 <div className={`w-3 h-3 rounded ${config.color}`} />
                                 {config.label}

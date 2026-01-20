@@ -150,6 +150,8 @@ export const SimulationProvider = ({ children }) => {
         } catch {
             // localStorage 不可用时忽略
         }
+        // 触发自定义事件，通知 App 组件
+        window.dispatchEvent(new CustomEvent('arklines_devmode_change', { detail: { unlocked: false } }));
     };
     
     // 自动吸附冲突处理模式：push=推挤，gray=置灰不推挤

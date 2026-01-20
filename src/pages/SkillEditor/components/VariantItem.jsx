@@ -5,7 +5,7 @@ import { ActionItem } from './ActionItem';
 import { ChevronDown, ChevronRight, Trash2, Plus, Copy } from 'lucide-react';
 import { createActionTemplate } from '../../../data/skillSchema';
 
-const inputClassName = "w-full bg-neutral-900 border border-neutral-700 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-neutral-500";
+const inputClassName = "w-full bg-neutral-900 border border-neutral-700 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-[#ffff21]";
 
 export function VariantItem({ variant, index, onChange, onRemove }) {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -27,7 +27,16 @@ export function VariantItem({ variant, index, onChange, onRemove }) {
     // 更新变体中的 action
     const updateAction = (actionIndex, updates) => {
         const actions = [...(variant.actions || [])];
-        actions[actionIndex] = { ...actions[actionIndex], ...updates };
+        const merged = { ...actions[actionIndex], ...updates };
+        
+        // 清理 undefined 值，确保导出的 JSON 干净
+        Object.keys(merged).forEach(key => {
+            if (merged[key] === undefined) {
+                delete merged[key];
+            }
+        });
+        
+        actions[actionIndex] = merged;
         updateField('actions', actions);
     };
 
@@ -39,7 +48,7 @@ export function VariantItem({ variant, index, onChange, onRemove }) {
     };
 
     return (
-        <div className="border border-neutral-700 rounded-lg overflow-hidden bg-neutral-800/30">
+        <div className="border border-neutral-700 rounded-lg bg-neutral-800/30">
             {/* 头部 */}
             <div className="flex items-center gap-2 px-3 py-2 bg-neutral-800/50">
                 <button
@@ -190,7 +199,7 @@ export function VariantItem({ variant, index, onChange, onRemove }) {
                                     </button>
 
                                     {showAddActionMenu && (
-                                        <div className="absolute top-full left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-10 overflow-hidden max-h-48 overflow-y-auto">
+                                        <div className="absolute top-full left-0 right-0 mt-1 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-50 overflow-hidden max-h-48 overflow-y-auto">
                                             {Object.entries(ACTION_TYPES).map(([type, config]) => (
                                                 <button
                                                     key={type}

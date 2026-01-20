@@ -53,7 +53,7 @@ export function BuffSelector({ value, onChange }) {
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between gap-2 bg-neutral-900 border border-neutral-700 rounded px-2 py-1 text-sm text-white hover:border-[#ffff21] focus:outline-none focus:border-neutral-500 transition-colors"
+                className="w-full flex items-center justify-between gap-2 bg-neutral-900 border border-neutral-700 rounded px-2 py-1 text-sm text-white hover:border-[#ffff21] focus:outline-none focus:border-[#ffff21] transition-colors"
             >
                 {selectedBuff ? (
                     <span className="truncate">{selectedBuff.name}</span>
@@ -85,7 +85,7 @@ export function BuffSelector({ value, onChange }) {
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     placeholder="搜索 Buff..."
-                                    className="w-full bg-neutral-900 border border-neutral-700 rounded pl-7 pr-2 py-1 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500"
+                                    className="w-full bg-neutral-900 border border-neutral-700 rounded pl-7 pr-2 py-1 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#ffff21]"
                                     autoFocus
                                 />
                             </div>

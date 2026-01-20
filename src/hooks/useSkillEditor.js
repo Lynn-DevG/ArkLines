@@ -13,6 +13,10 @@ export function useSkillEditor() {
     const [skills, setSkills] = useState({});
     // 当前选中的技能 ID
     const [currentSkillId, setCurrentSkillId] = useState(null);
+    // 当前选中的变体索引 (-1 表示主技能)
+    const [activeVariantIndex, setActiveVariantIndex] = useState(-1);
+    // 当前选中的行为索引 (null 表示未选中)
+    const [selectedActionIndex, setSelectedActionIndex] = useState(null);
     // 是否有未保存的修改
     const [isDirty, setIsDirty] = useState(false);
     // 保存状态
@@ -98,7 +102,43 @@ export function useSkillEditor() {
     // 选择技能
     const selectSkill = useCallback((skillId) => {
         setCurrentSkillId(skillId);
+        setActiveVariantIndex(-1); // 重置为主技能
+        setSelectedActionIndex(null); // 重置选中的行为
     }, []);
+
+    // 选择变体
+    const selectVariant = useCallback((index) => {
+        setActiveVariantIndex(index);
+        setSelectedActionIndex(null); // 重置选中的行为
+    }, []);
+
+    // 选择行为
+    const selectAction = useCallback((index) => {
+        setSelectedActionIndex(index);
+    }, []);
+
+    // 获取当前编辑的数据（主技能或变体）
+    const currentEditingData = useMemo(() => {
+        if (!currentSkill) return null;
+        if (activeVariantIndex === -1) {
+            return currentSkill;
+        }
+        return currentSkill.variants?.[activeVariantIndex] || null;
+    }, [currentSkill, activeVariantIndex]);
+
+    // 获取当前编辑数据的 actions
+    const currentActions = useMemo(() => {
+        if (!currentEditingData) return [];
+        return currentEditingData.actions || [];
+    }, [currentEditingData]);
+
+    // 获取当前选中的行为
+    const selectedAction = useMemo(() => {
+        if (selectedActionIndex === null || !currentActions[selectedActionIndex]) {
+            return null;
+        }
+        return currentActions[selectedActionIndex];
+    }, [currentActions, selectedActionIndex]);
 
     // 更新当前技能
     const updateCurrentSkill = useCallback((updates) => {
@@ -177,46 +217,96 @@ export function useSkillEditor() {
 
     // === Action 操作 ===
     
+    // 辅助函数：更新当前编辑数据的 actions
+    const updateCurrentActions = useCallback((newActions) => {
+        if (!currentSkillId || !skills[currentSkillId]) return;
+        
+        if (activeVariantIndex === -1) {
+            // 更新主技能
+            updateCurrentSkill({ actions: newActions });
+        } else {
+            // 更新变体
+            const variants = [...(skills[currentSkillId].variants || [])];
+            if (variants[activeVariantIndex]) {
+                variants[activeVariantIndex] = {
+                    ...variants[activeVariantIndex],
+                    actions: newActions
+                };
+                updateCurrentSkill({ variants });
+            }
+        }
+    }, [currentSkillId, skills, activeVariantIndex, updateCurrentSkill]);
+    
     // 添加 Action
     const addAction = useCallback((actionType = 'damage') => {
         if (!currentSkillId || !skills[currentSkillId]) return;
         
         const template = createActionTemplate(actionType);
-        const actions = [...(skills[currentSkillId].actions || []), template];
+        const actions = [...currentActions, template];
         
-        updateCurrentSkill({ actions });
-    }, [currentSkillId, skills, updateCurrentSkill]);
+        updateCurrentActions(actions);
+        // 选中新添加的行为
+        setSelectedActionIndex(actions.length - 1);
+    }, [currentSkillId, skills, currentActions, updateCurrentActions]);
 
     // 更新 Action
     const updateAction = useCallback((index, updates) => {
         if (!currentSkillId || !skills[currentSkillId]) return;
         
-        const actions = [...(skills[currentSkillId].actions || [])];
-        actions[index] = { ...actions[index], ...updates };
+        const actions = [...currentActions];
+        const merged = { ...actions[index], ...updates };
         
-        updateCurrentSkill({ actions });
-    }, [currentSkillId, skills, updateCurrentSkill]);
+        // 清理 undefined 值，确保导出的 JSON 干净
+        Object.keys(merged).forEach(key => {
+            if (merged[key] === undefined) {
+                delete merged[key];
+            }
+        });
+        
+        actions[index] = merged;
+        
+        updateCurrentActions(actions);
+    }, [currentSkillId, skills, currentActions, updateCurrentActions]);
+
+    // 更新 Action 的 offset（用于时间轴拖拽）
+    const updateActionOffset = useCallback((index, newOffset) => {
+        // 对齐到 0.01 秒
+        const alignedOffset = Math.round(newOffset * 100) / 100;
+        updateAction(index, { offset: Math.max(0, alignedOffset) });
+    }, [updateAction]);
 
     // 删除 Action
     const removeAction = useCallback((index) => {
         if (!currentSkillId || !skills[currentSkillId]) return;
         
-        const actions = [...(skills[currentSkillId].actions || [])];
+        const actions = [...currentActions];
         actions.splice(index, 1);
         
-        updateCurrentSkill({ actions });
-    }, [currentSkillId, skills, updateCurrentSkill]);
+        updateCurrentActions(actions);
+        
+        // 重置选中状态
+        if (selectedActionIndex === index) {
+            setSelectedActionIndex(null);
+        } else if (selectedActionIndex !== null && selectedActionIndex > index) {
+            setSelectedActionIndex(selectedActionIndex - 1);
+        }
+    }, [currentSkillId, skills, currentActions, updateCurrentActions, selectedActionIndex]);
 
     // 移动 Action
     const moveAction = useCallback((fromIndex, toIndex) => {
         if (!currentSkillId || !skills[currentSkillId]) return;
         
-        const actions = [...(skills[currentSkillId].actions || [])];
+        const actions = [...currentActions];
         const [removed] = actions.splice(fromIndex, 1);
         actions.splice(toIndex, 0, removed);
         
-        updateCurrentSkill({ actions });
-    }, [currentSkillId, skills, updateCurrentSkill]);
+        updateCurrentActions(actions);
+        
+        // 更新选中状态
+        if (selectedActionIndex === fromIndex) {
+            setSelectedActionIndex(toIndex);
+        }
+    }, [currentSkillId, skills, currentActions, updateCurrentActions, selectedActionIndex]);
 
     // === Variant 操作 ===
     
@@ -240,7 +330,16 @@ export function useSkillEditor() {
         if (!currentSkillId || !skills[currentSkillId]) return;
         
         const variants = [...(skills[currentSkillId].variants || [])];
-        variants[index] = { ...variants[index], ...updates };
+        const merged = { ...variants[index], ...updates };
+        
+        // 清理 undefined 值，确保导出的 JSON 干净
+        Object.keys(merged).forEach(key => {
+            if (merged[key] === undefined) {
+                delete merged[key];
+            }
+        });
+        
+        variants[index] = merged;
         
         updateCurrentSkill({ variants });
     }, [currentSkillId, skills, updateCurrentSkill]);
@@ -313,11 +412,18 @@ export function useSkillEditor() {
         filteredSkills,
         skillsByCharacter,
         
+        // 当前编辑数据（主技能或选中的变体）
+        currentEditingData,
+        currentActions,
+        selectedAction,
+        
         // 状态
         isDirty,
         saveStatus,
         validationResult,
         filter,
+        activeVariantIndex,
+        selectedActionIndex,
         
         // 技能操作
         selectSkill,
@@ -327,9 +433,14 @@ export function useSkillEditor() {
         duplicateSkill,
         deleteSkill,
         
+        // 变体/行为选择
+        selectVariant,
+        selectAction,
+        
         // Action 操作
         addAction,
         updateAction,
+        updateActionOffset,
         removeAction,
         moveAction,
         

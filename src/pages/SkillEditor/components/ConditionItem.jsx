@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CONDITION_TYPES } from './ConditionBuilder';
 import { BuffSelector } from './BuffSelector';
-import { Trash2 } from 'lucide-react';
+import { Trash2, ChevronDown, ChevronRight } from 'lucide-react';
 
 // 目标类型选项
 const TARGET_TYPES = [
@@ -64,10 +64,22 @@ const ATTRIBUTE_TYPES = [
     { value: 'poise', label: '失衡值' }
 ];
 
-const inputClassName = "bg-neutral-900 border border-neutral-700 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-neutral-500";
-const selectClassName = "bg-neutral-900 border border-neutral-700 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-neutral-500";
+// 输入框样式 - 固定宽度
+const inputClassName = "w-[200px] bg-neutral-800 border border-neutral-700 rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#ffff21]";
+const selectClassName = "w-[200px] bg-neutral-800 border border-neutral-700 rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-[#ffff21]";
+
+// 表单行组件 - 标签在左，输入框在右
+function FormRow({ label, children }) {
+    return (
+        <div className="flex items-center gap-4">
+            <label className="w-20 text-sm text-white flex-shrink-0">{label}</label>
+            {children}
+        </div>
+    );
+}
 
 export function ConditionItem({ condition, index, onChange, onRemove, compact = false }) {
+    const [isExpanded, setIsExpanded] = useState(true);
     const config = CONDITION_TYPES[condition.type] || { label: condition.type, color: 'bg-slate-500' };
 
     const updateField = (field, value) => {
@@ -79,34 +91,63 @@ export function ConditionItem({ condition, index, onChange, onRemove, compact = 
         onChange({ params });
     };
 
+    // 生成条件摘要（折叠时显示）
+    const getSummary = () => {
+        switch (condition.type) {
+            case 'combo':
+                return condition.value === 'heavy' ? '重击' : `第 ${condition.value || 1} 段`;
+            case 'buff_check':
+                return `${condition.buffId || '未选择'} ≥ ${condition.stacks || 1} 层`;
+            case 'action_history':
+                return `${condition.timeWindow || 4}秒内 ${ACTION_HISTORY_TYPES.find(t => t.value === condition.actionType)?.label || ''}`;
+            case 'attribute_check':
+                return `${ATTRIBUTE_TYPES.find(t => t.value === condition.attribute)?.label || ''} ${COMPARE_TYPES.find(t => t.value === condition.compare)?.label || ''} ${condition.value || 0}`;
+            case 'enemy_state':
+                return ENEMY_STATES.find(t => t.value === condition.state)?.label || '';
+            case 'is_main_char':
+                return '是主控角色';
+            default:
+                return '';
+        }
+    };
+
     return (
-        <div className={`border border-neutral-700 rounded-lg overflow-hidden bg-neutral-800/30
-            ${compact ? 'p-2' : 'p-3'}`}>
-            {/* 头部 */}
-            <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                    <div className={`w-2.5 h-2.5 rounded ${config.color}`} />
-                    <span className={`font-medium ${compact ? 'text-xs' : 'text-sm'}`}>{config.label}</span>
+        <div className="border border-neutral-700 rounded-lg bg-neutral-800/30">
+            {/* 头部 - 可点击折叠 */}
+            <div 
+                className={`flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-neutral-700/30 transition-colors ${isExpanded ? 'border-b border-neutral-700/50' : ''}`}
+                onClick={() => setIsExpanded(!isExpanded)}
+            >
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                    {isExpanded ? <ChevronDown size={14} className="text-neutral-400 flex-shrink-0" /> : <ChevronRight size={14} className="text-neutral-400 flex-shrink-0" />}
+                    <div className={`w-2.5 h-2.5 rounded flex-shrink-0 ${config.color}`} />
+                    <span className="text-sm font-medium text-white">{config.label}</span>
+                    {!isExpanded && (
+                        <span className="text-xs text-neutral-500 truncate ml-2">{getSummary()}</span>
+                    )}
                 </div>
                 <button
-                    onClick={onRemove}
-                    className="p-1 hover:bg-red-500 hover:text-white rounded text-red-400 transition-colors"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onRemove();
+                    }}
+                    className="p-1 hover:bg-red-500 hover:text-white rounded text-red-400 transition-colors flex-shrink-0"
                     title="删除"
                 >
-                    <Trash2 size={compact ? 12 : 14} />
+                    <Trash2 size={14} />
                 </button>
             </div>
 
-            {/* 条件参数 */}
-            <div className={`grid gap-2 ${compact ? 'grid-cols-2' : 'grid-cols-3'}`}>
+            {/* 条件参数 - 每行一条 */}
+            {isExpanded && (
+            <div className="space-y-3 p-3">
                 {/* combo 条件 */}
                 {condition.type === 'combo' && (
-                    <div className="col-span-2">
-                        <label className="text-[10px] text-neutral-500 mb-1 block">连击段数</label>
+                    <FormRow label="连击段数">
                         <select
                             value={condition.value || 1}
                             onChange={(e) => updateField('value', e.target.value === 'heavy' ? 'heavy' : parseInt(e.target.value))}
-                            className={`${selectClassName} w-full`}
+                            className={selectClassName}
                         >
                             <option value={1}>第 1 段</option>
                             <option value={2}>第 2 段</option>
@@ -114,120 +155,114 @@ export function ConditionItem({ condition, index, onChange, onRemove, compact = 
                             <option value={4}>第 4 段</option>
                             <option value="heavy">重击</option>
                         </select>
-                    </div>
+                    </FormRow>
                 )}
 
                 {/* buff_check 条件 */}
                 {condition.type === 'buff_check' && (
                     <>
-                        <div className="col-span-2">
-                            <label className="text-[10px] text-neutral-500 mb-1 block">Buff</label>
+                        <FormRow label="Buff">
                             <BuffSelector
                                 value={condition.buffId || ''}
                                 onChange={(value) => updateField('buffId', value)}
                             />
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-neutral-500 mb-1 block">检查目标</label>
+                        </FormRow>
+                        <FormRow label="检查目标">
                             <select
                                 value={condition.target || 'self'}
                                 onChange={(e) => updateField('target', e.target.value)}
-                                className={`${selectClassName} w-full`}
+                                className={selectClassName}
                             >
                                 {TARGET_TYPES.map(opt => (
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 ))}
                             </select>
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-neutral-500 mb-1 block">比较方式</label>
+                        </FormRow>
+                        <FormRow label="比较方式">
                             <select
                                 value={condition.compare || 'gte'}
                                 onChange={(e) => updateField('compare', e.target.value)}
-                                className={`${selectClassName} w-full`}
+                                className={selectClassName}
                             >
                                 {COMPARE_TYPES.map(opt => (
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 ))}
                             </select>
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-neutral-500 mb-1 block">层数</label>
+                        </FormRow>
+                        <FormRow label="层数">
                             <input
                                 type="number"
                                 min="0"
                                 value={condition.stacks || 1}
                                 onChange={(e) => updateField('stacks', parseInt(e.target.value) || 0)}
-                                className={`${inputClassName} w-full`}
+                                className={inputClassName}
                             />
-                        </div>
+                        </FormRow>
                     </>
                 )}
 
                 {/* action_history 条件 */}
                 {condition.type === 'action_history' && (
                     <>
-                        <div>
-                            <label className="text-[10px] text-neutral-500 mb-1 block">行为类型</label>
+                        <FormRow label="行为类型">
                             <select
                                 value={condition.actionType || 'cast_skill'}
                                 onChange={(e) => updateField('actionType', e.target.value)}
-                                className={`${selectClassName} w-full`}
+                                className={selectClassName}
                             >
                                 {ACTION_HISTORY_TYPES.map(opt => (
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 ))}
                             </select>
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-neutral-500 mb-1 block">检查目标</label>
+                        </FormRow>
+                        <FormRow label="检查目标">
                             <select
                                 value={condition.target || 'self'}
                                 onChange={(e) => updateField('target', e.target.value)}
-                                className={`${selectClassName} w-full`}
+                                className={selectClassName}
                             >
                                 {TARGET_TYPES.map(opt => (
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 ))}
                             </select>
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-neutral-500 mb-1 block">时间窗口(秒)</label>
-                            <input
-                                type="number"
-                                step="0.5"
-                                min="0"
-                                value={condition.timeWindow || 4}
-                                onChange={(e) => updateField('timeWindow', parseFloat(e.target.value) || 4)}
-                                className={`${inputClassName} w-full`}
-                            />
-                        </div>
+                        </FormRow>
+                        <FormRow label="时间窗口">
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="number"
+                                    step="0.5"
+                                    min="0"
+                                    value={condition.timeWindow || 4}
+                                    onChange={(e) => updateField('timeWindow', parseFloat(e.target.value) || 4)}
+                                    className={inputClassName}
+                                />
+                                <span className="text-xs text-neutral-500">秒</span>
+                            </div>
+                        </FormRow>
                         
                         {/* cast_skill 额外参数 */}
                         {condition.actionType === 'cast_skill' && (
                             <>
-                                <div>
-                                    <label className="text-[10px] text-neutral-500 mb-1 block">技能类型</label>
+                                <FormRow label="技能类型">
                                     <select
                                         value={condition.params?.skillType || ''}
                                         onChange={(e) => updateParams('skillType', e.target.value || undefined)}
-                                        className={`${selectClassName} w-full`}
+                                        className={selectClassName}
                                     >
                                         {SKILL_TYPES.map(opt => (
                                             <option key={opt.value} value={opt.value}>{opt.label}</option>
                                         ))}
                                     </select>
-                                </div>
-                                <div>
-                                    <label className="text-[10px] text-neutral-500 mb-1 block">变体类型</label>
+                                </FormRow>
+                                <FormRow label="变体类型">
                                     <input
                                         type="text"
                                         value={condition.params?.variantType || ''}
                                         onChange={(e) => updateParams('variantType', e.target.value || undefined)}
-                                        className={`${inputClassName} w-full`}
+                                        className={inputClassName}
                                         placeholder="如: heavy"
                                     />
-                                </div>
+                                </FormRow>
                             </>
                         )}
                     </>
@@ -236,78 +271,74 @@ export function ConditionItem({ condition, index, onChange, onRemove, compact = 
                 {/* attribute_check 条件 */}
                 {condition.type === 'attribute_check' && (
                     <>
-                        <div>
-                            <label className="text-[10px] text-neutral-500 mb-1 block">属性</label>
+                        <FormRow label="属性">
                             <select
                                 value={condition.attribute || 'hp'}
                                 onChange={(e) => updateField('attribute', e.target.value)}
-                                className={`${selectClassName} w-full`}
+                                className={selectClassName}
                             >
                                 {ATTRIBUTE_TYPES.map(opt => (
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 ))}
                             </select>
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-neutral-500 mb-1 block">比较方式</label>
-                            <select
-                                value={condition.compare || 'gte'}
-                                onChange={(e) => updateField('compare', e.target.value)}
-                                className={`${selectClassName} w-full`}
-                            >
-                                {COMPARE_TYPES.map(opt => (
-                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-neutral-500 mb-1 block">比较值</label>
-                            <input
-                                type="number"
-                                step="0.01"
-                                value={condition.value || 0}
-                                onChange={(e) => updateField('value', parseFloat(e.target.value) || 0)}
-                                className={`${inputClassName} w-full`}
-                            />
-                        </div>
-                        <div>
-                            <label className="text-[10px] text-neutral-500 mb-1 block">检查目标</label>
+                        </FormRow>
+                        <FormRow label="检查目标">
                             <select
                                 value={condition.target || 'self'}
                                 onChange={(e) => updateField('target', e.target.value)}
-                                className={`${selectClassName} w-full`}
+                                className={selectClassName}
                             >
                                 {TARGET_TYPES.map(opt => (
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 ))}
                             </select>
-                        </div>
+                        </FormRow>
+                        <FormRow label="比较方式">
+                            <select
+                                value={condition.compare || 'gte'}
+                                onChange={(e) => updateField('compare', e.target.value)}
+                                className={selectClassName}
+                            >
+                                {COMPARE_TYPES.map(opt => (
+                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                ))}
+                            </select>
+                        </FormRow>
+                        <FormRow label="比较值">
+                            <input
+                                type="number"
+                                step="0.01"
+                                value={condition.value || 0}
+                                onChange={(e) => updateField('value', parseFloat(e.target.value) || 0)}
+                                className={inputClassName}
+                            />
+                        </FormRow>
                     </>
                 )}
 
                 {/* enemy_state 条件 */}
                 {condition.type === 'enemy_state' && (
-                    <div className="col-span-2">
-                        <label className="text-[10px] text-neutral-500 mb-1 block">敌人状态</label>
+                    <FormRow label="敌人状态">
                         <select
                             value={condition.state || 'staggered'}
                             onChange={(e) => updateField('state', e.target.value)}
-                            className={`${selectClassName} w-full`}
+                            className={selectClassName}
                         >
                             {ENEMY_STATES.map(opt => (
                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
                         </select>
-                    </div>
+                    </FormRow>
                 )}
 
                 {/* is_main_char 条件 - 无需额外参数 */}
                 {condition.type === 'is_main_char' && (
-                    <div className="col-span-2 text-xs text-neutral-500">
+                    <div className="text-sm text-neutral-400">
                         检查执行者是否为当前主控角色
                     </div>
                 )}
             </div>
+            )}
         </div>
     );
 }

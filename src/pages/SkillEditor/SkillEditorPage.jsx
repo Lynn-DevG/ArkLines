@@ -70,7 +70,7 @@ export function SkillEditorPage({ onBack }) {
                     </aside>
 
                     {/* 中栏 - 编辑表单 */}
-                    <main className="flex-1 overflow-y-auto">
+                    <main className="flex-1 overflow-hidden">
                         {editor.currentSkill ? (
                             <SkillForm />
                         ) : (

@@ -83,7 +83,7 @@ export function SkillList() {
                         placeholder="搜索技能..."
                         value={filter.search}
                         onChange={(e) => setFilter(prev => ({ ...prev, search: e.target.value }))}
-                        className="w-full bg-neutral-800 border border-neutral-700 rounded pl-8 pr-3 py-1.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500"
+                        className="w-full bg-neutral-800 border border-neutral-700 rounded pl-8 pr-3 py-1.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-[#ffff21]"
                     />
                 </div>
                 
@@ -124,7 +124,7 @@ export function SkillList() {
                 </button>
                 
                 {showNewSkillMenu && (
-                    <div className="absolute top-full left-3 right-3 mt-1 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-10">
+                    <div className="absolute top-full left-3 right-3 mt-1 bg-neutral-800 border border-neutral-700 rounded shadow-lg z-50">
                         {Object.entries(SKILL_TYPES).map(([type, config]) => {
                             const Icon = config.icon;
                             return (
